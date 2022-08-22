@@ -1,0 +1,16 @@
+# default
+/.quarto/
+/_site/
+
+# R proj files
+.Rproj.user
+.Rproj.user/*
+.Rhistory
+
+
+# images
+*.png
+
+# MacOS related
+.DS_Store
+.Rproj.user
