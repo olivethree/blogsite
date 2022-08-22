@@ -7,10 +7,6 @@
 .Rproj.user/*
 .Rhistory
 
-
-# images
-*.png
-
 # MacOS related
 .DS_Store
 .Rproj.user

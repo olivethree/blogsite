@@ -43,7 +43,7 @@ website:
     palette: dark
   
   open-graph:
-    site-name: Manuel Oliveira blog
+    site-name: Manuel Oliveira
     
 execute:
   freeze: auto
