@@ -1,0 +1,79 @@
+[
+  {
+    "objectID": "posts/p_1/index.html",
+    "href": "posts/p_1/index.html",
+    "title": "Hi, my name is…",
+    "section": "",
+    "text": "I wrote this piece for those who have an interest in learning a bit about me and my professional traject so far.\nI love coffee and would ideally invite you to join me for a cup (other beverages allowed, naturally!). To compensate, here’s a picture of a morning coffee scene to get you in the mood to read the rest of the monologue:\n\n\n\nRetrieved from pexels.com\n\n\nIn 2019, I earned my PhD in Social Psychology from ISPA - Instituto Universitario. During my PhD I divided my time between Portugal and the Netherlands, conducting research at [William James Center for Research](https://williamjamescr.org/) and [Utrecht University](https://www.uu.nl/en/research/behaviour-in-social-context/research-programmes/social-cognitive-and-interpersonal-determinants-of-behaviour).\n\n\n\nMoments after I survived my PhD defense\n\n\nMy doctoral work resulted in multiple scientific contributions to the fields of social perception and psychophysical image classification methods (a.k.a. reverse-correlation).\nAfter obtaining my PhD, I moved into industry in pursuit of research with a more direct societal impact. I believe that goal was achieved during the time I spent doing research to support the development of automated clinical decision support software. At the same time, it became clear to me that there was not yet enough knowledge available to inform many of the steps taken during the development of automated systems that directly impact the human side of the human-computer interaction. Questions such as “How much control should we give to the user?”, “How are human biases being taken into account into the development of these automated tools?”, “What factors promote trust between user and AI systems?”, remained without a clear answer.\nThese and other questions made me realize that I should move back to the only domain in society where I believe there is time to clarify such questions: academia. I was lucky enough to find a team of researchers who welcomed me back into the ivory tower. Currently, I’m working as a postdoctoral researcher at Utrecht University in the team of Ruud Hortensius, Baptist Liefooghe, and Henk Aarts, on topics related with those questions or Human-centered Artificial Intelligence research in general.\nIn my free time, I enjoy playing music, brewing coffee, JRPGs, ocasionally go bouldering with friends, or take relaxed strolls in nature. And when time is no less than abundant, maybe play around with hobby projects (see [Apps](apps.qmd))."
+  },
+  {
+    "objectID": "posts/p_2/index.html",
+    "href": "posts/p_2/index.html",
+    "title": "Why I believe psychology is important for AI developers",
+    "section": "",
+    "text": "Retrieved from https://www.wired.com/images_blogs/gadgetlab/2012\n\n\nAs I see it, knowledge about human psychology and behavior should be the guiding light in the development of smart tools (or AI tools if you prefer) serving society and people. It is my belief that a human-centered approach to AI development will not only catalyze progress in most societal domains, but also boost the competitiveness of entrepreneurial ventures invested in the crucial task of translating the promises of AI into more tangible products and services.\nImportantly, I believe that we should raise awareness in the AI development community about all the harmful human biases that have hindered human progress to this day (e.g. prejudice of any kind). Therefore, I firmly defend we should find better ways of educating our “AI” systems, by preventing biased artificial behavior as much as we can.\nFinally, although I’ve been mostly ranting about how psychological science benefits AI development, this collaboration is a win-win for both parties. Psychology and related behavioral sciences have much to learn about how the dawn of AI in our society is impacting human behavior and mental processes. For instance, “Are smart tools making us lazier?”, “How is our memory being affected by smart tools?”, “How is AI impacting our mental and behavioral development across the life-span?”, among many other interesting questions one can start to think of -- psst…if you’re interested in the future of AI, I recommend reading “[Human Compatible](https://www.amazon.com/Human-Compatible-Artificial-Intelligence-Problem-ebook/dp/B07N5J5FTS)” by Stuart Russell 😉. It is my hope that the attempts to answer such questions will throw light on the malleability of our behavior and mind processes during sigificant environmental changes, as well as expose a bit more of what pieces of our mental and behavioral *machinery* remain stoically invariant throughout the tides of time and progress."
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Manuel Oliveira",
+    "section": "",
+    "text": "Psychology & Artificial Intelligence | Social Perception | Data Analysis | R | Python\n\n\n\n\n\nWelcome to my personal website!\nI have a background in Psychology and my doctoral work focused on the relation between personality stereotypes and social attributions based on facial appearance. Most of the work I’ve done in the past years involved statistics, programming, experimental design, and scientific writing. After my Ph.D. I moved on to an R&D industry job where I learned tons about coding, business, Artificial Intelligence (AI), and working with teams with diverse professional and cultural backgrounds. During that period, I became increasingly interested in the challenges of harmonizing human psychology and behavior with the growing presence of AI in society.\nCurrently, I’m working as a postdoctoral researcher at Utrecht University on topics of Human-centered Artificial Intelligence research in general."
+  },
+  {
+    "objectID": "apps.html",
+    "href": "apps.html",
+    "title": "Applications",
+    "section": "",
+    "text": "Face Masker\nReal-time webcam face masking\nThis application applies a facial mask to any faces captured by the webcam. In addition, it includes a “Save snapshot” feature that captures the current frame and saves it as a JPEG file. It was developed during my free time as a hobby project. There are some limitations in version 1.0 that need improvement, especially the “laggy” frame rate.\nRunning the app: For now, the only way to run the Face Masker app is from source code “~/src/facemasker_main.py” script.\nDownload Face Masker source code"
+  },
+  {
+    "objectID": "publications.html",
+    "href": "publications.html",
+    "title": "Publications",
+    "section": "",
+    "text": "2020\nOliveira, M., Garcia-Marques, T., Garcia-Marques, L. , & Dotsch, R. (2020). Good to bad or bad to bad? What is the relationship between valence and the trait content of the Big Two? European Journal of Social Psychology, 50(2), 463-483. https://doi.org/10.1002/ejsp.2618\n\n\n2019\nOliveira, M., Garcia-Marques, T., & Dotsch, R. (2019). Combining traits into a face: A reverse correlation approach. Social Cognition, 37(5), 516-545. doi: 10.1521/soco.2019.37.5.516\nOliveira, M., Garcia-Marques, T., Dotsch, R., & Garcia-Marques, L. (2019). Dominance and competence face to face: Dissociations obtained with a reverse correlation approach. European Journal of Social Psychology, 49(5), 888-902. https://doi.org/10.1002/ejsp.2569\n\n\n2017\nSantos, A., Almeida, F., Palma, T., Oliveira, M., & Garcia-Marques, L. (2017). The cultural stereotype of professional groups: Consensus, accessibility and typicality of stereotypic contents. Análise Psicológica, 35, 557-568. https://doi.org/10.14417/ap.1385\n\n\n2016\nRamos, T., Oliveira, M., Santos, A. S., Garcia-Marques, & L. Carneiro, P. (2016). Evaluating young and old faces on social dimensions: Trustworthiness and dominance. Psicológica, 37(2), 169-185.\n\n\n2012\nOliveira, M., & Miranda, M. (2012). Paradigma: Teste de associação implícita [Paradigm: Implicit association test]. Laboratório de Psicologia, 10, 235-249. doi: 10.14417/lp.673\n\n\nPh.D. Dissertation\nOliveira, M.J.B. (2020). The structuring role of valence in the relationship between and within models of face and trait impressions."
+  },
+  {
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "Manuel Oliveira",
+    "section": "",
+    "text": "Manuel Oliveira (he/him) is a postdoctoral researcher at Utrecht University. When taking a break from his research duties, he enjoys spending time brewing and drinking (way too much) coffee, reading all sorts of books, entertaining (?) his neighbors by playing loudly on his guitar, and of course, spending time with friends."
+  },
+  {
+    "objectID": "about.html#experience",
+    "href": "about.html#experience",
+    "title": "Manuel Oliveira",
+    "section": "Experience",
+    "text": "Experience\n\nPhilips - Digital Cognitive Diagnostics | Data Modeller & Researcher | Oct 2020 - Jan 2022\nISPA - Instituto Universitário | Teaching Assistant | 2016 - 2019\nISCTE-IUL | Research Assistant | May 2014 - Jul 2014\nUniversity of Lisbon, Faculty of Psychology | Teaching Assistant | 2013 - 2014 University of Lisbon, Faculty of Psychology | Research Assistant | Jul 2012 - Dec 2014\nPublicis Groupe | Strategic Planner | Oct 2009 - May 2010"
+  },
+  {
+    "objectID": "about.html#education",
+    "href": "about.html#education",
+    "title": "Manuel Oliveira",
+    "section": "Education",
+    "text": "Education\nPhD in Social Psychology | Feb 2015 - Dec 2019\nISPA - Instituto Universitário | Lisbon, Portugal & Utrecht, Netherlands\n\nGraduated with Honor and Distinction\nPhD Dissertation: “The structuring role of valence in the relationship between and within models of face and trait impressions”\n\nMSc in Social and Organizational Psychology | Sep 2009 - October 2011\nISPA - Instituto Universitário | Lisbon, Portugal\nBSc in Psychology | Sep 2006 - July 2009\nUniversity of Aveiro | Aveiro, Portugal"
+  },
+  {
+    "objectID": "posts.html",
+    "href": "posts.html",
+    "title": "Posts",
+    "section": "",
+    "text": "I wrote this piece for those who have an interest in learning a bit about me and my professional traject so far.\nI love coffee and would ideally invite you to join me for a cup (other beverages allowed, naturally!). To compensate, here’s a picture of a morning coffee scene to get you in the mood to read the rest of the monologue:\n\n\n\nRetrieved from: pexels.com\n\n\nIn 2019, I earned my PhD in Social Psychology from ISPA - Instituto Universitario. During my PhD I divided my time between Portugal and the Netherlands, conducting research at William James Center for Research and Utrecht University.\n\n\n\nMoments after I survived my Ph.D. defense 😄\n\n\nMy doctoral work resulted in multiple scientific contributions to the fields of social perception and psychophysical image classification methods (a.k.a. reverse-correlation).\nAfter obtaining my PhD, I moved into industry in pursuit of research with a more direct societal impact. I believe that goal was achieved during the time I spent doing research to support the development of automated clinical decision support software. At the same time, it became clear to me that there was not yet enough knowledge available to inform many of the steps taken during the development of automated systems that directly impact the human side of the human-computer interaction. Questions such as “How much control should we give to the user?”, “How are human biases being taken into account into the development of these automated tools?”, “What factors promote trust between user and AI systems?”, remained without a clear answer.\nThese and other questions made me realize that I should move back to the only domain in society where I believe there is time to clarify such questions: academia. I was lucky enough to find a team of researchers who welcomed me back into the ivory tower. Currently, I’m working as a postdoctoral researcher at Utrecht University in the team of Ruud Hortensius, Baptist Liefooghe, and Henk Aarts, on topics related with those questions or Human-centered Artificial Intelligence research in general.\nIn my free time, I enjoy playing music, brewing coffee, JRPGs, ocasionally go bouldering with friends, or take relaxed strolls in nature. And when time is no less than abundant, maybe play around with hobby projects (see Apps)."
+  },
+  {
+    "objectID": "posts.html#why-behavioral-science-should-guide-ai-development",
+    "href": "posts.html#why-behavioral-science-should-guide-ai-development",
+    "title": "Posts",
+    "section": "Why behavioral science should guide AI development",
+    "text": "Why behavioral science should guide AI development\nAs I see it, knowledge about human psychology and behavior should be the guiding light in the development of smart tools (or AI tools if you prefer) serving society and people. It is my belief that a human-centered approach to AI development will not only catalyze progress in most societal domains, but also boost the competitiveness of entrepreneurial ventures invested in the crucial task of translating the promises of AI into more tangible products and services.\nImportantly, I believe that we should raise awareness in the AI development community about all the harmful human biases that have hindered human progress to this day (e.g. prejudice of any kind). Therefore, I firmly defend we should find better ways of educating our “AI” systems, by preventing biased artificial behavior as much as we can.\nFinally, although I’ve been mostly ranting about how psychological science benefits AI development, this collaboration is a win-win for both parties. Psychology and related behavioral sciences have much to learn about how the dawn of AI in our society is impacting human behavior and mental processes. For instance, “Are smart tools making us lazier?”, “How is our memory being affected by smart tools?”, “How is AI impacting our mental and behavioral development across the life-span?”, among many other interesting questions one can start to think of – psst…if you’re interested in the future of AI, I recommend reading “Human Compatible” by Stuart Russell 😉. It is my hope that the attempts to answer such questions will throw light on the malleability of our behavior and mind processes during sigificant environmental changes, as well as expose a bit more of what pieces of our mental and behavioral machinery remain stoically invariant throughout the tides of time and progress.\nDate: 19 August 2022\nAuthor: M. Oliveira"
+  },
+  {
+    "objectID": "blog.html",
+    "href": "blog.html",
+    "title": "Blog",
+    "section": "",
+    "text": "A short post where I introduce myself and disclose a bit about my professional traject so far.\n\n\n\n\n\n\nMar 7, 2024\n\n\nM. Oliveira\n\n\n\n\n\n\n  \n\n\n\n\n\n\n\n\nIn this post I rant about the benefits of merging behavioral science with AI development.\n\n\n\n\n\n\nJul 8, 2023\n\n\nM. Oliveira\n\n\n\n\n\n\nNo matching items"
+  }
+]

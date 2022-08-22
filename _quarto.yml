@@ -1,0 +1,58 @@
+project:
+  type: website
+  output-dir: docs
+
+website:
+  title: "Manuel Oliveira"
+  image: assets/profile_zigzag.png
+  navbar:
+    background: '#fcc404'
+    right: 
+      - icon: github
+        href: https://github.com/olivethree
+      - icon: twitter 
+        href: https://twitter.com/manueljbo
+      - icon: linkedin
+        href: https://www.linkedin.com/in/manueljbo/ 
+    left:
+      - href: index.qmd
+        text: Home
+        
+      - href: blog.qmd
+        text: Blogposts
+
+      - href: publications.qmd
+        text: Publications
+      
+      - href: apps.qmd
+        text: Apps
+      
+      - href: about.qmd
+        text: About
+        
+  page-footer: 
+    left: "Copyright 2022, Manuel Oliveira" 
+  
+  google-analytics: 
+    tracking-id: "UA-176122484-2"
+    anonymize-ip: true
+    
+  cookie-consent:
+    type: express
+    style: headline
+    palette: dark
+  
+  open-graph:
+    site-name: Manuel Oliveira blog
+    
+execute:
+  freeze: auto
+
+format:
+  html:
+    theme: lux
+    css: styles.css
+    toc: true
+
+editor: visual
+

@@ -1,0 +1,26 @@
+---
+title: "Hi, my name is..."
+description: "A short post where I introduce myself and disclose a bit about my professional traject so far."
+author: "M. Oliveira"
+date: "27/07/2022"
+---
+
+## Hi, my name is...
+
+I wrote this piece for those who have an interest in learning a bit about me and my professional traject so far.
+
+I love coffee and would ideally invite you to join me for a cup (other beverages allowed, naturally!). To compensate, here's a picture of a morning coffee scene to get you in the mood to read the rest of the monologue:
+
+![Retrieved from pexels.com](/assets/pexels-gagan-cambow-1170659.jpg){fig-align="center" width="502"}
+
+In 2019, I earned my PhD in Social Psychology from ISPA - Instituto Universitario. During my PhD I divided my time between Portugal and the Netherlands, conducting research at \[William James Center for Research\](https://williamjamescr.org/) and \[Utrecht University\](https://www.uu.nl/en/research/behaviour-in-social-context/research-programmes/social-cognitive-and-interpersonal-determinants-of-behaviour).
+
+![Moments after I survived my PhD defense](/assets/phd_defense_manueloliveira.jpg){fig-align="center" width="500"}
+
+My doctoral work resulted in multiple scientific contributions to the fields of social perception and psychophysical image classification methods (a.k.a. reverse-correlation).
+
+After obtaining my PhD, I moved into industry in pursuit of research with a more direct societal impact. I believe that goal was achieved during the time I spent doing research to support the development of automated clinical decision support software. At the same time, it became clear to me that there was not yet enough knowledge available to inform many of the steps taken during the development of automated systems that directly impact the human side of the human-computer interaction. Questions such as "How much control should we give to the user?", "How are human biases being taken into account into the development of these automated tools?", "What factors promote trust between user and AI systems?", remained without a clear answer.
+
+These and other questions made me realize that I should move back to the only domain in society where I believe there is time to clarify such questions: academia. I was lucky enough to find a team of researchers who welcomed me back into the ivory tower. Currently, I'm working as a postdoctoral researcher at Utrecht University in the team of Ruud Hortensius, Baptist Liefooghe, and Henk Aarts, on topics related with those questions or Human-centered Artificial Intelligence research in general.
+
+In my free time, I enjoy playing music, brewing coffee, JRPGs, ocasionally go bouldering with friends, or take relaxed strolls in nature. And when time is no less than abundant, maybe play around with hobby projects (see \[Apps\](apps.qmd)).

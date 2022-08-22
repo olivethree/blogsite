@@ -1,0 +1,15 @@
+---
+title: ""
+---
+
+# Manuel Oliveira, Ph.D.
+
+Psychology & Artificial Intelligence \| Social Perception \| Data Analysis \| R \| Python
+
+![](assets/profile_yellow.png){#profilepic fig-align="center" width="200"}
+
+Welcome to my personal website!
+
+I have a background in Psychology and my doctoral work focused on the relation between personality stereotypes and social attributions based on facial appearance. Most of the work I've done in the past years involved statistics, programming, experimental design, and scientific writing. After my Ph.D. I moved on to an R&D industry job where I learned tons about coding, business, Artificial Intelligence (AI), and working with teams with diverse professional and cultural backgrounds. During that period, I became increasingly interested in the challenges of harmonizing human psychology and behavior with the growing presence of AI in society.
+
+Currently, I'm working as a postdoctoral researcher at Utrecht University on topics of Human-centered Artificial Intelligence research in general.

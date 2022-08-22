@@ -1,0 +1,47 @@
+---
+title: "Manuel Oliveira"
+about:
+  template: trestles
+  image: assets/profile_zigzag.png
+  links:
+    - icon: twitter
+      href: https://twitter.com/manueljbo
+    - icon: linkedin
+      href: https://www.linkedin.com/in/manueljbo/
+    - icon: github
+      href: https://github.com/olivethree
+---
+
+Manuel Oliveira (he/him) is a postdoctoral researcher at Utrecht University. When taking a break from his research duties, he enjoys spending time brewing and drinking (way too much) coffee, reading all sorts of books, entertaining (?) his neighbors by playing loudly on his guitar, and of course, spending time with friends.
+
+## Experience
+
+-   Philips - Digital Cognitive Diagnostics \| Data Modeller & Researcher \| Oct 2020 - Jan 2022
+
+-   ISPA - Instituto Universitário \| Teaching Assistant \| 2016 - 2019
+
+-   ISCTE-IUL \| Research Assistant \| May 2014 - Jul 2014
+
+-   University of Lisbon, Faculty of Psychology \| Teaching Assistant \| 2013 - 2014 University of Lisbon, Faculty of Psychology \| Research Assistant \| Jul 2012 - Dec 2014
+
+-   Publicis Groupe \| Strategic Planner \| Oct 2009 - May 2010
+
+## Education
+
+**PhD in Social Psychology** \| Feb 2015 - Dec 2019
+
+ISPA - Instituto Universitário \| Lisbon, Portugal & Utrecht, Netherlands
+
+-   Graduated with Honor and Distinction
+
+-   PhD Dissertation: "The structuring role of valence in the relationship between and within models of face and trait impressions"
+
+**MSc in Social and Organizational Psychology** \| Sep 2009 - October 2011
+
+ISPA - Instituto Universitário \| Lisbon, Portugal
+
+**BSc in Psychology** \| Sep 2006 - July 2009
+
+University of Aveiro \| Aveiro, Portugal
+
+## 

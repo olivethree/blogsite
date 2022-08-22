@@ -1,0 +1,28 @@
+---
+title: "Applications"
+editor: visual
+---
+
+## [Random File Sampler](https://github.com/olivethree/randomfilesampler)
+
+I wrote this program with the goal of automating the random sampling of face images from databases. This is useful to anyone looking to prevent any bias in image file selection. This program randomly samples (without replacement) files of any given extension from a folder. The sampled files are then copied to a new folder together with a .txt file listing the sampled file names. For reproducibility, the program uses a fixed pseudo-random generator seed number (seed=1234). Alternatively, you can set your own custom seed number. In the last updates, I added a user-friendly interface and created a Windows installer for the application.
+
+**For Windows users**: click below to download the application installer
+
+[Download Random File Sampler (Windows Installer, 18.7 MB)](https://github.com/olivethree/randomfilesampler/releases/download/1.0.1/Install_RandomFileSampler_v1.0.exe)
+
+**For Mac OS users (source code only)**:
+
+[Download Random File Sampler source code (18.2 MB)](https://github.com/olivethree/randomfilesampler/archive/refs/tags/1.0.1.zip)
+
+\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
+
+# [Face Masker](https://github.com/olivethree/webcam_face_masker){#face-masker}
+
+**Real-time webcam face masking**
+
+This application applies a facial mask to any faces captured by the webcam. In addition, it includes a "Save snapshot" feature that captures the current frame and saves it as a JPEG file. It was developed during my free time as a hobby project. There are some limitations in version 1.0 that need improvement, especially the "laggy" frame rate.
+
+**Running the app**: For now, the only way to run the Face Masker app is from source code "\~/src/**facemasker_main.py**" script.
+
+[Download Face Masker source code](https://github.com/olivethree/webcam_face_masker/archive/refs/heads/master.zip)
