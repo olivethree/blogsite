@@ -3,7 +3,7 @@ title: "Why I believe psychology is important for AI developers"
 editor: visual
 description: "In this post I rant about the benefits of merging behavioral science with AI development."
 author: "M. Oliveira"
-date: "19/08/2022"
+date: "08/19/2022"
 ---
 
 ## Why behavioral science should guide AI development
