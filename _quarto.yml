@@ -4,7 +4,7 @@ project:
 
 website:
   title: "Manuel Oliveira"
-  image: assets/profile_zigzag.png
+  image: assets/robots.png
   navbar:
     background: '#fcc404'
     right: 
