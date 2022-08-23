@@ -4,7 +4,7 @@ project:
 
 website:
   title: "Manuel Oliveira"
-  image: assets/robots.png
+  favicon: assets/robots.png
   navbar:
     background: '#fcc404'
     right: 
@@ -44,13 +44,17 @@ website:
   
   open-graph:
     site-name: Manuel Oliveira
+  
+  twitter-card: true
     
 execute:
   freeze: auto
 
 format:
   html:
-    theme: lux
+    theme: 
+      light: lux
+      dark: darkly
     css: styles.css
     toc: true
 
