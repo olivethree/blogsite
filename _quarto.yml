@@ -54,7 +54,7 @@ format:
   html:
     theme: 
       light: lux
-      dark: lux
+      dark: slate
     css: styles.css
     toc: true
 
