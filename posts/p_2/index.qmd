@@ -6,12 +6,12 @@ author: "M. Oliveira"
 date: "08/19/2022"
 ---
 
-## Why behavioral science should guide AI development
-
-![Retrieved from https://www.wired.com/images_blogs/gadgetlab/2012](/assets/ff_robot_therapist.jpeg){fig-align="center" width="400"}
-
 As I see it, knowledge about human psychology and behavior should be the guiding light in the development of smart tools (or AI tools if you prefer) serving society and people. It is my belief that a human-centered approach to AI development will not only catalyze progress in most societal domains, but also boost the competitiveness of entrepreneurial ventures invested in the crucial task of translating the promises of AI into more tangible products and services.
 
 Importantly, I believe that we should raise awareness in the AI development community about all the harmful human biases that have hindered human progress to this day (e.g. prejudice of any kind). Therefore, I firmly defend we should find better ways of educating our "AI" systems, by preventing biased artificial behavior as much as we can.
 
-Finally, although I've been mostly ranting about how psychological science benefits AI development, this collaboration is a win-win for both parties. Psychology and related behavioral sciences have much to learn about how the dawn of AI in our society is impacting human behavior and mental processes. For instance, "Are smart tools making us lazier?", "How is our memory being affected by smart tools?", "How is AI impacting our mental and behavioral development across the life-span?", among many other interesting questions one can start to think of \-- psst...if you're interested in the future of AI, I recommend reading "[Human Compatible](https://www.amazon.com/Human-Compatible-Artificial-Intelligence-Problem-ebook/dp/B07N5J5FTS)" by Stuart Russell 😉. It is my hope that the attempts to answer such questions will throw light on the malleability of our behavior and mind processes during sigificant environmental changes, as well as expose a bit more of what pieces of our mental and behavioral \*machinery\* remain stoically invariant throughout the tides of time and progress.
+![Retrieved from https://www.wired.com/images_blogs/gadgetlab/2012](/assets/ff_robot_therapist.jpeg){alt="Retrieved from https://www.wired.com/images_blogs/gadgetlab/2012" fig-align="center" width="400"}
+
+Finally, although I've been mostly ranting about how psychological science benefits AI development, this collaboration is a win-win for both parties. Psychology and related behavioral sciences have much to learn about how the dawn of AI in our society is impacting human behavior and mental processes. For instance, "Are smart tools making us lazier?", "How is our memory being affected by smart tools?", "How is AI impacting our mental and behavioral development across the life-span?", among many other interesting questions one can start to think of \-- psst...if you're interested in the future of AI, I recommend reading "[Human Compatible](https://www.amazon.com/Human-Compatible-Artificial-Intelligence-Problem-ebook/dp/B07N5J5FTS)" by Stuart Russell 😉.
+
+It is my hope that the attempts to answer such questions will throw light on the malleability of our behavior and mind processes during significant environmental changes, as well as expose a bit more of what pieces of our mental and behavioral \*machinery\* remain stoically invariant throughout the tides of time and progress.
