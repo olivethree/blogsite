@@ -7,7 +7,7 @@ editor: visual
 
 I wrote this program with the goal of automating the random sampling of face images from databases. This is useful to anyone looking to prevent any bias in image file selection. This program randomly samples (without replacement) files of any given extension from a folder. The sampled files are then copied to a new folder together with a .txt file listing the sampled file names. For reproducibility, the program uses a fixed pseudo-random generator seed number (seed=1234). Alternatively, you can set your own custom seed number. In the last updates, I added a user-friendly interface and created a Windows installer for the application.
 
-**For Windows users**: click below to download the application installer
+**For Windows users**:
 
 [Download Random File Sampler (Windows Installer, 18.7 MB)](https://github.com/olivethree/randomfilesampler/releases/download/1.0.1/Install_RandomFileSampler_v1.0.exe)
 
@@ -15,7 +15,7 @@ I wrote this program with the goal of automating the random sampling of face ima
 
 [Download Random File Sampler source code (18.2 MB)](https://github.com/olivethree/randomfilesampler/archive/refs/tags/1.0.1.zip)
 
-\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
+------------------------------------------------------------------------
 
 # [Face Masker](https://github.com/olivethree/webcam_face_masker){#face-masker}
 
