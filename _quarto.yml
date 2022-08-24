@@ -54,7 +54,8 @@ format:
   html:
     theme: 
       light: lux
-      dark: solar
+      dark: [lux, theme-dark-lux.scss]
+      
     css: styles.css
     toc: true
 
