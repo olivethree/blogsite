@@ -5,6 +5,8 @@ editor: visual
 
 ### **2022**
 
+\[Preprint\] [Liefooghe, B., **Oliveira, M. J. B.**, Leisten, L. M., Hoogers, E., Aarts, H., & Hortensius, R. (2022, June 10). Faces Merely Labelled as Artificial are Trusted Less. https://doi.org/10.31234/osf.io/te2ju](https://psyarxiv.com/te2ju)
+
 [**Oliveira, M.**, & Garcia-Marques, T. (2022). The effect of facial occlusion on facial impressions of trustworthiness and dominance. *Memory & Cognition*, *Advance Online Publication*. https://doi.org/10.3758/s13421-022-01316-z](https://doi.org/10.3758/s13421-022-01316-z)
 
 [Garcia-Marques, T., **Oliveira, M.**, & Nunes, L. (2022). That person is now with or without a mask: how encoding context modulates identity recognition. *Cognitive Research: Principles and Implications*, *7*(29), 1-17. https://doi.org/10.1186/s41235-022-00379-5](https://doi.org/10.1186/s41235-022-00379-5)
