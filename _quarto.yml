@@ -36,11 +36,6 @@ website:
   google-analytics: 
     tracking-id: "UA-176122484-2"
     anonymize-ip: true
-    
-  cookie-consent:
-    type: express
-    style: headline
-    palette: dark
   
   open-graph:
     site-name: Manuel Oliveira
