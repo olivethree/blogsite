@@ -7,13 +7,6 @@
     "text": "I love coffee and would ideally invite you to join me for a cup (other beverages allowed, naturally!). To compensate, here’s a picture of a morning coffee scene to get you in the mood to read the rest of the monologue:\n\n\n\nRetrieved from pexels.com\n\n\nIn 2019, I earned my PhD in Social Psychology from ISPA - Instituto Universitario. During my PhD I divided my time between Portugal and the Netherlands, conducting research at William James Centre for Research and Utrecht University.\n\n\n\nMoments after I survived my PhD defense\n\n\nMy doctoral work resulted in multiple scientific contributions to the fields of social perception and psychophysical image classification methods (a.k.a. reverse-correlation).\nAfter obtaining my PhD, I moved into industry in pursuit of research with a more direct societal impact. I believe that goal was achieved during the time I spent doing research to support the development of automated clinical decision support software. At the same time, it became clear to me that there was not yet enough knowledge available to inform many of the steps taken during the development of automated systems that directly impact the human side of the human-computer interaction. Questions such as “How much control should we give to the user?”, “How are human biases being taken into account into the development of these automated tools?”, “What factors promote trust between user and AI systems?”, remained without a clear answer.\nThese and other questions made me realize that I should move back to the only domain in society where I believe there is time to clarify such questions: academia. I was lucky enough to find a team of researchers who welcomed me back into the ivory tower. Currently, I’m working as a postdoctoral researcher at Utrecht University in the team of Ruud Hortensius, Baptist Liefooghe, and Henk Aarts, on topics related with those questions or Human-centered Artificial Intelligence research in general.\nIn my free time, I enjoy playing music, brewing coffee, JRPGs, ocasionally go bouldering with friends, or take relaxed strolls in nature. And when time is no less than abundant, maybe play around with hobby projects (see Apps)."
   },
   {
-    "objectID": "posts/p_2/index.html",
-    "href": "posts/p_2/index.html",
-    "title": "Why I believe psychology is important for AI developers",
-    "section": "",
-    "text": "Importantly, I believe that we should raise awareness in the AI development community about all the harmful human biases that have hindered human progress to this day (e.g. prejudice of any kind). Therefore, I firmly defend we should find better ways of educating our “AI” systems, by preventing biased artificial behavior as much as we can.\n\n\n\nRetrieved from https://www.wired.com/images_blogs/gadgetlab/2012\n\n\nFinally, although I’ve been mostly ranting about how psychological science benefits AI development, this collaboration is a win-win for both parties. Psychology and related behavioral sciences have much to learn about how the dawn of AI in our society is impacting human behavior and mental processes. For instance, “Are smart tools making us lazier?”, “How is our memory being affected by smart tools?”, “How is AI impacting our mental and behavioral development across the life-span?”, among many other interesting questions one can start to think of -- psst…if you’re interested in the future of AI, I recommend reading “Human Compatible” by Stuart Russell 😉.\nIt is my hope that the attempts to answer such questions will throw light on the malleability of our behavior and mind processes during significant environmental changes, as well as expose a bit more of what pieces of our mental and behavioral machinery remain stoically invariant throughout the tides of time and progress."
-  },
-  {
     "objectID": "index.html",
     "href": "index.html",
     "title": "Manuel Oliveira",
@@ -25,7 +18,14 @@
     "href": "apps.html",
     "title": "Applications",
     "section": "",
-    "text": "Face Masker\nReal-time webcam face masking\nThis application applies a facial mask to any faces captured by the webcam. In addition, it includes a “Save snapshot” feature that captures the current frame and saves it as a JPEG file. It was developed during my free time as a hobby project. There are some limitations in version 1.0 that need improvement, especially the “laggy” frame rate.\nRunning the app: For now, the only way to run the Face Masker app is from source code “~/src/facemasker_main.py” script.\nDownload Face Masker source code"
+    "text": "This shiny app facilitates the generation of the so-called ‘subgroup’ classification images (CIs) for a two-phase reverse correlation methodology.\nThe use of subgroup CIs is a currently recommended practice in psychological research involving a two-phase variant of the psychophysical reverse correlation method (e.g. Dotsch & Todorov, 2012). In practice, this implies using the data collected during the first phase (reverse correlation task) to generate multiple group-level CIs associated with the same target construct condition (i.e. the subgroup CIs) for the second phase where these are rated by another group of raters. This approach circumvents the issues (e.g. type I error inflation) associated with using a single group CI for a given traget construct in the second phase (see Cone et al., 2021).\nFor more details see: https://github.com/olivethree/shinyrc_subgroupcis"
+  },
+  {
+    "objectID": "apps.html#random-file-sampler",
+    "href": "apps.html#random-file-sampler",
+    "title": "Applications",
+    "section": "Random File Sampler",
+    "text": "Random File Sampler\nI wrote this program with the goal of automating the random sampling of face images from databases. This is useful to anyone looking to prevent any bias in image file selection. This program randomly samples (without replacement) files of any given extension from a folder. The sampled files are then copied to a new folder together with a .txt file listing the sampled file names. For reproducibility, the program uses a fixed pseudo-random generator seed number (seed=1234). Alternatively, you can set your own custom seed number. In the last updates, I added a user-friendly interface and created a Windows installer for the application.\nFor Windows users:\nDownload Random File Sampler (Windows Installer, 18.7 MB)\nFor Mac OS users (source code only):\nDownload Random File Sampler source code (18.2 MB)"
   },
   {
     "objectID": "publications.html",
@@ -74,6 +74,6 @@
     "href": "blog.html",
     "title": "Blog",
     "section": "",
-    "text": "In this post I rant about the benefits of merging behavioral science with AI development.\n\n\n\n\n\n\nAug 19, 2022\n\n\nM. Oliveira\n\n\n\n\n\n\n  \n\n\n\n\n\n\n\n\nA short post where I introduce myself and disclose a bit about my professional traject so far.\n\n\n\n\n\n\nJul 27, 2022\n\n\nM. Oliveira\n\n\n\n\n\n\nNo matching items"
+    "text": "A short post where I introduce myself and disclose a bit about my professional traject so far.\n\n\n\n\n\n\nJul 27, 2022\n\n\nM. Oliveira\n\n\n\n\n\n\nNo matching items"
   }
 ]
