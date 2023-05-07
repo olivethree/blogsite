@@ -3,6 +3,16 @@ title: "Applications"
 editor: visual
 ---
 
+## [Shiny Reverse Correlation: Sampling Subgroup CIs](https://olivethree.shinyapps.io/shinyRC_subgroup_cis/)
+
+This shiny app facilitates the generation of the so-called 'subgroup' classification images (CIs) for a two-phase reverse correlation methodology.
+
+The use of subgroup CIs is a currently recommended practice in psychological research involving a two-phase variant of the psychophysical reverse correlation method (e.g. [Dotsch & Todorov, 2012](https://journals.sagepub.com/doi/abs/10.1177/1948550611430272)). In practice, this implies using the data collected during the first phase (reverse correlation task) to generate multiple group-level CIs associated with the same target construct condition (i.e. the subgroup CIs) for the second phase where these are rated by another group of raters. This approach circumvents the issues (e.g. type I error inflation) associated with using a single group CI for a given traget construct in the second phase (see [Cone et al., 2021](https://journals.sagepub.com/doi/10.1177/1948550620938616)).
+
+For more details see: <https://github.com/olivethree/shinyrc_subgroupcis>
+
+------------------------------------------------------------------------
+
 ## [Random File Sampler](https://github.com/olivethree/randomfilesampler)
 
 I wrote this program with the goal of automating the random sampling of face images from databases. This is useful to anyone looking to prevent any bias in image file selection. This program randomly samples (without replacement) files of any given extension from a folder. The sampled files are then copied to a new folder together with a .txt file listing the sampled file names. For reproducibility, the program uses a fixed pseudo-random generator seed number (seed=1234). Alternatively, you can set your own custom seed number. In the last updates, I added a user-friendly interface and created a Windows installer for the application.
