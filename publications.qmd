@@ -3,6 +3,10 @@ title: "Publications"
 editor: visual
 ---
 
+### **2023**
+
+[Liefooghe, B., **Oliveira, M. J. B.**, Leisten, L. M., Hoogers, E., Aarts, H., & Hortensius, R. (2023). Are natural faces merely labelled as artificial trusted less? *Collabra: Psychology*, *9*(1): 73066. doi: https://doi.org/10.1525/collabra.73066](https://online.ucpress.edu/collabra/article/9/1/73066/195773/Are-Natural-Faces-Merely-Labelled-as-Artificial)
+
 ### **2022**
 
 \[Preprint\] [Liefooghe, B., **Oliveira, M. J. B.**, Leisten, L. M., Hoogers, E., Aarts, H., & Hortensius, R. (2022, June 10). Faces Merely Labelled as Artificial are Trusted Less. https://doi.org/10.31234/osf.io/te2ju](https://psyarxiv.com/te2ju)
