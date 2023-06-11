@@ -7,7 +7,7 @@ editor: visual
 
 This shiny app facilitates the generation of the so-called 'subgroup' classification images (CIs) for a two-phase reverse correlation methodology.
 
-Read the associated [Medium blogpost](https://medium.com/@manueljbo/improving-reverse-correlation-methods-what-are-subgroup-cis-and-how-to-generate-them-85e4732b48f2)
+Read the associated [Medium ](https://medium.com/@manueljbo/improving-reverse-correlation-methods-what-are-subgroup-cis-and-how-to-generate-them-85e4732b48f2)[blogpost](https://medium.com/@manueljbo/improved-two-phase-reverse-correlation-method-in-psychological-research-overview-and-r-tutorial-dfb66f95553c)
 
 The use of subgroup CIs is a currently recommended practice in psychological research involving a two-phase variant of the psychophysical reverse correlation method (e.g. [Dotsch & Todorov, 2012](https://journals.sagepub.com/doi/abs/10.1177/1948550611430272)). In practice, this implies using the data collected during the first phase (reverse correlation task) to generate multiple group-level CIs associated with the same target construct condition (i.e. several 'Trustworthy' subgroup CIs vs. single 'Trustworthy' group CI ). These are then rated in the second phase by another group of raters.
 
