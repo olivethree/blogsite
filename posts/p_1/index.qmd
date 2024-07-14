@@ -8,11 +8,11 @@ I wrote this piece for those who have an interest in learning a bit about me and
 
 I love coffee and would ideally invite you to join me for a cup or two. To compensate, here's a picture of a morning coffee scene to get you in the mood to read the rest of the monologue:
 
-![Retrieved from: pexels.com](assets/pexels-gagan-cambow-1170659.jpg){fig-align="center" width="500"}
+![Retrieved from: pexels.com](/assets/pexels-gagan-cambow-1170659.jpg){fig-align="center"}
 
 In 2019, I earned my PhD in Social Psychology from ISPA - Instituto Universitario. During my PhD I divided my time between Portugal and the Netherlands, conducting research at [William James Center for Research](https://williamjamescr.org/) and [Utrecht University](https://www.uu.nl/en/research/behaviour-in-social-context/research-programmes/social-cognitive-and-interpersonal-determinants-of-behaviour).
 
-![Moments after my PhD defense 😄 - 16 December 2019](assets/phd_defense_manueloliveira.jpg){fig-align="center" width="500"}
+![Moments after my PhD defense 😄 - 16 December 2019](/assets/phd_defense_manueloliveira.jpg){fig-align="center"}
 
 My doctoral work resulted in contributions to the fields of [social perception](https://onlinelibrary.wiley.com/doi/10.1002/9781118133880.hop205011) and psychophysical image classification methods like [reverse correlation](https://en.wikipedia.org/wiki/Reverse_correlation_technique).
 
