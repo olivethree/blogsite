@@ -10,7 +10,7 @@ website:
     right: 
       - icon: github
         href: https://github.com/olivethree
-      - icon: twitter
+      - icon: twitter-x
         href: https://twitter.com/manueljbo
       - icon: linkedin
         href: https://www.linkedin.com/in/manueljbo/ 
@@ -25,13 +25,13 @@ website:
         text: Publications
       
       - href: apps.qmd
-        text: Apps
+        text: Tools
       
       - href: about.qmd
         text: About
         
   page-footer: 
-    left: "Copyright 2023, Manuel Oliveira" 
+    left: "Copyright 2024, Manuel Oliveira" 
   
   google-analytics: 
     tracking-id: "UA-176122484-2"

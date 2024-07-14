@@ -3,6 +3,10 @@ title: "Publications"
 editor: visual
 ---
 
+### 2024
+
+\[Accepted for publication at Cognitive Research: Principles and Implications\] [Oliveira, M. J. B., Brands, J., Mashudi, J., Liefooghe, B., & Hortensius, R. (2023, September 29). Perceptions of Artificial Intelligence system's aptitude to judge morality and competence amidst the rise of chatbots.](https://doi.org/10.31234/osf.io/vsxr4)
+
 ### **2023**
 
 [Liefooghe, B., **Oliveira, M. J. B.**, Leisten, L. M., Hoogers, E., Aarts, H., & Hortensius, R. (2023). Are natural faces merely labelled as artificial trusted less? *Collabra: Psychology*, *9*(1): 73066. doi: https://doi.org/10.1525/collabra.73066](https://online.ucpress.edu/collabra/article/9/1/73066/195773/Are-Natural-Faces-Merely-Labelled-as-Artificial)

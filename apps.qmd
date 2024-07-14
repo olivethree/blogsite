@@ -1,5 +1,5 @@
 ---
-title: "Applications"
+title: "Tools"
 editor: visual
 ---
 
@@ -7,7 +7,7 @@ editor: visual
 
 This shiny app facilitates the generation of the so-called 'subgroup' classification images (CIs) for a two-phase reverse correlation methodology.
 
-Read the associated [Medium ](https://medium.com/@manueljbo/improving-reverse-correlation-methods-what-are-subgroup-cis-and-how-to-generate-them-85e4732b48f2)[blogpost](https://medium.com/@manueljbo/improved-two-phase-reverse-correlation-method-in-psychological-research-overview-and-r-tutorial-dfb66f95553c)
+Read the post at [Medium](https://medium.com/@manueljbo/improved-two-phase-reverse-correlation-method-in-psychological-research-overview-and-r-tutorial-dfb66f95553c)
 
 The use of subgroup CIs is a currently recommended practice in psychological research involving a two-phase variant of the psychophysical reverse correlation method (e.g. [Dotsch & Todorov, 2012](https://journals.sagepub.com/doi/abs/10.1177/1948550611430272)). In practice, this implies using the data collected during the first phase (reverse correlation task) to generate multiple group-level CIs associated with the same target construct condition (i.e. several 'Trustworthy' subgroup CIs vs. single 'Trustworthy' group CI ). These are then rated in the second phase by another group of raters.
 
@@ -15,27 +15,13 @@ Using subgroup CIs helps decrease the number of images to rate in the second pha
 
 For more details see: <https://github.com/olivethree/shinyrc_subgroupcis>
 
-------------------------------------------------------------------------
-
-## [Random File Sampler](https://github.com/olivethree/randomfilesampler)
-
-I wrote this program with the goal of automating the random sampling of face images from databases. This is useful to anyone looking to prevent any bias in image file selection. This program randomly samples (without replacement) files of any given extension from a folder. The sampled files are then copied to a new folder together with a .txt file listing the sampled file names. For reproducibility, the program uses a fixed pseudo-random generator seed number (seed=1234). Alternatively, you can set your own custom seed number. In the last updates, I added a user-friendly interface and created a Windows installer for the application.
-
-**For Windows users**:
-
-[Download Random File Sampler (Windows Installer, 18.7 MB)](https://github.com/olivethree/randomfilesampler/releases/download/1.0.1/Install_RandomFileSampler_v1.0.exe)
-
-**For Mac OS users (source code only)**:
-
-[Download Random File Sampler source code (18.2 MB)](https://github.com/olivethree/randomfilesampler/archive/refs/tags/1.0.1.zip)
-
-------------------------------------------------------------------------
+## 
 
 # [Face Masker](https://github.com/olivethree/webcam_face_masker){#face-masker}
 
 **Real-time webcam face masking**
 
-This application applies a facial mask to any faces captured by the webcam. In addition, it includes a "Save snapshot" feature that captures the current frame and saves it as a JPEG file. It was developed during my free time as a hobby project. There are some limitations in version 1.0 that need improvement, especially the "laggy" frame rate.
+This application applies a facial mask to any faces captured by the webcam. You can also take snapshots and store them in jpeg format. It was developed during my free time as a hobby project, years before AI chatbots could do this for me in 5 seconds. I leave it up to you to decide how useful this app/code may be to you. The app is quite limited and I stopped working on it a long time ago, but maybe it can inspire you to start something better :)
 
 **Running the app**: For now, the only way to run the Face Masker app is from source code "\~/src/**facemasker_main.py**" script.
 
