@@ -2,7 +2,7 @@
 title: "Manuel Oliveira"
 about:
   template: trestles
-  image: assets/profile_pic.jpg
+  image: assets/profile_pic_crop.png
   links:
     - icon: twitter-x
       href: https://twitter.com/manueljbo
