@@ -7,4 +7,3 @@ title: ""
 Welcome to my personal website!
 
 Here you can find information about my academic research and posts about coding or tools I created for past research projects or just for fun.
-
