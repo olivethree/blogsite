@@ -2,8 +2,8 @@
 title: ""
 ---
 
-# Manuel Oliveira, Ph.D.
+# Manuel Oliveira
 
 Welcome to my personal website!
 
-Here you can find information about my academic research and posts about coding or tools I created for past research projects or just for fun.
+Here you can find information about my academic research and posts about coding or tools I created for research projects or just for fun.
