@@ -5,7 +5,7 @@ editor: visual
 
 ### 2024
 
-[Oliveira, M., Brands, J., Mashudi, J., Liefooghe, B., & Hortensius, R. (2024). Perceptions of artificial intelligence system's aptitude to judge morality and competence amidst the rise of Chatbots. *Cognitive Research: Principles and Implications*, *9* (47). https://doi.org/10.1186/s41235-024-00573-7] (https://cognitiveresearchjournal.springeropen.com/articles/10.1186/s41235-024-00573-7)
+[Oliveira, M., Brands, J., Mashudi, J., Liefooghe, B., & Hortensius, R. (2024). Perceptions of artificial intelligence system's aptitude to judge morality and competence amidst the rise of Chatbots. *Cognitive Research: Principles and Implications*, *9* (47). https://doi.org/10.1186/s41235-024-00573-7](https://cognitiveresearchjournal.springeropen.com/articles/10.1186/s41235-024-00573-7)
 
 ### **2023**
 
