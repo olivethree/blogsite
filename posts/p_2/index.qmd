@@ -1,9 +1,9 @@
 ---
-title: "Posts"
+title: "Improved Two-Phase Reverse Correlation Method — R tutorial"
 author: "Manuel Oliveira"
 ---
 
-# **Improved Two-Phase Reverse Correlation Method — R tutorial**
+# 
 
 ```{r echo=FALSE}
 cat("Last updated: :", Sys.time() |> format("%d %B, %Y"))

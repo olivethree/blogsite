@@ -1,5 +1,5 @@
 ---
-title: "Posts"
+title: "Hello World"
 author: "Manuel Oliveira"
 ---
 
