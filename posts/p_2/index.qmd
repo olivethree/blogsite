@@ -1,6 +1,15 @@
 ---
-title: "Improved Two-Phase Reverse Correlation Method — R tutorial"
-author: "Manuel Oliveira"
+title: "Using Reverse Correlation Methods in Psychology Research: R tutorial and Recommended Practices"
+author: "M. Oliveira"
+date: "6/11/2023"
+date-modified: "8/17/2024"
+categories:
+  - R
+  - Tutorial
+  - Reverse Correlation
+  - Research
+  - Psychophysics
+  - Psychology
 ---
 
 # 

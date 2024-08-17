@@ -1,11 +1,16 @@
+ews
+
 ---
-title: "Hello World"
-author: "Manuel Oliveira"
+title: "Hi, my name is..."
+author: "M. Oliveira"
+date: "8/22/2023"
+date-modified: "7/14/2024"
+categories:
+  - about me
+  - news
 ---
 
-## Hi, my name is...
-
-I wrote this piece for those who have an interest in learning a bit about me and my professional traject so far.
+I wrote this piece for those who have an interest in learning a bit about me and my professional trajectory so far.
 
 I love coffee and would ideally invite you to join me for a cup or two. To compensate, here's a picture of a morning coffee scene to get you in the mood to read the rest of the monologue:
 
@@ -24,7 +29,3 @@ I found my first opportunity to pursue the new interest in a postdoc position at
 The emergence of ChatGPT by the end of 2022 had a strong impact on the research I was conducting, raising new questions and opening up new opportunities to do research. But arguably more important was the impact of generative AI chatbots on teaching practices, which prompted us all (or should have!) to start discussing the future of Education in a world increasingly infused with tools capable of mimicking human output. The impact of AI in Education sounded like a meaningful question to invest my time in. Currently, I am doing a second postdoc at Eindhoven University of Technology. There, I spend most of my time thinking about the impact of AI in Education together with an interdisciplinary team of researchers (Economics, Philosophy, Education), university staff and students.
 
 In my free time, I enjoy playing music, hunting for specialty coffee, modern and retro games, catch up with my to-read list and travelling.
-
-**Date:** *14 July 2024*
-
-**Author:** \[M. Oliveira\]

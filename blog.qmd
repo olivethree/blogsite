@@ -3,6 +3,9 @@ title: "Blog"
 listing:
   contents: posts
   sort: "date desc"
-  type: default
+  date-format: long
+  type: grid
+  fields: [image, date, title, author, reading-time]
   categories: true
+  feed: true
 ---
