@@ -20,34 +20,56 @@ Since 2024, I'm working on the topic of AI in Education as a postdoctoral resear
 
 ## Experience
 
--   Utrecht University, Postdoctoral researcher, Coordination Human-AI Alliance program \| 2022 - 2023
+-   Postdoctoral researcher, Coordination Human-AI Alliance program \@ Utrecht University \| 2022 - 2023
 
--   Philips - Digital Cognitive Diagnostics \| Data Modeller & Researcher \| 2020 - 2022
+    -   Teaching activities:
 
--   ISPA - Instituto Universitário \| Teaching Assistant \| 2016 - 2019
+        -   Experimental Methods and Statistics, BSc in Artificial intelligence
 
--   ISCTE-IUL \| Research Assistant \| 2014
+        -   Thesis supervision, BSc in Artificial intelligence
 
--   University of Lisbon, Faculty of Psychology \| Teaching Assistant \| 2013 - 2014 University of Lisbon, Faculty of Psychology \| Research Assistant \| 2012 - 2014
+        -   Methods for AI Research, MSc in Artificial Intelligence
 
--   Publicis Groupe \| Strategic Planner \| 2009 - 2010
+        -   Integrative Practicum - Scientific Writing, Correlational Designs and Data Analysis, Research MSc Psychology
+
+-   Data Modeller & Researcher \@ Philips - Digital Cognitive Diagnostics \| 2020 - 2022
+
+-   Teaching Assistant \@ ISPA - Instituto Universitário \| 2016 - 2019
+
+    -   Academic Skills
+
+    -   Data Processing
+
+    -   Experimental design
+
+    -   Face image manipulation
+
+-   Research Assistant \@ ISCTE-IUL \| 2014
+
+-   Teaching Assistant \@ University of Lisbon, Faculty of Psychology \| 2013 - 2014
+
+    -   Face image manipulation techniques
+
+-   Research Assistant \@ University of Lisbon, Faculty of Psychology \| 2012 - 2014
+
+-   Strategic Planning Internship \@ Publicis Groupe \| 2009 - 2010
 
 ## Education
 
 **PhD in Social Psychology** \| 2015 - 2019
 
-ISPA - Instituto Universitário \| Lisbon, Portugal & Utrecht, Netherlands
+-   ISPA - Instituto Universitário \| Lisbon, Portugal & Utrecht, Netherlands
 
--   Graduated with Honor and Distinction
+    -   Graduated with Honor and Distinction
 
--   PhD Dissertation: "The structuring role of valence in the relationship between and within models of face and trait impressions"
+    -   PhD Dissertation: "The structuring role of valence in the relationship between and within models of face and trait impressions"
 
 **MSc in Social and Organizational Psychology** \| 2009 - 2011
 
-ISPA - Instituto Universitário \| Lisbon, Portugal
+-   ISPA - Instituto Universitário \| Lisbon, Portugal
 
 **BSc in Psychology** \| 2006 - 2009
 
-University of Aveiro \| Aveiro, Portugal
+-   University of Aveiro \| Aveiro, Portugal
 
 ## 
