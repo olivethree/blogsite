@@ -8,7 +8,7 @@ website:
   site-url: "https://manueloliveira.nl/"
   description: "Explore research tools and apps developed by Manuel Oliveira. Includes coding projects, academic resources, tools and tutorials for anyone conducting Psychology research or interested in reverse-correlation methods, face image manipulation, or data analysis. Learn more today!"
   navbar:
-    background: '#009999'
+    background: '#fcc404'
     right: 
       - icon: github
         href: https://github.com/olivethree
