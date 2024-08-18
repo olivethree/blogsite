@@ -1,0 +1,493 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss  xmlns:atom="http://www.w3.org/2005/Atom" 
+      xmlns:media="http://search.yahoo.com/mrss/" 
+      xmlns:content="http://purl.org/rss/1.0/modules/content/" 
+      xmlns:dc="http://purl.org/dc/elements/1.1/" 
+      version="2.0">
+<channel>
+<title>Manuel Oliveira</title>
+<link>https://manueloliveira.nl/blog.html</link>
+<atom:link href="https://manueloliveira.nl/blog.xml" rel="self" type="application/rss+xml"/>
+<description>Explore research tools and apps developed by Manuel Oliveira. Includes coding projects, academic resources, tools and tutorials for anyone conducting Psychology research or interested in reverse-correlation methods, face image manipulation, or data analysis. Learn more today!</description>
+<generator>quarto-1.0.37</generator>
+<lastBuildDate>Sat, 10 Jun 2023 22:00:00 GMT</lastBuildDate>
+<item>
+  <title>Using Reverse Correlation Methods in Psychology Research: R tutorial and Recommended Practices</title>
+  <dc:creator>M. Oliveira</dc:creator>
+  <link>https://manueloliveira.nl/posts/p_2/index.html</link>
+  <description><![CDATA[ 
+
+
+
+<section id="section" class="level1">
+<h1></h1>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>Last updated: : 18 August, 2024</code></pre>
+</div>
+</div>
+<p><img src="https://manueloliveira.nl/posts/p_2/images/clipboard-2637353984.png" class="img-fluid"></p>
+<p>If you found this post, chances are you might already be familiarized with the reversed correlation (RC) methodology in psychological research. But in case you never heard about it, are just curious, or need to refresh your memory, I provide a brief overview of the method below, along with R code you can use to implement the method from the start.</p>
+<p>The main motivation behind this post is to offer an up-to-date tutorial on how to implement the two-phase variant of the RC methodology following the latest recommended practices. While doing so, I will show you the steps you can take to avoid a well-known limitation of this method.</p>
+<section id="the-two-phase-rc-methodology" class="level2">
+<h2 class="anchored" data-anchor-id="the-two-phase-rc-methodology"><strong>The two-phase RC methodology</strong></h2>
+<p>Below I describe the steps typically involved in a <strong>two-phase reverse correlation methodology</strong> in the domain of social psychological research (see for example, <a href="https://journals.sagepub.com/doi/abs/10.1177/1948550611430272">Dotsch &amp; Todorov, 2012</a>).</p>
+<p>This methodology has been often used to examine research question social judgments based on facial appearance, such as ‘<em>Which facial cues predict that a person will be judged as having Portuguese nationality</em>?’ or ‘<em>Which facial cues predict that a person will be judged as trustworthy</em>?’. Naturally, you could ask the same question about things other than faces, such as what features of an object predict that we judge it as a ‘chair’. However, for the sake of simplicity, the current overview will focus on the example of social judgments from facial appearance.</p>
+<p><strong>Research question:</strong> Imagine you’re interested in visualizing the facial cues that people use to judge someone as a trustworthy person.</p>
+</section>
+<section id="phase-i" class="level2">
+<h2 class="anchored" data-anchor-id="phase-i"><strong>Phase I</strong></h2>
+<p>The image below illustrates the 3 main steps of Phase I.</p>
+<p><img src="https://manueloliveira.nl/posts/p_2/images/clipboard-2870363183.png" class="img-fluid"></p>
+<section id="step-1" class="level3">
+<h3 class="anchored" data-anchor-id="step-1"><strong>Step 1</strong></h3>
+<p>The first thing you need to implement the method is to find an image of a face. This is called the <strong>base image</strong>. There are many variables you may want to take into consideration during the selection process (for details see <a href="https://doi.org/10.1080/10463283.2017.1381469">Brinkman et al., 2017</a>), but picking an image of a face is what you’d go for here. This can be seen as a trick to approximate the image to what we think is the ‘prototypical’ image of the thing we want to study, which in our example is <em>a face</em> conveying trustworthiness. For this post, I used a randomly generated deep fake image of a female face (using <a href="https://thispersondoesnotexist.com/">thispersondoesnotexist.com</a>). You can copy-paste it from below:</p>
+<p><img src="https://manueloliveira.nl/posts/p_2/images/clipboard-1683970715.png" class="img-fluid" width="512"></p>
+<p>To implement the method you can use the <a href="https://github.com/rdotsch/rcicr"><em>rcicr R</em> package</a> (Dotsch, 2016), along with a couple of other useful R packages for data and image processing. In the R tutorial below I show you how you can setup an R project, prepare the base image to use with <em>rcicr</em>, generate task stimuli, and generate classification images (CIs) for different analytical scenarios (older approach vs.&nbsp;latest recommendations).</p>
+<p><strong>Requirements:</strong> This tutorial assumes you have <a href="https://cran.r-project.org/">R</a> and RStudio installed (R version used in this tutorial is 4.2.0, but I expect later versions to work just as well).</p>
+<section id="setup-r-project" class="level4">
+<h4 class="anchored" data-anchor-id="setup-r-project"><strong>Setup R project</strong></h4>
+<p>I highly recommend you create a folder in your computer called “Rworkspace” or any other name you prefer, where you can store all your R projects inside. This makes it easier to organize and find your multiple projects and contents.</p>
+<p>Next, open RStudio, go to File &gt; New Project</p>
+<p><img src="https://manueloliveira.nl/posts/p_2/images/clipboard-888106561.png" class="img-fluid"></p>
+<p>Now you can select New Directory &gt; New Project</p>
+<p>In the window below, use <em>Browse</em> to find your “Rworkspace” folder. Once you set it, you can now enter the name of your R project under <em>Directory name</em>. I named my project “rc_tutorial”. This will create a folder named after the project name inside the parent folder <em>Rworkspace</em>. Inside your R project folder you will find a .<em>Rproj</em> file. This .<em>Rproj</em> file teels R that the root directory of your project is where it is located.</p>
+<p>For now, you can simply proceed without ticking any of the options as shown below (unless you are familiarised with git version control or want to have better control of your R environment).</p>
+<p>Click <em>Create Project</em> and you’re ready to start coding!</p>
+<p><img src="https://manueloliveira.nl/posts/p_2/images/clipboard-1901390154.png" class="img-fluid"></p>
+<p>To start coding open a R script (File &gt; New File) and save it.</p>
+<p>To install packages you can use the following function in the RStudio console:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><span class="fu" style="color: #4758AB;">install.packages</span>(<span class="st" style="color: #20794D;">"PACKAGE_NAME_HERE"</span>)</span></code></pre></div>
+</div>
+<p>If you have a recent version of the RStudio it will automatically detect the packages that are required by a script and will prompt you to install them. You should start by loading all the required packages at the beginning of a script. You’ll need these:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><span class="co" style="color: #5E5E5E;"># Required packages for this tutorial</span></span>
+<span id="cb3-2"><span class="fu" style="color: #4758AB;">library</span>(here) <span class="co" style="color: #5E5E5E;"># for easy path referencing</span></span>
+<span id="cb3-3"><span class="fu" style="color: #4758AB;">library</span>(tidyverse) <span class="co" style="color: #5E5E5E;"># my preference for data processing, improved code readability</span></span>
+<span id="cb3-4"><span class="fu" style="color: #4758AB;">library</span>(magrittr) <span class="co" style="color: #5E5E5E;"># to pipe code</span></span>
+<span id="cb3-5"><span class="fu" style="color: #4758AB;">library</span>(devtools) <span class="co" style="color: #5E5E5E;"># required to load github based libraries</span></span>
+<span id="cb3-6"><span class="fu" style="color: #4758AB;">library</span>(imager) <span class="co" style="color: #5E5E5E;"># to process and edit images</span></span>
+<span id="cb3-7"></span>
+<span id="cb3-8"><span class="co" style="color: #5E5E5E;"># Automatically detect if rcicr package (v1.0.0 -- github version) is installed. </span></span>
+<span id="cb3-9"><span class="co" style="color: #5E5E5E;"># If yes, loads it. Otherwise installs it and loads it.  </span></span>
+<span id="cb3-10"><span class="cf" style="color: #003B4F;">if</span>(<span class="sc" style="color: #5E5E5E;">!</span><span class="fu" style="color: #4758AB;">require</span>(rcicr) <span class="sc" style="color: #5E5E5E;">|</span> <span class="fu" style="color: #4758AB;">packageVersion</span>(<span class="st" style="color: #20794D;">"rcicr"</span>) <span class="sc" style="color: #5E5E5E;">!=</span> <span class="st" style="color: #20794D;">"1.0.0"</span>) {</span>
+<span id="cb3-11">  devtools<span class="sc" style="color: #5E5E5E;">::</span><span class="fu" style="color: #4758AB;">install_github</span>(<span class="st" style="color: #20794D;">'rdotsch/rcicr'</span>) </span>
+<span id="cb3-12">  <span class="fu" style="color: #4758AB;">library</span>(rcicr)</span>
+<span id="cb3-13">}</span></code></pre></div>
+</div>
+<p>The <em>rcicr</em> package requires you to convert the base image to grayscale, and to resize it to identical width and height (e.g.&nbsp;512 by 512 pixels).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><span class="co" style="color: #5E5E5E;"># Path to image file ------------------------------------------------------</span></span>
+<span id="cb4-2"></span>
+<span id="cb4-3"><span class="co" style="color: #5E5E5E;"># if image is in R project root directory (where Rproj file is located)</span></span>
+<span id="cb4-4"><span class="co" style="color: #5E5E5E;"># simply enter the filename as a string</span></span>
+<span id="cb4-5">img_path <span class="ot" style="color: #003B4F;">&lt;-</span> <span class="st" style="color: #20794D;">"generated-image-bxx2g8.jpg"</span> </span>
+<span id="cb4-6"></span>
+<span id="cb4-7"><span class="co" style="color: #5E5E5E;"># otherwise you can use the here() package to specify the path to the file</span></span>
+<span id="cb4-8"><span class="co" style="color: #5E5E5E;"># starting from the R project root directory</span></span>
+<span id="cb4-9"><span class="co" style="color: #5E5E5E;"># in the commented example below, the file would be stored in a folder named 'subfolder_X' located in the root directory</span></span>
+<span id="cb4-10"></span>
+<span id="cb4-11"><span class="co" style="color: #5E5E5E;"># img_path &lt;- here::here("subfolder_X", "generated-image-bxx2g8.jpg") </span></span>
+<span id="cb4-12"></span>
+<span id="cb4-13"><span class="co" style="color: #5E5E5E;"># Image dimensions --------------------------------------------------------</span></span>
+<span id="cb4-14"></span>
+<span id="cb4-15"><span class="co" style="color: #5E5E5E;"># Set width in pixels</span></span>
+<span id="cb4-16">img_width <span class="ot" style="color: #003B4F;">&lt;-</span> <span class="dv" style="color: #AD0000;">512</span></span>
+<span id="cb4-17"></span>
+<span id="cb4-18"><span class="co" style="color: #5E5E5E;"># Automatically set height to match width (required for rcicr) </span></span>
+<span id="cb4-19">img_height <span class="ot" style="color: #003B4F;">&lt;-</span> img_width</span>
+<span id="cb4-20"></span>
+<span id="cb4-21"></span>
+<span id="cb4-22"><span class="co" style="color: #5E5E5E;"># Convert to grayscale and resize image -----------------------------------</span></span>
+<span id="cb4-23"></span>
+<span id="cb4-24">base_image <span class="ot" style="color: #003B4F;">&lt;-</span> <span class="fu" style="color: #4758AB;">load.image</span>(<span class="st" style="color: #20794D;">"generated-image-bxx2g8.jpg"</span>) <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
+<span id="cb4-25">  imager<span class="sc" style="color: #5E5E5E;">::</span><span class="fu" style="color: #4758AB;">grayscale</span>() <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
+<span id="cb4-26">  imager<span class="sc" style="color: #5E5E5E;">::</span><span class="fu" style="color: #4758AB;">resize</span>(<span class="at" style="color: #657422;">size_x =</span> img_width, <span class="at" style="color: #657422;">size_y =</span> img_height)</span>
+<span id="cb4-27"></span>
+<span id="cb4-28"></span>
+<span id="cb4-29"><span class="co" style="color: #5E5E5E;"># Save image --------------------------------------------------------------</span></span>
+<span id="cb4-30"></span>
+<span id="cb4-31"><span class="fu" style="color: #4758AB;">save.image</span>(<span class="at" style="color: #657422;">im =</span> base_image, <span class="st" style="color: #20794D;">"gray_base_image.jpg"</span>)</span></code></pre></div>
+</div>
+</section>
+</section>
+<section id="step-2" class="level3">
+<h3 class="anchored" data-anchor-id="step-2"><strong>Step 2</strong></h3>
+<p>Now you can use the base image to generate many pairs of images. These pairs of images are the stimuli you need for the 2-image forced choice task. In each pair, one image is the base image with superimposed visual noise, and the other image is the base face with the inverted noise from the first image (its negative image). The use of noise + inverted noise is a trick to maximize the differences between the images in any given task trial. This minimizes the difficulty of having to choose between highly similar images. For this example, I’m generating 500 image pairs, for a task with 500 decision trials. Here’s how you can generate them:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><span class="co" style="color: #5E5E5E;"># Load base image file ----------------------------------------------------</span></span>
+<span id="cb5-2"></span>
+<span id="cb5-3">base_face_file <span class="ot" style="color: #003B4F;">&lt;-</span> <span class="fu" style="color: #4758AB;">list</span>(<span class="st" style="color: #20794D;">"base_face"</span> <span class="ot" style="color: #003B4F;">=</span> <span class="st" style="color: #20794D;">"gray_base_image.jpg"</span>)</span>
+<span id="cb5-4"></span>
+<span id="cb5-5"></span>
+<span id="cb5-6"><span class="co" style="color: #5E5E5E;"># Generate image pairs ----------------------------------------------------</span></span>
+<span id="cb5-7"></span>
+<span id="cb5-8"><span class="co" style="color: #5E5E5E;"># How many trials do you wish to have in your task?</span></span>
+<span id="cb5-9">number_task_trials <span class="ot" style="color: #003B4F;">&lt;-</span> <span class="dv" style="color: #AD0000;">500</span></span>
+<span id="cb5-10"></span>
+<span id="cb5-11"><span class="co" style="color: #5E5E5E;"># Which type of visual noise do you want to generate?</span></span>
+<span id="cb5-12"><span class="co" style="color: #5E5E5E;"># Default is sinusoid; other options include Gabor noise  </span></span>
+<span id="cb5-13">selected_noise <span class="ot" style="color: #003B4F;">&lt;-</span> <span class="st" style="color: #20794D;">"sinusoid"</span> <span class="co" style="color: #5E5E5E;"># or "gabor"</span></span>
+<span id="cb5-14"></span>
+<span id="cb5-15"><span class="co" style="color: #5E5E5E;"># Generate stimuli</span></span>
+<span id="cb5-16"><span class="fu" style="color: #4758AB;">generateStimuli2IFC</span>(base_face_file, </span>
+<span id="cb5-17">                    <span class="at" style="color: #657422;">n_trials =</span> number_task_trials,</span>
+<span id="cb5-18">                    <span class="at" style="color: #657422;">img_size =</span> <span class="dv" style="color: #AD0000;">512</span>,</span>
+<span id="cb5-19">                    <span class="at" style="color: #657422;">noise_type =</span> selected_noise,</span>
+<span id="cb5-20">                    <span class="at" style="color: #657422;">stimulus_path =</span> <span class="st" style="color: #20794D;">"./stimuli"</span>)</span>
+<span id="cb5-21"></span>
+<span id="cb5-22"><span class="co" style="color: #5E5E5E;"># WHERE ARE STIMULI STORED?</span></span>
+<span id="cb5-23"></span>
+<span id="cb5-24"><span class="do" style="color: #5E5E5E;
+font-style: italic;">## The generated stimuli can be found in a folder named 'stimuli' (or name you</span></span>
+<span id="cb5-25"><span class="do" style="color: #5E5E5E;
+font-style: italic;">## used in stimulus_path argument above)</span></span>
+<span id="cb5-26"></span>
+<span id="cb5-27"><span class="do" style="color: #5E5E5E;
+font-style: italic;">## In this folder you can also find the .Rdata file file needed for analysis of</span></span>
+<span id="cb5-28"><span class="do" style="color: #5E5E5E;
+font-style: italic;">## data after data collection. This .Rdata file contains the parameters that </span></span>
+<span id="cb5-29"><span class="do" style="color: #5E5E5E;
+font-style: italic;">## were used to generate each stimulus</span></span></code></pre></div>
+</div>
+</section>
+<section id="step-3" class="level3">
+<h3 class="anchored" data-anchor-id="step-3"><strong>Step 3</strong></h3>
+<p>Now that you have your stimuli, you can use them in a 2-image forced choice task — as we have only two images per trial, but there are other variants of the task with more images per trial (see <a href="https://psyarxiv.com/xg693/">Schmitz et al., 2021</a>). Please note that each image pair is composed of an original image and its inverted version (its visual negative).</p>
+<p>Use your preferred experiment-building program to run the task. Some popular choices include <a href="https://www.millisecond.com/download/library/reversecorrelation">Inquisit</a>, <a href="https://www.psychopy.org/">PsychoPy</a>, <a href="https://osdoc.cogsci.nl/">OpenSesame</a>, <a href="https://gorilla.sc/">Gorilla</a>, or <a href="https://www.qualtrics.com/">Qualtrics</a>. In the image below you can see an example of a 2-image forced choice task. I highlight the essential components and the expected content of the data output, but please add Informed Consent in the beginning, and demographics (+ debriefing if necessary) at the end.</p>
+<p><img src="https://manueloliveira.nl/posts/p_2/images/clipboard-1976476111.png" class="img-fluid"></p>
+<p>Important to take into account while building the task:</p>
+<ul>
+<li><p><strong>Image pair presentation.</strong> Each image pair generated in Step 2 includes an image labeled as original (e.g.&nbsp;rcic_base_face_1_00001_<strong>ori</strong>.png) and another labeled as inverted (e.g.&nbsp;rcic_base_face_1_00001_<strong>inv</strong>.png). These should be presented as a pair in the same task trial. Therefore, each trial number will be associated with a specific pair of stimulus images.</p></li>
+<li><p><strong>Counterbalance ori and inv images.</strong> You may want to counterbalance the position where the ori and inv images are presented, between-participants. That is, for half the participants the ori images are displayed at the left (inv at the right), and for the other half the ori images are displayed at the right (inv at the left).</p></li>
+<li><p><strong>Required data output.</strong> Your program needs to log the following information: condition of the target construct you’re interested in (e.g.&nbsp;<em>trustworthy</em>), unique subject ID, trial number, image presented on the left, image presented on the right, image selected, whether image is <em>ori</em> or <em>inv</em>, response (derived from the type of image selected (ori = +1, inv = -1). See the example data output above. The most important data to have in the end are: subject, trial number, and response coded as 1 or -1.</p></li>
+</ul>
+<p>For the sake of this tutorial, I generated some bogus response data to use in the next steps. You can also generate it using the code below.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><span class="co" style="color: #5E5E5E;"># Simulate RC response data -----------------------------------------------</span></span>
+<span id="cb6-2"></span>
+<span id="cb6-3"><span class="co" style="color: #5E5E5E;"># How many participants?</span></span>
+<span id="cb6-4">nr_subjects <span class="ot" style="color: #003B4F;">&lt;-</span> <span class="dv" style="color: #AD0000;">50</span></span>
+<span id="cb6-5"><span class="co" style="color: #5E5E5E;"># How many trials?</span></span>
+<span id="cb6-6">nr_trials <span class="ot" style="color: #003B4F;">&lt;-</span> <span class="dv" style="color: #AD0000;">500</span></span>
+<span id="cb6-7"></span>
+<span id="cb6-8"><span class="co" style="color: #5E5E5E;"># Generate simulated data frame</span></span>
+<span id="cb6-9">sim_data <span class="ot" style="color: #003B4F;">&lt;-</span> <span class="fu" style="color: #4758AB;">data.frame</span>(</span>
+<span id="cb6-10">  <span class="at" style="color: #657422;">condition =</span> <span class="st" style="color: #20794D;">"TRUSTWORTHY"</span>,</span>
+<span id="cb6-11">  <span class="at" style="color: #657422;">subject =</span> <span class="fu" style="color: #4758AB;">rep</span>(<span class="dv" style="color: #AD0000;">1</span><span class="sc" style="color: #5E5E5E;">:</span>nr_subjects, <span class="at" style="color: #657422;">each =</span> nr_trials),</span>
+<span id="cb6-12">  <span class="at" style="color: #657422;">trial =</span> <span class="fu" style="color: #4758AB;">rep</span>(<span class="dv" style="color: #AD0000;">1</span><span class="sc" style="color: #5E5E5E;">:</span>nr_trials, <span class="at" style="color: #657422;">times =</span> nr_subjects),</span>
+<span id="cb6-13">  <span class="at" style="color: #657422;">resp =</span> <span class="fu" style="color: #4758AB;">rbinom</span>(nr_subjects<span class="sc" style="color: #5E5E5E;">*</span>nr_trials, <span class="dv" style="color: #AD0000;">1</span>, <span class="fl" style="color: #AD0000;">0.3</span>)</span>
+<span id="cb6-14">) <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
+<span id="cb6-15">  <span class="fu" style="color: #4758AB;">mutate</span>(<span class="at" style="color: #657422;">resp =</span> <span class="fu" style="color: #4758AB;">ifelse</span>(resp <span class="sc" style="color: #5E5E5E;">==</span> <span class="dv" style="color: #AD0000;">0</span>, <span class="sc" style="color: #5E5E5E;">-</span><span class="dv" style="color: #AD0000;">1</span>, <span class="dv" style="color: #AD0000;">1</span>))</span>
+<span id="cb6-16"></span>
+<span id="cb6-17"><span class="co" style="color: #5E5E5E;"># Save data</span></span>
+<span id="cb6-18"><span class="fu" style="color: #4758AB;">write_csv</span>(sim_data, <span class="at" style="color: #657422;">file =</span> <span class="st" style="color: #20794D;">"sim_rc_data.csv"</span>)</span></code></pre></div>
+</div>
+<section id="generating-classification-images" class="level4">
+<h4 class="anchored" data-anchor-id="generating-classification-images"><strong>Generating Classification Images</strong></h4>
+<p>Once you have finished collecting and processing your data, you are ready to generate <strong>classification images (CIs)</strong>. You have several options:</p>
+<ul>
+<li><p>Create a CI for each participant: we call this an <strong>Individual CI</strong></p></li>
+<li><p>Create a CI using the data from all participants of the same target construct condition (e.g.&nbsp;TRUSTWORTHY): we call this a <strong>Group CI</strong></p></li>
+<li><p>Create several CIs using randomly sampled subsets of participants from the same target construct condition (e.g.&nbsp;TRUSTWORTHY) we call this a <strong>Subgroup CI</strong></p></li>
+</ul>
+<p>Until recently, most studies using the two-phase variant of RC methods in Social Psychology, focused on generating and analyzing group CIs, as these capture the visual features predicting the target construct (TRUSTWORTHY) on which all participants of a condition agree on average.</p>
+<p><img src="https://manueloliveira.nl/posts/p_2/images/clipboard-423364294.png" class="img-fluid"></p>
+<p>For now, let’s focus on the traditional options of CI generation and how to do it in R.</p>
+</section>
+<section id="individual-ci-generation" class="level4">
+<h4 class="anchored" data-anchor-id="individual-ci-generation"><strong><em>Individual CI generation</em></strong></h4>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><span class="co" style="color: #5E5E5E;"># Setup -------------------------------------------------------------------</span></span>
+<span id="cb7-2"></span>
+<span id="cb7-3"><span class="co" style="color: #5E5E5E;"># Load response data</span></span>
+<span id="cb7-4">rc_data <span class="ot" style="color: #003B4F;">&lt;-</span> vroom<span class="sc" style="color: #5E5E5E;">::</span><span class="fu" style="color: #4758AB;">vroom</span>(<span class="st" style="color: #20794D;">"sim_rc_data.csv"</span>) <span class="co" style="color: #5E5E5E;"># replace with your data filename if you're not using the tutorial bogus data</span></span>
+<span id="cb7-5"></span>
+<span id="cb7-6"><span class="co" style="color: #5E5E5E;"># Convert data to data.frame format to prevent issues with rcicr package</span></span>
+<span id="cb7-7">rc_data <span class="ot" style="color: #003B4F;">&lt;-</span> <span class="fu" style="color: #4758AB;">as.data.frame</span>(rc_data)</span>
+<span id="cb7-8"></span>
+<span id="cb7-9"><span class="co" style="color: #5E5E5E;"># Load Rdata file with stimulus generation info</span></span>
+<span id="cb7-10"><span class="co" style="color: #5E5E5E;"># File is stored inside the task stimuli folder when stimuli are generated</span></span>
+<span id="cb7-11">rdata_file_location <span class="ot" style="color: #003B4F;">&lt;-</span> here<span class="sc" style="color: #5E5E5E;">::</span><span class="fu" style="color: #4758AB;">here</span>(<span class="st" style="color: #20794D;">"stimuli"</span>, <span class="st" style="color: #20794D;">"rcic_seed_1_time_Jun_10_2023_18_47.Rdata"</span>) </span>
+<span id="cb7-12"></span>
+<span id="cb7-13"><span class="co" style="color: #5E5E5E;"># Label given for base face at stimulus generation, in our case it was 'base_face'</span></span>
+<span id="cb7-14">base_face_label <span class="ot" style="color: #003B4F;">&lt;-</span> <span class="st" style="color: #20794D;">"base_face"</span></span>
+<span id="cb7-15"></span>
+<span id="cb7-16"></span>
+<span id="cb7-17"><span class="co" style="color: #5E5E5E;"># Generate Individual CIs for all participants ---------------------------------------------</span></span>
+<span id="cb7-18"></span>
+<span id="cb7-19">ind_cis <span class="ot" style="color: #003B4F;">&lt;-</span> <span class="fu" style="color: #4758AB;">batchGenerateCI</span>(</span>
+<span id="cb7-20">  <span class="at" style="color: #657422;">data =</span> rc_data,</span>
+<span id="cb7-21">  <span class="at" style="color: #657422;">by =</span> <span class="st" style="color: #20794D;">"subject"</span>,</span>
+<span id="cb7-22">  <span class="at" style="color: #657422;">stimuli =</span> <span class="st" style="color: #20794D;">"trial"</span>,</span>
+<span id="cb7-23">  <span class="at" style="color: #657422;">responses =</span> <span class="st" style="color: #20794D;">"resp"</span>,</span>
+<span id="cb7-24">  <span class="at" style="color: #657422;">baseimage =</span> base_face_label,</span>
+<span id="cb7-25">  <span class="at" style="color: #657422;">label =</span> <span class="st" style="color: #20794D;">"ind_ci_"</span>,</span>
+<span id="cb7-26">  <span class="at" style="color: #657422;">rdata =</span> rdata_file_location,</span>
+<span id="cb7-27">  <span class="at" style="color: #657422;">targetpath =</span> <span class="st" style="color: #20794D;">"./individual_cis"</span></span>
+<span id="cb7-28">)</span>
+<span id="cb7-29"></span>
+<span id="cb7-30"><span class="co" style="color: #5E5E5E;"># You will find all the individual CI image inside the folder 'individual_cis'</span></span>
+<span id="cb7-31"></span>
+<span id="cb7-32"></span>
+<span id="cb7-33"><span class="co" style="color: #5E5E5E;"># Generate Individual CI for a single participant ------------------------------------------------------</span></span>
+<span id="cb7-34"></span>
+<span id="cb7-35"><span class="co" style="color: #5E5E5E;"># Here I'm subsetting the data from participant nr. 25</span></span>
+<span id="cb7-36">s25_df <span class="ot" style="color: #003B4F;">&lt;-</span> rc_data <span class="sc" style="color: #5E5E5E;">%&gt;%</span> <span class="fu" style="color: #4758AB;">filter</span>(subject <span class="sc" style="color: #5E5E5E;">==</span> <span class="dv" style="color: #AD0000;">25</span>)</span>
+<span id="cb7-37"></span>
+<span id="cb7-38"><span class="co" style="color: #5E5E5E;"># To customize the filenames of output individual CI</span></span>
+<span id="cb7-39">participant_nr <span class="ot" style="color: #003B4F;">&lt;-</span> <span class="dv" style="color: #AD0000;">25</span></span>
+<span id="cb7-40"></span>
+<span id="cb7-41"><span class="co" style="color: #5E5E5E;"># Generate individual CI</span></span>
+<span id="cb7-42">indci_25 <span class="ot" style="color: #003B4F;">&lt;-</span> <span class="fu" style="color: #4758AB;">generateCI</span>(</span>
+<span id="cb7-43">  <span class="at" style="color: #657422;">stimuli =</span> s25_df<span class="sc" style="color: #5E5E5E;">$</span>trial,</span>
+<span id="cb7-44">  <span class="at" style="color: #657422;">responses =</span> s25_df<span class="sc" style="color: #5E5E5E;">$</span>resp,</span>
+<span id="cb7-45">  <span class="at" style="color: #657422;">baseimage =</span> base_face_label,</span>
+<span id="cb7-46">  <span class="at" style="color: #657422;">filename =</span> <span class="fu" style="color: #4758AB;">paste0</span>(<span class="st" style="color: #20794D;">"indci_"</span>, participant_nr),</span>
+<span id="cb7-47">  <span class="at" style="color: #657422;">rdata =</span> rdata_file_location,</span>
+<span id="cb7-48">  <span class="at" style="color: #657422;">targetpath =</span> <span class="st" style="color: #20794D;">"./individual_cis"</span></span>
+<span id="cb7-49">)</span>
+<span id="cb7-50"></span>
+<span id="cb7-51"><span class="co" style="color: #5E5E5E;"># You will find the individual CI image inside the folder 'individual_cis'</span></span></code></pre></div>
+</div>
+</section>
+<section id="group-ci-generation" class="level4">
+<h4 class="anchored" data-anchor-id="group-ci-generation"><strong><em>Group CI generation</em></strong></h4>
+<p>For the tutorial example condition ‘TRUSTWORTHY’:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><span class="co" style="color: #5E5E5E;"># Setup -------------------------------------------------------------------</span></span>
+<span id="cb8-2"></span>
+<span id="cb8-3"><span class="co" style="color: #5E5E5E;"># Load response data</span></span>
+<span id="cb8-4">rc_data <span class="ot" style="color: #003B4F;">&lt;-</span> vroom<span class="sc" style="color: #5E5E5E;">::</span><span class="fu" style="color: #4758AB;">vroom</span>(<span class="st" style="color: #20794D;">"sim_rc_data.csv"</span>) <span class="co" style="color: #5E5E5E;"># replace with your data filename if you're not using the tutorial bogus data</span></span>
+<span id="cb8-5"></span>
+<span id="cb8-6"><span class="co" style="color: #5E5E5E;"># Convert data to data.frame format to prevent issues with rcicr package</span></span>
+<span id="cb8-7">rc_data <span class="ot" style="color: #003B4F;">&lt;-</span> <span class="fu" style="color: #4758AB;">as.data.frame</span>(rc_data)</span>
+<span id="cb8-8"></span>
+<span id="cb8-9"><span class="co" style="color: #5E5E5E;"># Load Rdata file with stimulus generation info</span></span>
+<span id="cb8-10"><span class="co" style="color: #5E5E5E;"># File is stored inside the task stimuli folder when stimuli are generated</span></span>
+<span id="cb8-11">rdata_file_location <span class="ot" style="color: #003B4F;">&lt;-</span> here<span class="sc" style="color: #5E5E5E;">::</span><span class="fu" style="color: #4758AB;">here</span>(<span class="st" style="color: #20794D;">"stimuli"</span>, <span class="st" style="color: #20794D;">"rcic_seed_1_time_Jun_10_2023_18_47.Rdata"</span>) </span>
+<span id="cb8-12"></span>
+<span id="cb8-13"><span class="co" style="color: #5E5E5E;"># Load rdata into environment</span></span>
+<span id="cb8-14">base<span class="sc" style="color: #5E5E5E;">::</span><span class="fu" style="color: #4758AB;">load</span>(rdata_file_location)</span>
+<span id="cb8-15"></span>
+<span id="cb8-16"><span class="co" style="color: #5E5E5E;"># Label given for base face at stimulus generation, in our case it was 'base_face'</span></span>
+<span id="cb8-17">base_face_label <span class="ot" style="color: #003B4F;">&lt;-</span> <span class="st" style="color: #20794D;">"base_face"</span></span>
+<span id="cb8-18"></span>
+<span id="cb8-19"></span>
+<span id="cb8-20"><span class="co" style="color: #5E5E5E;"># Generate group CI for Trustworthy --------------------------------------------------</span></span>
+<span id="cb8-21"></span>
+<span id="cb8-22">group_cis <span class="ot" style="color: #003B4F;">&lt;-</span> <span class="fu" style="color: #4758AB;">batchGenerateCI</span>(</span>
+<span id="cb8-23">  <span class="at" style="color: #657422;">data =</span> rc_data,</span>
+<span id="cb8-24">  <span class="at" style="color: #657422;">by =</span> <span class="st" style="color: #20794D;">"condition"</span>,</span>
+<span id="cb8-25">  <span class="at" style="color: #657422;">stimuli =</span> <span class="st" style="color: #20794D;">"trial"</span>,</span>
+<span id="cb8-26">  <span class="at" style="color: #657422;">responses =</span> <span class="st" style="color: #20794D;">"resp"</span>,</span>
+<span id="cb8-27">  <span class="at" style="color: #657422;">baseimage =</span> base_face_label,</span>
+<span id="cb8-28">  <span class="at" style="color: #657422;">rdata =</span> rdata_file_location,</span>
+<span id="cb8-29">  <span class="at" style="color: #657422;">targetpath =</span> <span class="st" style="color: #20794D;">"./group_cis"</span></span>
+<span id="cb8-30">)</span>
+<span id="cb8-31"></span>
+<span id="cb8-32"><span class="co" style="color: #5E5E5E;"># You will find the individual CI image inside the folder 'group_cis'</span></span></code></pre></div>
+</div>
+<p>Traditionally, once you have the group CI for your different target conditions (e.g.&nbsp;trustworthy, untrustworthy, happy, sad) you can move to Phase II.</p>
+</section>
+</section>
+</section>
+<section id="phase-ii" class="level2">
+<h2 class="anchored" data-anchor-id="phase-ii">Phase II</h2>
+<p>In this phase, you are usually interested in understanding if the CIs you generated in Phase I contain the <em>signal</em> or <em>pattern of features</em> that are predictive of the judgments you are studying (i.e., trustworthy, etc.). Although you can visually inspect the CIs and reach your own conclusions about whether they communicate the signal you are interested in, this would not be very reliable, as you are more biased than you think (confirmation bias…look it up!). However, you could ask an entirely new group of people to make judgments about your fresh CIs. Importantly, and ideally, these people should not have participated in the RC task in Phase I.</p>
+<p>Traditionally, researchers focused on collecting ratings for the group CIs of their conditions. If a group CI was generated for the concept of a ‘trustworthy’ face, then the new group of participants would evaluate how trustworthy this group CI face looks to them. If the new group of participants indeed rates this group CI as trustworthy, researchers can pop a bottle of champagne and report to the world that the group CI captured the visual cues associated with judging a face as ‘trustworthy’.</p>
+<p><img src="https://manueloliveira.nl/posts/p_2/images/clipboard-1250331001.png" class="img-fluid"></p>
+<p>All good right?</p>
+<p>Well…</p>
+<section id="whats-wrong-with-the-traditional-approach" class="level3">
+<h3 class="anchored" data-anchor-id="whats-wrong-with-the-traditional-approach"><strong>What’s wrong with the traditional approach?</strong></h3>
+<p>A group of psychology researchers (<a href="https://journals.sagepub.com/doi/10.1177/1948550620938616">Cone et al., 2021</a>) called attention to the fact that evaluating a single group CI in the second phase is not ideal, as a single group CI is not able to convey any of the variability of people’s results in the first phase. This is important to consider since different groups of participants will generate slightly different group CIs for the same construct, and therefore, presenting the group of raters in the second phase with a single group CI is like presenting a randomly drawn card from the deck without showing them how the cards can vary.</p>
+<p>In phase one, there is an individual result — or individual CI — for each participant. The group CI created by aggregating all the individual CIs from a given condition (for instance, ‘Trustworthy’ face) averages out any of the individual differences present in the individual CIs (how each participant imagines a “trustworthy” face to look like), keeping only the visual information that is common across the individual CIs.</p>
+<p>While there is nothing fundamentally wrong with asking a second group of participants to judge a single group CI on ‘trustworthiness’, there is an unfortunate loss of information regarding how this single image could vary depending on the visual cues that different individuals or subgroups of them (they are all sampled from a larger population after all) could have used to make their decisions in the RC task. In this way, the ratings in Phase II can capture what was common across all the individual CIs, but cannot pick up on any of the variations that occurred in peoples’ responses during Phase I.</p>
+</section>
+<section id="recommended-practices-for-phase-ii" class="level3">
+<h3 class="anchored" data-anchor-id="recommended-practices-for-phase-ii"><strong>Recommended practices for Phase II</strong></h3>
+<p>Taken to the extreme, the solution could also involve asking the CI raters in phase two to rate all of the individual CIs, thus preventing any loss of variability. However, when you have dozens if not hundreds of individual CIs, your study becomes very expensive as participants are usually paid according to the duration of the study. Plus, the task becomes increasingly tiresome for the participants who might then fall into the temptation of randomly responding.</p>
+<p><img src="https://manueloliveira.nl/posts/p_2/images/clipboard-218544073.png" class="img-fluid"></p>
+<p>Another recently proposed solution involves reducing the number of CIs associated with the same condition while keeping a decent amount of them. We call these <strong>subgroup CIs</strong>. This solution represents a compromise between the costly option of using all individual CIs and the problematic option of using a single group CI. The creation of subgroup CIs involves taking random subsets of participants from the same condition and generating a (sub)group CI for each of these subsets. This increases the scientific soundness and reliability of the results of Phase II, while saving us time and financial resources.</p>
+<blockquote class="blockquote">
+<p>In sum, it is currently recommended that you use either all individual CIs, or subgroup CIs in Phase II.</p>
+</blockquote>
+<p>For more detailed and formal explanations see <a href="https://journals.sagepub.com/doi/10.1177/1948550620938616">Cone et al.&nbsp;(2021)</a>.</p>
+</section>
+<section id="how-to-generate-subgroup-cis" class="level3">
+<h3 class="anchored" data-anchor-id="how-to-generate-subgroup-cis"><strong>How to generate subgroup CIs</strong></h3>
+<p>There are a couple of decisions you have to make before you start generating subgroup CIs for Phase II, including:</p>
+<ul>
+<li><p>How many subgroup CIs you want? The maximum you can have in practice = number of all participants in condition - 1. You will want less than that I suppose (otherwise, what’s the point?).</p></li>
+<li><p>What percentage of participant IDs do you want to randomly draw from the full set for each subgroup CI? I recommend using either: 0.25, 0.50, or 0.75. Note that 1.00 (100%) is equivalent to requesting a group CI, as all participants from the condition will be used.</p></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><span class="co" style="color: #5E5E5E;"># Setup -------------------------------------------------------------------</span></span>
+<span id="cb9-2"></span>
+<span id="cb9-3"><span class="co" style="color: #5E5E5E;"># Load response data</span></span>
+<span id="cb9-4">rc_data <span class="ot" style="color: #003B4F;">&lt;-</span> vroom<span class="sc" style="color: #5E5E5E;">::</span><span class="fu" style="color: #4758AB;">vroom</span>(<span class="st" style="color: #20794D;">"sim_rc_data.csv"</span>) <span class="co" style="color: #5E5E5E;"># replace with your data filename if you're not using the tutorial bogus data</span></span>
+<span id="cb9-5"></span>
+<span id="cb9-6"><span class="co" style="color: #5E5E5E;"># Convert data to data.frame format to prevent issues with rcicr package</span></span>
+<span id="cb9-7">rc_data <span class="ot" style="color: #003B4F;">&lt;-</span> <span class="fu" style="color: #4758AB;">as.data.frame</span>(rc_data)</span>
+<span id="cb9-8"></span>
+<span id="cb9-9"><span class="co" style="color: #5E5E5E;"># Load Rdata file with stimulus generation info</span></span>
+<span id="cb9-10"><span class="co" style="color: #5E5E5E;"># File is stored inside the task stimuli folder when stimuli are generated</span></span>
+<span id="cb9-11">rdata_file_location <span class="ot" style="color: #003B4F;">&lt;-</span> here<span class="sc" style="color: #5E5E5E;">::</span><span class="fu" style="color: #4758AB;">here</span>(<span class="st" style="color: #20794D;">"stimuli"</span>, <span class="st" style="color: #20794D;">"rcic_seed_1_time_Jun_10_2023_18_47.Rdata"</span>) </span>
+<span id="cb9-12"></span>
+<span id="cb9-13"><span class="co" style="color: #5E5E5E;"># Load rdata into environment</span></span>
+<span id="cb9-14">base<span class="sc" style="color: #5E5E5E;">::</span><span class="fu" style="color: #4758AB;">load</span>(rdata_file_location)</span>
+<span id="cb9-15"></span>
+<span id="cb9-16"><span class="co" style="color: #5E5E5E;"># Label given for base face at stimulus generation, in our case it was 'base_face'</span></span>
+<span id="cb9-17">base_face_label <span class="ot" style="color: #003B4F;">&lt;-</span> <span class="st" style="color: #20794D;">"base_face"</span></span>
+<span id="cb9-18"></span>
+<span id="cb9-19"></span>
+<span id="cb9-20"><span class="co" style="color: #5E5E5E;"># Subgroup CI generation --------------------------------------------------</span></span>
+<span id="cb9-21"></span>
+<span id="cb9-22"><span class="co" style="color: #5E5E5E;"># Set seed for reproducible results (default = 42, geeks will know the 'meaning' of this)</span></span>
+<span id="cb9-23">custom_seed <span class="ot" style="color: #003B4F;">&lt;-</span> <span class="dv" style="color: #AD0000;">42</span></span>
+<span id="cb9-24"><span class="fu" style="color: #4758AB;">set.seed</span>(custom_seed)</span>
+<span id="cb9-25"></span>
+<span id="cb9-26"><span class="co" style="color: #5E5E5E;"># Derive total number of participants</span></span>
+<span id="cb9-27">participant_n <span class="ot" style="color: #003B4F;">&lt;-</span> rc_data<span class="sc" style="color: #5E5E5E;">$</span>subject <span class="sc" style="color: #5E5E5E;">%&gt;%</span> unique <span class="sc" style="color: #5E5E5E;">%&gt;%</span> length</span>
+<span id="cb9-28"></span>
+<span id="cb9-29"><span class="co" style="color: #5E5E5E;"># How many possible individual CIs</span></span>
+<span id="cb9-30">total_ind_cis <span class="ot" style="color: #003B4F;">&lt;-</span> participant_n <span class="co" style="color: #5E5E5E;"># This step is explicitly added for the sake of clarity</span></span>
+<span id="cb9-31"></span>
+<span id="cb9-32"><span class="co" style="color: #5E5E5E;"># Desired number of sub group-CIs (using 4 for this tutorial)</span></span>
+<span id="cb9-33">nr_groupcis <span class="ot" style="color: #003B4F;">&lt;-</span> <span class="dv" style="color: #AD0000;">4</span></span>
+<span id="cb9-34"></span>
+<span id="cb9-35"><span class="co" style="color: #5E5E5E;"># Fraction of participants (individual CIs) to randmoly sample from the full set</span></span>
+<span id="cb9-36"><span class="co" style="color: #5E5E5E;"># for each subgroup CI</span></span>
+<span id="cb9-37"><span class="co" style="color: #5E5E5E;"># I recommend using 0.25, 0.50, or 0.75. </span></span>
+<span id="cb9-38"><span class="co" style="color: #5E5E5E;"># Important: using 1.00 would be equivalent to a group CI.</span></span>
+<span id="cb9-39">input_fraction <span class="ot" style="color: #003B4F;">&lt;-</span> <span class="fl" style="color: #AD0000;">0.50</span></span>
+<span id="cb9-40"></span>
+<span id="cb9-41"><span class="co" style="color: #5E5E5E;"># Initialize dataframe to log information about sampled individual CIs</span></span>
+<span id="cb9-42">sampled_cis <span class="ot" style="color: #003B4F;">&lt;-</span> <span class="cn" style="color: #8f5902;">NULL</span></span>
+<span id="cb9-43"></span>
+<span id="cb9-44"><span class="co" style="color: #5E5E5E;"># Loop over </span></span>
+<span id="cb9-45"><span class="cf" style="color: #003B4F;">for</span>(i <span class="cf" style="color: #003B4F;">in</span> <span class="dv" style="color: #AD0000;">1</span><span class="sc" style="color: #5E5E5E;">:</span>nr_groupcis) {</span>
+<span id="cb9-46">  </span>
+<span id="cb9-47">  <span class="co" style="color: #5E5E5E;"># Sampling (without replacement)</span></span>
+<span id="cb9-48">  sampled_ind_cis <span class="ot" style="color: #003B4F;">&lt;-</span> rc_data<span class="sc" style="color: #5E5E5E;">$</span>subject <span class="sc" style="color: #5E5E5E;">%&gt;%</span></span>
+<span id="cb9-49">    <span class="fu" style="color: #4758AB;">unique</span>() <span class="sc" style="color: #5E5E5E;">%&gt;%</span></span>
+<span id="cb9-50">    <span class="fu" style="color: #4758AB;">sample</span>(<span class="at" style="color: #657422;">size =</span> <span class="fu" style="color: #4758AB;">round</span>(input_fraction <span class="sc" style="color: #5E5E5E;">*</span> participant_n, <span class="dv" style="color: #AD0000;">0</span>),</span>
+<span id="cb9-51">           <span class="at" style="color: #657422;">replace =</span> <span class="cn" style="color: #8f5902;">FALSE</span>)</span>
+<span id="cb9-52">  </span>
+<span id="cb9-53">  <span class="co" style="color: #5E5E5E;"># Filter input response data set to include only subset of participants (individual CIs)</span></span>
+<span id="cb9-54">  subgroup_df <span class="ot" style="color: #003B4F;">&lt;-</span></span>
+<span id="cb9-55">    rc_data <span class="sc" style="color: #5E5E5E;">%&gt;%</span> <span class="fu" style="color: #4758AB;">filter</span>(subject <span class="sc" style="color: #5E5E5E;">%in%</span> sampled_ind_cis) <span class="sc" style="color: #5E5E5E;">%&gt;%</span> <span class="fu" style="color: #4758AB;">mutate</span>(<span class="at" style="color: #657422;">subgroup_ci_nr =</span> i)</span>
+<span id="cb9-56">  </span>
+<span id="cb9-57">  <span class="co" style="color: #5E5E5E;"># Subgroup CI name</span></span>
+<span id="cb9-58">  subgroupci_label <span class="ot" style="color: #003B4F;">&lt;-</span> <span class="fu" style="color: #4758AB;">paste0</span>(<span class="st" style="color: #20794D;">"subgroup_ci_"</span>, i)</span>
+<span id="cb9-59">  </span>
+<span id="cb9-60">  <span class="co" style="color: #5E5E5E;"># Log sampled data</span></span>
+<span id="cb9-61">  sampled_cis <span class="ot" style="color: #003B4F;">&lt;-</span> <span class="fu" style="color: #4758AB;">rbind</span>(sampled_cis, <span class="fu" style="color: #4758AB;">data.frame</span>(subgroupci_label, sampled_ind_cis))</span>
+<span id="cb9-62">  </span>
+<span id="cb9-63">  </span>
+<span id="cb9-64">  <span class="co" style="color: #5E5E5E;"># Generate subgroup CI</span></span>
+<span id="cb9-65">  sg_ci <span class="ot" style="color: #003B4F;">&lt;-</span> <span class="fu" style="color: #4758AB;">batchGenerateCI</span>(</span>
+<span id="cb9-66">    subgroup_df,</span>
+<span id="cb9-67">    <span class="at" style="color: #657422;">by =</span> <span class="st" style="color: #20794D;">"subgroup_ci_nr"</span>,</span>
+<span id="cb9-68">    <span class="at" style="color: #657422;">stimuli =</span> <span class="st" style="color: #20794D;">"trial"</span>,</span>
+<span id="cb9-69">    <span class="at" style="color: #657422;">responses =</span> <span class="st" style="color: #20794D;">"resp"</span>,</span>
+<span id="cb9-70">    <span class="at" style="color: #657422;">baseimage =</span> base_face_label,</span>
+<span id="cb9-71">    <span class="at" style="color: #657422;">rdata =</span> rdata_file_location,</span>
+<span id="cb9-72">    <span class="at" style="color: #657422;">save_as_png =</span> <span class="cn" style="color: #8f5902;">TRUE</span>,</span>
+<span id="cb9-73">    <span class="at" style="color: #657422;">targetpath =</span> <span class="st" style="color: #20794D;">"./subgroup_cis"</span>,</span>
+<span id="cb9-74">    <span class="at" style="color: #657422;">antiCI =</span> <span class="cn" style="color: #8f5902;">FALSE</span>,</span>
+<span id="cb9-75">    <span class="at" style="color: #657422;">scaling =</span> <span class="st" style="color: #20794D;">"autoscale"</span>,</span>
+<span id="cb9-76">    <span class="at" style="color: #657422;">constant =</span> <span class="fl" style="color: #AD0000;">0.1</span>,</span>
+<span id="cb9-77">    <span class="at" style="color: #657422;">label =</span> subgroupci_label</span>
+<span id="cb9-78">  )</span>
+<span id="cb9-79">}</span>
+<span id="cb9-80"></span>
+<span id="cb9-81"><span class="co" style="color: #5E5E5E;"># You can find the subgroup CIs inside the folder 'subgroup_cis'</span></span>
+<span id="cb9-82"></span>
+<span id="cb9-83"><span class="co" style="color: #5E5E5E;"># Save data file with onformation about which participant Ids were sampled for each subgroupCI</span></span>
+<span id="cb9-84"><span class="fu" style="color: #4758AB;">write_csv</span>(sampled_cis, <span class="at" style="color: #657422;">file =</span> <span class="st" style="color: #20794D;">"pids_subgroupcis_data.csv"</span>)</span></code></pre></div>
+</div>
+<section id="alternative-with-less-code" class="level4">
+<h4 class="anchored" data-anchor-id="alternative-with-less-code"><strong>Alternative with less code</strong></h4>
+<p>Alternatively, when you already have the Phase I task response data and want to quickly generate a dataset that you can use to generate subgroup CIs, you can bypass some of the initial coding and use the shiny app below. However, the main benefit of using this app is to speed things up, and you still need to go back to R coding after getting the output from it.</p>
+<p>🤔 <em>Currently wondering if this app is really that useful, since most of you will be good at coding if you got into RC methods…</em></p>
+<p><strong>Shiny app:</strong> <a href="https://github.com/olivethree/shinyrc_subgroupcis" class="uri">https://github.com/olivethree/shinyrc_subgroupcis</a></p>
+</section>
+</section>
+</section>
+<section id="improved-phase-ii" class="level2">
+<h2 class="anchored" data-anchor-id="improved-phase-ii"><strong>Improved Phase II</strong></h2>
+<p>Now you can use the subgroup CIs (or individual CIs if you have the resources) as stimuli in the CI validation task of Phase II.</p>
+<p><img src="https://manueloliveira.nl/posts/p_2/images/clipboard-2811613575.png" class="img-fluid"></p>
+<p>The resulting data is richer and multilevel in nature. You can for instance compute a grand mean for the Trustworthy rating of several Trustworthy subgroup CIs, or compute how the mean rating of each participant deviates from the grand mean, etc. Here’s an example of a potential analysis dataset below.</p>
+<p><img src="https://manueloliveira.nl/posts/p_2/images/clipboard-1569298348.png" class="img-fluid"></p>
+<p>How to analyze it will depend on the questions you’re asking. For example, you may be interested in understanding whether the ratings of CIs generated for ‘Trustworthy’ are significantly different from CIs generated for ‘Sad’. Whatever the case, you will have a richer set of data to test your hypotheses if you follow the current recommended practices.</p>
+<p>Thanks for reading!</p>
+</section>
+<section id="references" class="level2">
+<h2 class="anchored" data-anchor-id="references"><strong>References</strong></h2>
+<ul>
+<li><p>Brinkman, L., Todorov, A., &amp; Dotsch, R. (2017). Visualising mental representations: A primer on noise-based reverse correlation in social psychology. <em>European Review of Social Psychology</em>, <em>28</em>(1), 333–361. <a href="https://doi.org/10.1080/10463283.2017.1381469" class="uri">https://doi.org/10.1080/10463283.2017.1381469</a></p></li>
+<li><p>Cone, J., Brown-Iannuzzi, J. L., Lei, R., &amp; Dotsch, R. (2021). Type I Error Is Inflated in the Two-Phase Reverse Correlation Procedure. Social Psychological and Personality Science, 12(5), 760–768. <a href="https://doi.org/10.1177/1948550620938616" class="uri">https://doi.org/10.1177/1948550620938616</a></p></li>
+<li><p>Dotsch R. (2016). Rcicr: Reverse-correlation image-classification toolbox. <em>R package (Version 0.3)</em>, 4. <a href="https://cran.r-project.org/web/packages/rcicr/index.html" class="uri">https://cran.r-project.org/web/packages/rcicr/index.html</a></p></li>
+<li><p>Dotsch, R., &amp; Todorov, A. (2012). Reverse Correlating Social Face Perception. Social Psychological and Personality Science, 3(5), 562–571. <a href="https://doi.org/10.1177/1948550611430272" class="uri">https://doi.org/10.1177/1948550611430272</a></p></li>
+<li><p>Schmitz, M., Rougier, M., &amp; Yzerbyt, V. (2021, March 24). Introducing the Brief Reverse Correlation. <a href="https://doi.org/10.31234/osf.io/xg693" class="uri">https://doi.org/10.31234/osf.io/xg693</a></p></li>
+</ul>
+
+
+</section>
+</section>
+
+ ]]></description>
+  <category>R</category>
+  <category>Tutorial</category>
+  <category>Reverse Correlation</category>
+  <category>Research</category>
+  <category>Psychophysics</category>
+  <category>Psychology</category>
+  <guid>https://manueloliveira.nl/posts/p_2/index.html</guid>
+  <pubDate>Sat, 10 Jun 2023 22:00:00 GMT</pubDate>
+  <media:content url="https://manueloliveira.nl/posts/p_2/images/clipboard-2637353984.png" medium="image" type="image/png" height="72" width="144"/>
+</item>
+<item>
+  <title>Hi, my name is…</title>
+  <dc:creator>M. Oliveira</dc:creator>
+  <link>https://manueloliveira.nl/posts/p_1/index.html</link>
+  <description><![CDATA[ 
+
+
+
+<p>I wrote this piece for those who have an interest in learning a bit about me and my professional trajectory so far.</p>
+<p>I love coffee and would ideally invite you to join me for a cup or two. To compensate, here’s a picture of a morning coffee scene to get you in the mood to read the rest of the monologue:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://manueloliveira.nl/assets/pexels-gagan-cambow-1170659.jpg" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">Retrieved from: pexels.com</figcaption><p></p>
+</figure>
+</div>
+<p>In 2019, I earned my PhD in Social Psychology from ISPA - Instituto Universitario. During my PhD I divided my time between Portugal and the Netherlands, conducting research at <a href="https://williamjamescr.org/">William James Center for Research</a> and <a href="https://www.uu.nl/en/research/behaviour-in-social-context/research-programmes/social-cognitive-and-interpersonal-determinants-of-behaviour">Utrecht University</a>.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://manueloliveira.nl/assets/phd_defense_manueloliveira.jpg" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">Moments after my PhD defense 😄 - 16 December 2019</figcaption><p></p>
+</figure>
+</div>
+<p>My doctoral work resulted in contributions to the fields of <a href="https://onlinelibrary.wiley.com/doi/10.1002/9781118133880.hop205011">social perception</a> and psychophysical image classification methods like <a href="https://en.wikipedia.org/wiki/Reverse_correlation_technique">reverse correlation</a>.</p>
+<p>After obtaining my PhD, I moved into an industry job in pursuit of research with a more direct societal impact. I like to believe that goal was achieved during the time I spent at a Philips venture working on the development of automated clinical decision support systems. During this time my interest in the topic of human technology interaction awakened and I took an interest in roles where I could deepen my knowledge about the topic, and perhaps contribute to the domain in some way.</p>
+<p>I found my first opportunity to pursue the new interest in a postdoc position at Utrecht University focusing on aspects of trust in AI and human-AI interaction in general. During this period I faced some challenges (naturally): adjusting back to the academic environment, catching up with a rapidly growing field of interdisciplinary research outside of the comfort zone (social cognition), and learning how to effectively split my time between research and teaching. At the same time, I learned much about how academics approach the topic of human-AI interaction, learned much about the relevance of Psychology knowledge to the impact of AI in society, and more importantly, met wonderful people including students and colleagues with whom I learned, and keep learning, from.</p>
+<p>The emergence of ChatGPT by the end of 2022 had a strong impact on the research I was conducting, raising new questions and opening up new opportunities to do research. But arguably more important was the impact of generative AI chatbots on teaching practices, which prompted us all (or should have!) to start discussing the future of Education in a world increasingly infused with tools capable of mimicking human output. The impact of AI in Education sounded like a meaningful question to invest my time in. Currently, I am doing a second postdoc at Eindhoven University of Technology. There, I spend most of my time thinking about the impact of AI in Education together with an interdisciplinary team of researchers (Economics, Philosophy, Education), university staff and students.</p>
+<p>In my free time, I enjoy playing music, hunting for specialty coffee, modern and retro games, catch up with my to-read list and travelling.</p>
+
+
+
+ ]]></description>
+  <category>About me</category>
+  <category>News</category>
+  <guid>https://manueloliveira.nl/posts/p_1/index.html</guid>
+  <pubDate>Sun, 21 Aug 2022 22:00:00 GMT</pubDate>
+  <media:content url="https://manueloliveira.nl/assets/pexels-gagan-cambow-1170659.jpg" medium="image" type="image/jpeg"/>
+</item>
+</channel>
+</rss>

@@ -50,7 +50,7 @@ execute:
 format:
   html:
     embed-resources: true
-    self-contained: true
+    self-contained: false
     meta:
       - name: "description"
         content: "Explore research tools and apps developed by Manuel Oliveira. Includes coding projects, academic resources, tools and tutorials for anyone conducting Psychology research or interested in reverse-correlation methods, face image manipulation, or data analysis. Learn more today!"

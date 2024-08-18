@@ -474,3 +474,5 @@ Thanks for reading!
 -   Dotsch R. (2016). Rcicr: Reverse-correlation image-classification toolbox. *R package (Version 0.3)*, 4. <https://cran.r-project.org/web/packages/rcicr/index.html>
 
 -   Dotsch, R., & Todorov, A. (2012). Reverse Correlating Social Face Perception. Social Psychological and Personality Science, 3(5), 562–571. <https://doi.org/10.1177/1948550611430272>
+
+-   Schmitz, M., Rougier, M., & Yzerbyt, V. (2021, March 24). Introducing the Brief Reverse Correlation. <https://doi.org/10.31234/osf.io/xg693>
