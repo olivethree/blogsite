@@ -6,4 +6,4 @@ title: ""
 
 Here you can find information about my academic research and posts about coding or tools I created for research projects or just for fun.
 
-![Afternoon walk in Wilhelmina Park \@ Utrecht, Netherlands](images/PXL_20211114_145741966.jpg){fig-align="center" width="512"}
+![Wilhelmina Park, Utrecht, Netherlands](images/PXL_20211114_145741966.jpg){fig-align="center" width="512"}
