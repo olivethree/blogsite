@@ -4,7 +4,7 @@ author: "M. Oliveira"
 date: "8/22/2022"
 date-modified: "7/14/2024"
 categories:
-  - About me
+  - About Author
   - News
 ---
 

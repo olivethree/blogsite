@@ -7,8 +7,6 @@ categories:
   - R
   - Tutorial
   - Reverse Correlation
-  - Research
-  - Psychophysics
   - Psychology
 ---
 
