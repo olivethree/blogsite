@@ -12,8 +12,8 @@ categories:
 
 # 
 
-```{r echo=FALSE}
-cat("Last updated: :", Sys.time() |> format("%d %B, %Y"))
+```{r echo=FALSE, eval=FALSE}
+cat("Last rendered: :", Sys.time() |> format("%d %B, %Y"))
 ```
 
 ![](images/clipboard-2637353984.png)

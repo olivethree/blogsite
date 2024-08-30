@@ -4,8 +4,8 @@ listing:
   contents: posts
   sort: "date desc"
   date-format: long
-  type: grid
-  fields: [image, date, title, author, reading-time]
+  type: table
+  fields: [date, title, author, reading-time]
   categories: true
   feed: true
 ---
