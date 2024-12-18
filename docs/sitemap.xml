@@ -1,31 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://manueloliveira.nl/blog.html</loc>
-    <lastmod>2024-08-30T19:03:47.358Z</lastmod>
-  </url>
-  <url>
-    <loc>https://manueloliveira.nl/publications.html</loc>
-    <lastmod>2024-07-21T00:17:46.924Z</lastmod>
-  </url>
-  <url>
-    <loc>https://manueloliveira.nl/index.html</loc>
-    <lastmod>2024-08-19T11:41:47.922Z</lastmod>
-  </url>
-  <url>
     <loc>https://manueloliveira.nl/posts/p_1/index.html</loc>
-    <lastmod>2024-08-30T18:53:17.454Z</lastmod>
+    <lastmod>2024-12-18T21:38:20.478Z</lastmod>
   </url>
   <url>
     <loc>https://manueloliveira.nl/posts/p_2/index.html</loc>
-    <lastmod>2024-08-30T19:02:26.526Z</lastmod>
+    <lastmod>2024-12-18T21:38:21.452Z</lastmod>
+  </url>
+  <url>
+    <loc>https://manueloliveira.nl/index.html</loc>
+    <lastmod>2024-12-18T21:38:21.843Z</lastmod>
   </url>
   <url>
     <loc>https://manueloliveira.nl/apps.html</loc>
-    <lastmod>2024-08-16T14:06:24.413Z</lastmod>
+    <lastmod>2024-12-18T21:38:22.388Z</lastmod>
+  </url>
+  <url>
+    <loc>https://manueloliveira.nl/publications.html</loc>
+    <lastmod>2024-12-18T21:38:22.829Z</lastmod>
   </url>
   <url>
     <loc>https://manueloliveira.nl/about.html</loc>
-    <lastmod>2024-08-30T19:06:55.156Z</lastmod>
+    <lastmod>2024-12-18T21:38:23.343Z</lastmod>
+  </url>
+  <url>
+    <loc>https://manueloliveira.nl/blog.html</loc>
+    <lastmod>2024-12-18T21:38:23.814Z</lastmod>
   </url>
 </urlset>
