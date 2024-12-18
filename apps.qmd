@@ -7,15 +7,15 @@ editor: visual
 
 Run the Brief Reverse Correlation Task locally in your browser (no internet required).
 
-## Setting up the experiment
+### Setting up the experiment
 
 These instructions outline how to set up and run the Brief Reverse Correlation task developed by Schmitz et al. (2024) on your local machine.
 
-**1. Create a project folder:**
+#### **1. Create a project folder:**
 
 Begin by creating a new folder on your computer to house the task files. Choose a descriptive name for this folder (e.g., `Brief_RC_Task`, `BRC_Experiment`, or similar). This will help keep your files organized.
 
-**2. Download files from GitHub:**
+#### **2. Download files from GitHub:**
 
 Navigate to the GitHub repository \[insert GitHub repository link here\]. You will need to download the following:
 
@@ -23,7 +23,7 @@ Navigate to the GitHub repository \[insert GitHub repository link here\]. You wi
 
 -   **`images` Folder:** Download the entire `images` folder, including all its contents (the image files used in the task). *It is crucial to maintain the folder structure; do not just download the images individually.*
 
-**3. Project structure:**
+#### **3. Project structure:**
 
 Place the downloaded HTML file and the `images` folder (with its contents) directly into the project folder you created in Step 1. The structure should look like this:
 
@@ -36,23 +36,25 @@ Brief_RC_Task/       (Your project folder)
     └── ...          (Other image files)
 ```
 
-**4. Adjust experiment content to your needs:**
+#### **4. Adjust experiment content to your needs:**
 
 You can adjust the informed consent, task instructions, and trial instruction (very important as this is the target category you are interested in, e.g. Select the face that looks like \<YOUR_CATEGORY_OF_INTEREST\>).
 
 To adjust these instructions, you can simply edit the content of the HTML file by opening it in your favorite IDE (e.g. [Visual Code](https://code.visualstudio.com/), [Notepad++,](https://notepad-plus-plus.org/) Xcode, etc.) or text editor, and look for the text. In case you get lost, you can ask ChatGPT or similar chatbots for guidance on where to find this content (or even change it in a more efficient way through prompt engineering if you know what you're doing...just remember to be critical of the output of generative AI, always verify!).
 
-**5. Run the experiment**
+#### **5. Run the experiment** 
 
 Open the HTML file (e.g., `index.html`) in your preferred web browser (e.g., Chrome, Firefox, Safari, Edge). The experiment should now load and be ready to use.
 
-**6. Results:**
+#### **6. Results:**
 
 Upon completion of a session, the results will be automatically saved to your browser's default downloads folder (typically named "Downloads").
 
-## References
+### References
 
 -   Schmitz, M., Rougier, M., & Yzerbyt, V. (2024). Introducing the brief reverse correlation: An improved tool to assess visual representations. *European Journal of Social Psychology*. Advance Online Publication. [**https://doi.org/10.1002/ejsp.3100**](https://doi.org/10.1002/ejsp.3100)
+
+------------------------------------------------------------------------
 
 # [Shiny Reverse Correlation: Sampling Subgroup CIs](https://olivethree.shinyapps.io/shinyRC_subgroup_cis/)
 
@@ -66,7 +68,7 @@ Using subgroup CIs helps decrease the number of images to rate in the second pha
 
 For more details see: <https://github.com/olivethree/shinyrc_subgroupcis>
 
-## 
+------------------------------------------------------------------------
 
 # [Face Masker](https://github.com/olivethree/webcam_face_masker){#face-masker}
 
