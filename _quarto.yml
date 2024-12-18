@@ -6,7 +6,7 @@ website:
   title: "Manuel Oliveira"
   favicon: assets/robots.png
   site-url: "https://manueloliveira.nl/"
-  description: "Explore research tools and apps developed by Manuel Oliveira. Includes coding projects, academic resources, tools and tutorials for anyone conducting Psychology research or interested in reverse-correlation methods, face image manipulation, or data analysis. Learn more today!"
+  description: "Explore research tools and apps developed by Manuel Oliveira. Includes coding projects, academic resources, tools and tutorials for anyone conducting Psychology research or interested in reverse-correlation methods, face image manipulation, or data analysis with R and specific R packages for experimental psychology research. Learn more today!"
   navbar:
     background: '#fcc404'
     right: 
