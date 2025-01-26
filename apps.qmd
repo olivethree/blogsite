@@ -7,7 +7,117 @@ editor: visual
 
 Run the Brief Reverse Correlation Task locally in your browser (no internet required).
 
-### Setting up the experiment
+## Generating stimuli for the task
+
+Select a base face image. In this example, I use the average of the average male and average female faces, facing forward and with neutral expression, from the Karolinska Face Database (Lundqvist, Flykt, & Öhman, 1998).
+
+Next you, you need to decide how many trials you need for your task. In a traditional 2-image forced-choice Reverse Correlation task, we need a pair of images per trial. Therefore, the total images you need to generate as stimuli for the task = \[number of trials you want\] x \[number of images per trial\]. For the case of 2 images per trial, this would be 600 images for 300 trials.
+
+However, the benefit of using Brief RC is so you can present more images per trial. In this tutorial I focus on the version with 12 images per trial. Twelve images per trial is, in my opinion, a reasonable amount to present in most devices' screens, while keeping a manageable informational load for the participants.
+
+In the Brief RC 12 version, 12 images are presented in each trial. These are not random images from the pool of stimuli. Instead, these are actually 6 pairs of images, where each pair is associated with a specific number (assigned during the noise generation procedure) and includes an original noise patch (labelled as *ori*) and its inverted noise (labelled as *inv*).
+
+In this case, I will follow the trials used by the Brief RC's authors (Schmitz et al., 2024) for the Brief RC 12 task:
+
+**Total trials:** 60
+
+**Images per trial:** 12 (6 pairs of ori-inv images)
+
+**Total images to generate** = 720
+
+Finally, the generated images are resized for proper fit within the screen area. Image stimuli in the RC task (used in psychology research) are frequently 512x512 px, or 256x256, or 128x128. Here, we will use 128x128 as the final output size for the stimulus images. Importantly, your base face image will need to be resized to these dimensions as well, and make sure this does not stretch or alter the original base face image in any way (unless you have any reasons to distort the natural configuration of a face).
+
+### R script to generate stimuli
+
+Note: R scripts are adapted from the original materials shared by Schmitz et al. (2024).
+
+```{r eval=FALSE}
+# Required packages
+library(tidyverse)
+library(data.table)
+library(magick)
+library(magrittr)
+
+# Github packages
+library(devtools)
+# rcicr
+if(!require(rcicr)) devtools::install_github('rdotsch/rcicr'); library(rcicr)
+
+# Parameters
+{# Seed for reproducibility}
+gen_seed   <- 1984
+
+# Define how many task trials you want
+nr_task_trials <- 60
+
+# Number of image pairs (ori + inv)
+nr_rc_trials <- nr_task_trials * 6
+
+cat("Setting script to generate stimuli for a total of: ", nr_task_trials, "trials (Brief RC 12 version).\n")
+cat("This means you will have a total of ", nr_rc_trials, "image pairs, or ", nr_rc_trials*2, "total amount of images.")
+
+# Path for base face image file (average of the average male and average female face of the Karolinska face database, neutral expression, frontal pose)
+
+path_baseface <- "FMNES.jpg" # Replace with your own base image
+
+# Output directory to store the stimuli images
+output_path  <- "img/"
+
+# Stimuli generation
+noise_matrix <- rcicr::generateStimuli2IFC(
+  base_face_files     = list('avg' = path_baseface),
+  n_trials            = nr_rc_trials,
+  seed                = gen_seed,
+  save_as_png         = TRUE,
+  stimulus_path       = output_path,
+  return_as_dataframe = TRUE,
+  save_rdata          = FALSE
+)
+
+# Noise matrix
+
+# Convert noise matrix to a data.table object
+noise_matrix <- data.table(noise_matrix)
+
+# save it as txt file
+fwrite(noise_matrix, file = "noise_matrix.txt", sep = " ", row.names = FALSE, col.names = FALSE)
+
+# Rename image files
+
+# Ori files
+list.files(path = output_path, pattern = "ori.png", full.names = TRUE) %>%
+  set_names(paste0(output_path, "faceOri", seq_along(.), ".png")) %>%
+  walk2(., names(.), file.rename)
+
+# Inv files
+list.files(path = output_path, pattern = "inv.png", full.names = TRUE) %>%
+  set_names(paste0(output_path, "faceInv", seq_along(.), ".png")) %>%
+  walk2(., names(.), file.rename)
+
+# Resize image files for brief RC task
+
+# Define image size (original brief RC paper used 150 x 150 px)
+new_size <- "150"
+
+# Create the 'resized' directory if it doesn't exist
+dir.create(file.path(output_path, "resized"), showWarnings = FALSE)
+
+# Process and move images to 'resized' 
+list.files(output_path, pattern = "face", full.names = TRUE) %>%
+  walk(function(img_path) {
+    outpath <- gsub(".png", "s.png", img_path)
+    resized_path <- file.path(output_path, "resized", basename(outpath))
+    image_read(img_path) %>%
+      image_scale(new_size) %>%
+      image_write(path = resized_path, format = "png")
+  })
+```
+
+Once the generation is completed, you can find the image stimulus set in "img/resized". All you need to do next is to copy paste these images to the appropriate experiment folder containing the images (see below).
+
+Importantly, this script generates the noise matrix file (very large file), that contains the information you need to compute the classification images after you run the experiment.
+
+## Setting up the experiment
 
 These instructions outline how to set up and run the Brief Reverse Correlation task developed by Schmitz et al. (2024) on your local machine.
 
@@ -50,8 +160,308 @@ Open the HTML file (e.g., `index.html`) in your preferred web browser (e.g., Chr
 
 Upon completion of a session, the results will be automatically saved to your browser's default downloads folder (typically named "Downloads").
 
-### References
+## Generating Individual Classification Images from Brief RC task data
 
+In this section I provide an example of how to generate an individual classification image based on the data output of the Brief RC task. I will use the output format of the web version of the task I describe above (<https://olivethree.github.io/briefrc12online/>).
+
+**Note:** *The code below only covers the generation of individual classification images. You can also generate Group CIs using the data from multiple participants, and loading it into R by combining into a single dataset. The data required for Group CI generation includes an additional column (string/factor) specifying target judgment condition, such as Star Wars Fan or Trustworthy. This additional column can then be used to compute the CI with the aggregated condition level data.*
+
+The output from the web version of the task I indicate above includes the following data:
+
++---------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Column              | Description                                                                                                                                                                                                                      |
++=====================+==================================================================================================================================================================================================================================+
+| participant_number  | \[Essential\] Identifier for each participant, provided by the user/experimenter in the first screen.                                                                                                                            |
++---------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| response_id         | \[Essential\] Unique identifier for each response. Can be used together with (or instead of) participant_number, point being you need a unique identifier for each participant.                                                  |
++---------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| ic_agree            | Whether the participant agreed to informed consent (True/False)                                                                                                                                                                  |
++---------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| trial               | \[Essential\] The trial number in the experiment. In this case, a total of 60 trials (per participant).                                                                                                                          |
++---------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| selected_image      | File name of the specific image chosen by the participant during the trial                                                                                                                                                       |
++---------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| image_number        | \[Essential\] A numeric identifier for the selected image. This is crucial information, connected to the noise matrix text file created during the generation of the CIs for the task (see Script 1)                             |
++---------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| image_type          | Indicates the type of image selected. Therefore, this is also the RESPONSE, reflecting the participant's decision.                                                                                                               |
+|                     |                                                                                                                                                                                                                                  |
+|                     | In a trial there are several pairs of images. Each pair is associated with a specific number (i.e., image_number). One of the images in the pair is original noise (coded as +1), the other is the inverted noise (coded as -1). |
++---------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| timestamp           | Timestamp of trial start.                                                                                                                                                                                                        |
++---------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| image_1 to image_12 | The 12 file names of the images displayed during the trial. Useful to verify if the 12 images correspond to six pairs of ori-inv images.                                                                                         |
++---------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| age                 | Participant's age.                                                                                                                                                                                                               |
++---------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| gender              | Participant's gender.                                                                                                                                                                                                            |
++---------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+
+Not that if your data looks different, you need to tweak the code to adapt it to your case (the moidified function should always stay the same though).
+
+## Modified function to generate BriefRC CIs
+
+Create a .R file with this content, and save it in your R projects' root directory (where .Rproj file is located).
+
+```{r eval = FALSE}
+# BriefRC Task - Modified functions
+
+# How to use this file:
+# Call this file from your CI generation script (use: source("rcicr_briefrc_mod.r"))
+
+# Conditional installing of required packages
+if(!require(devtools)) install.packages("devtools"); library(devtools)
+if(!require(rcicr)) devtools::install_github('rdotsch/rcicr'); library(rcicr)
+
+# Modified functions below
+
+#' @title Matrix to image
+#' @description Generalized version of \code{magick::image_read()} which also
+#'  allows to read numerical objects.
+#' @param img Image (e.g., image path) to be read, or numerical object (e.g., matrix, array)
+#' see \code{magick::image_read()} for more information (equivalent to `path` argument).
+#' @param alpha (optional) Scalar indicating the trasnparency of the (alpha). If the object already
+#' contains an alpha, than it will not be overwritten. Default is `1`.
+#' @param density see \code{magick::image_read()}
+#' @param depth see \code{magick::image_read()}
+#' @param strip see \code{magick::image_read()}
+#' @examples NULL
+#' @export mat2img
+mat2img <- function(img, density = NULL, depth = NULL, strip = FALSE, alpha = 1) {
+  # If img is a path, try to read the image
+  if (is.character(img)) {
+    if (grepl('png|PNG', img)) {
+      img <- png::readPNG(img)
+    } else if (grepl('jpeg|JPEG|jpg|JPG', img)) {
+      img <- jpeg::readJPEG(img)
+    } else {
+      stop("Image format not supported")
+    }
+  }
+  
+  imgDim <- dim(img)
+  alphaMatrix <- matrix(alpha, imgDim[1], imgDim[2])
+  
+  # If img is a numerical object, transform it into an array which can be read by image_read()
+  if (length(imgDim) < 3) {
+    img <- simplify2array(list(img, img, img, alphaMatrix))
+  } else if (imgDim[3] == 3) {
+    img <- simplify2array(list(img, alphaMatrix))
+  }
+  
+  magick::image_read(img, density = density, depth = depth, strip = strip)
+}
+
+#' @title Read and scale base image
+#' @description Read and scale the base image
+#' @param baseImgPath String specifying path to the base image.
+#' @return Vector of pixels from the base image.
+#' @examples NULL
+#' @export readBaseImg
+readBaseImg <- function(baseImgPath, maxContrast = TRUE) {
+  # Read image
+  if (grepl('png|PNG', baseImgPath)) {
+    baseImg <- png::readPNG(baseImgPath)
+  } else if (grepl('jpeg|JPEG|jpg|JPG', baseImgPath)) {
+    baseImg <- jpeg::readJPEG(baseImgPath)
+  } else {
+    stop("Base image format not supported")
+  }
+  
+  # Ensure there is only 2 dimensions
+  if (length(dim(baseImg)) == 3) baseImg <- baseImg[, , 1]
+  
+  # Maximize base image contrast
+  if (maxContrast) baseImg <- (baseImg - min(baseImg))/(max(baseImg) - min(baseImg))
+  
+  return( as.vector(baseImg) )
+}
+
+#' @title Generate (and scale) mask from responses
+#' @description Generate (and scale) mask from responses.
+#' @param response Numerical vector specifying the reponses.
+#' @param stim Numerical vector specifying the stimuli number.
+#' @param noiseMatrix Matrix of noise pattern as generated with
+#'   \code{noiseMatrix <- rcirc::generateStimuli2IFC(..., return_as_dataframe = TRUE)}.
+#' @param baseImg Numerical vector containing the baseImg image or string pointing to the baseImg
+#'   image file. If baseImg is a string, then the baseImg image must in .png or .jpeg.
+#' @param scaling String|Scalar|NULL specifying the scaling method. `"matched"` is the default method.
+#'   If a scalar is provided (e.g. 5) than the `"constant"` method will be applied.
+#'   If `NULL` no scaling is applied.
+#' @return List with the (un)scaled Noise mask (\code{$mask}) and the base image as a vector
+#'   (\code{$baseImgVect}).
+#' @examples NULL
+#' @export genMask
+genMask <- function(response, stim, noiseMatrix, baseImg, scaling = "matched") {
+  # Generate mask
+  X  <- data.table::data.table(response = response, stim = stim)
+  X  <- X[, .(response = mean(response)), stim]
+  mask <- (noiseMatrix[, X$stim] %*% X$response) / length(X$response)
+  
+  # Read base image
+  if (is.character(baseImg)) baseImg <- readBaseImg(baseImg)
+  
+  # Scale mask
+  if (scaling == "matched") {
+    scaledMask <- min(baseImg)+((max(baseImg)-min(baseImg))*(mask-min(mask))/(max(mask)-min(mask)))
+  } else if (is.numeric(scaling)) { # constant scaling
+    scaledMask <- (mask + scaling)/(2 * scaling)
+    if (max(scaledMask) > 1 | min(scaledMask) < -1) warning("Constant is too low! Adjust.")
+  } else if (is.null(scaling)) { # No scaling
+    scaledMask <- mask
+  }
+  
+  return(list(mask = scaledMask, baseImgVect = baseImg))
+}
+
+#' @title Generate Classification Image (CI)
+#' @description Generate the combinaed of the noise mask (mask) and the base image.
+#' @inheritParams genMask
+#' @param outputPath String specifying the file path of the ouput CI. Default is `"combined.png"`.
+#' @return NULL
+#' @examples NULL
+#' @export genCI
+genCI <- function(response, stim, noiseMatrix, baseImg, scaling = "matched",
+                  outputPath = "combined.png") {
+  # Generate mask
+  M <- genMask(response, stim, noiseMatrix, baseImg, scaling)
+  mask <- M$mask
+  baseImgVect <- M$baseImgVect
+  
+  # Write and save combined image
+  combined <- (baseImgVect + mask) / 2
+  combined <- matrix(combined, nrow = 512)
+  png::writePNG(combined, outputPath)
+  
+  # Return file path
+  invisible(outputPath)
+}
+
+
+#' @title Get face region
+#' @description Returns a logical vector with the face region
+#' @param imgPath String specifying path to the base image.
+#' @param xpos Numeric specifiying the X position (relative to the center).
+#' @param ypos Numeric specifiying the Y position (relative to the center).
+#' @param faceWidth Numeric specifiying the width of the face region.
+#' @param faceHeight Numeric specifiying the height of the face region.
+#' @param preview Numeric specifiying the height of the face region.
+#' @param writeImgTo String specifying where and if the output image should be saved. Default is
+#'   NULL, meaning that the image will not be saved.
+#' @return Logical vector specifying the location of the face region
+#' @examples NULL
+#' @export getFaceRegion
+getFaceRegion <- function(imgPath,
+                          xpos = 0, ypos = 0, faceWidth = 1.4, faceHeight = 1.8,
+                          preview = TRUE, writeImgTo = NULL) {
+  # Read image and convert to matrix
+  face <- readBaseImg(imgPath)
+  faceLength <- sqrt(length(face)) # must be squared
+  face <- matrix(face, ncol = faceLength)
+  
+  # Define face region: https://dahtah.github.io/imager/gimptools.html
+  Xcc <- function(im) imager::Xc(im) - imager::width(im)/2  + ypos
+  Ycc <- function(im) imager::Yc(im) - imager::height(im)/2 + xpos
+  NN <- imager::as.cimg( matrix(1:faceLength^2, nrow = faceLength) )
+  faceRegion <- (Xcc(NN)/faceHeight)^2 + (Ycc(NN)/faceWidth)^2 < 100^2
+  faceRegion <- as.vector(faceRegion)
+  
+  # Preview in Viewer
+  if (preview) {
+    alphaMask <- matrix(1, faceLength, faceLength)
+    alphaMask[!faceRegion] <- 0.6
+    previewFace <- abind::abind(face, alphaMask, along = 3)
+    previewFacePath <- tempfile(fileext = ".png")
+    png::writePNG(previewFace, previewFacePath)
+    invisible(capture.output(print(magick::image_read(previewFacePath))))
+  }
+  # Write face
+  if (!is.null(writeImgTo)) {
+    alphaMask <- matrix(1, faceLength, faceLength)
+    alphaMask[!faceRegion] <- 0
+    printedFace <- abind::abind(face, alphaMask, along = 3)
+    png::writePNG(printedFace, writeImgTo)
+  }
+  
+  invisible(faceRegion)
+}
+```
+
+## Script to generate Individual CI
+
+Here is how you can generate the individual CI from the Brief RC task data:
+
+```{r eval=FALSE}
+# Clear environment
+rm(list=ls())
+
+# Libraries
+library(tidyverse)
+library(here)
+library(purrr)
+library(readr)
+library(vroom)
+library(data.table)
+library(png)
+
+# Modified rcicr function
+
+# Make sure this file is in the same directory as the current file (both should be by default at the RProj root dir)
+source("rcicr_briefrc_mod.r")
+
+# Load data
+
+# LOAD A SINGLE PARTICIPANT'S DATA FILE
+rawdata <- vroom::vroom(here::here("data", "brief_rc_data_Rz2aqjzk31.csv")) # Replace CSV file with your own file
+
+# Data Processing
+
+# Keep only relevant variables for CI generation
+input_df <- rawdata %>% 
+  dplyr::select(participant_number, trial, image_number, image_type, selected_image) %>% 
+  mutate(response = image_type) # clarifies that the participant response is the same as teh selected image_type
+
+# Inspect data set
+input_df %>% names
+
+# Rename participant_number as id and change its type to factor
+rc_brief_df <- input_df %>% mutate(id = participant_number %>% as.factor)
+
+# Generate CIs
+
+# Parameters
+basePath <- "FMNES.jpg" # Base face image, loacted in root directory
+noisemat <- as.matrix( fread("noise_matrix.txt") ) # Load the noise matrix created at the time of stimuli generation
+
+# Individual CIs
+
+# Creating sub directory to store individual CIs
+indcis_dir <- "ind_cis"
+if (!dir.exists(indcis_dir)) {
+ dir.create(indcis_dir)
+ message(sprintf("Directory '%s' created.", indcis_dir))
+} else {
+ message(sprintf("Directory '%s' already exists.", indcis_dir))
+}
+
+# convert data frame to data.table object (data.table handles larger data better and more efficiently)
+rc_brief_dt <- rc_brief_df %>% as.data.table()
+
+# Generate individual CI(s)
+rc_brief_dt[, genCI(
+  outputPath  = paste0("ind_cis/ind_", id, ".png")[1],
+  stim        = image_number,
+  response    = response,
+  baseImg     = basePath,
+  scaling     = "matched", # this parameter might have to be tweaked by trial and error if you use different base images
+  noiseMatrix = noisemat
+), id]
+```
+
+You can find your individual CI result in the " ind_cis" folder. It's file name includes the participant number associated with it.
+
+## References
+
+-   Lundqvist, D., Flykt, A., & Öhman, A. (1998). *Karolinska Directed Emotional Faces (KDEF)* \[Database record\]. APA PsycTests. [https://doi.org/10.1037/t27732-000](https://psycnet.apa.org/doi/10.1037/t27732-000 "DOI link")
 -   Schmitz, M., Rougier, M., & Yzerbyt, V. (2024). Introducing the brief reverse correlation: An improved tool to assess visual representations. *European Journal of Social Psychology*. Advance Online Publication. [**https://doi.org/10.1002/ejsp.3100**](https://doi.org/10.1002/ejsp.3100)
 
 ------------------------------------------------------------------------
