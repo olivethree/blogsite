@@ -210,7 +210,10 @@ ga('send', {
   <ul>
   <li><a href="#brief-reverse-correlation-task" id="toc-brief-reverse-correlation-task" class="nav-link active" data-scroll-target="#brief-reverse-correlation-task"><span>Brief Reverse Correlation Task</span></a>
   <ul class="collapse">
+  <li><a href="#generating-stimuli-for-the-task" id="toc-generating-stimuli-for-the-task" class="nav-link" data-scroll-target="#generating-stimuli-for-the-task">Generating stimuli for the task</a>
+  <ul class="collapse">
   <li><a href="#r-script-to-generate-stimuli" id="toc-r-script-to-generate-stimuli" class="nav-link" data-scroll-target="#r-script-to-generate-stimuli">R script to generate stimuli</a></li>
+  </ul></li>
   <li><a href="#setting-up-the-experiment" id="toc-setting-up-the-experiment" class="nav-link" data-scroll-target="#setting-up-the-experiment">Setting up the experiment</a></li>
   <li><a href="#generating-individual-classification-images-from-brief-rc-task-data" id="toc-generating-individual-classification-images-from-brief-rc-task-data" class="nav-link" data-scroll-target="#generating-individual-classification-images-from-brief-rc-task-data">Generating Individual Classification Images from Brief RC task data</a></li>
   <li><a href="#modified-function-to-generate-briefrc-cis" id="toc-modified-function-to-generate-briefrc-cis" class="nav-link" data-scroll-target="#modified-function-to-generate-briefrc-cis">Modified function to generate BriefRC CIs</a></li>
@@ -246,8 +249,8 @@ ga('send', {
 <p>Run the Brief Reverse Correlation Task locally in your browser (no internet required).</p>
 <p>Demo version of full web task here: <a href="https://olivethree.github.io/briefrc12online/" class="uri">https://olivethree.github.io/briefrc12online/</a></p>
 <p>In this demo you can see how the full task works and obtain actual results you can use for learning. Using the target category “Star Wars Fan” for the sake of demonstartion. Prefer Star Trek? Let me know and I’ll make that version! :)</p>
-<p><br>
-## Generating stimuli for the task</p>
+<section id="generating-stimuli-for-the-task" class="level2">
+<h2 class="anchored" data-anchor-id="generating-stimuli-for-the-task">Generating stimuli for the task</h2>
 <p>Select a base face image. In this example, I use the average of the average male and average female faces, facing forward and with neutral expression, from the Karolinska Face Database (Lundqvist, Flykt, &amp; Öhman, 1998).</p>
 <p>Next you, you need to decide how many trials you need for your task. In a traditional 2-image forced-choice Reverse Correlation task, we need a pair of images per trial. Therefore, the total images you need to generate as stimuli for the task = [number of trials you want] x [number of images per trial]. For the case of 2 images per trial, this would be 600 images for 300 trials.</p>
 <p>However, the benefit of using Brief RC is so you can present more images per trial. In this tutorial I focus on the version with 12 images per trial. Twelve images per trial is, in my opinion, a reasonable amount to present in most devices’ screens, while keeping a manageable informational load for the participants.</p>
@@ -343,6 +346,7 @@ ga('send', {
 </div>
 <p>Once the generation is completed, you can find the image stimulus set in “img/resized”. All you need to do next is to copy paste these images to the appropriate experiment folder containing the images (see below).</p>
 <p>Importantly, this script generates the noise matrix file (very large file), that contains the information you need to compute the classification images after you run the experiment.</p>
+</section>
 </section>
 <section id="setting-up-the-experiment" class="level2">
 <h2 class="anchored" data-anchor-id="setting-up-the-experiment">Setting up the experiment</h2>
