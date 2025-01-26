@@ -7,7 +7,12 @@ editor: visual
 
 Run the Brief Reverse Correlation Task locally in your browser (no internet required).
 
-## Generating stimuli for the task
+Demo version of full web task here: <https://olivethree.github.io/briefrc12online/>
+
+In this demo you can see how the full task works and obtain actual results you can use for learning. Using the target category "Star Wars Fan" for the sake of demonstartion. Prefer Star Trek? Let me know and I'll make that version! :)
+
+\
+\## Generating stimuli for the task
 
 Select a base face image. In this example, I use the average of the average male and average female faces, facing forward and with neutral expression, from the Karolinska Face Database (Lundqvist, Flykt, & Öhman, 1998).
 
