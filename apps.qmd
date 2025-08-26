@@ -204,7 +204,7 @@ Not that if your data looks different, you need to tweak the code to adapt it to
 
 ## Modified function to generate BriefRC CIs
 
-Create a .R file with this content, and save it in your R projects' root directory (where .Rproj file is located).
+Create a .R file with this content (derived from Schmitz et al., 2024), and save it in your R projects' root directory (where .Rproj file is located).
 
 ```{r eval = FALSE}
 # BriefRC Task - Modified functions
