@@ -4,8 +4,6 @@ about:
   template: trestles
   image: assets/profile_pic_crop.png
   links:
-    - icon: twitter-x
-      href: https://twitter.com/manueljbo
     - icon: linkedin
       href: https://www.linkedin.com/in/manueljbo/
     - icon: github

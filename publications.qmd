@@ -4,9 +4,9 @@ editor: visual
 ---
 ### 2025
 
-* [**Oliveira, M. J. B.**, Zednik, C., Bombaerts, G., Sadowski, B., & Conijn, R. (2025, July 16). Assessing students’ DRIVE: An evidence-based framework to evaluate learning through students’ interactions with generative AI. https://doi.org/10.31234/osf.io/cne9j_v3](https://doi.org/10.31234/osf.io/cne9j_v3)
+[**Oliveira, M. J. B.**, Zednik, C., Bombaerts, G., Sadowski, B., & Conijn, R. (2025, July 16). Assessing students’ DRIVE: An evidence-based framework to evaluate learning through students’ interactions with generative AI. https://doi.org/10.31234/osf.io/cne9j_v3](https://doi.org/10.31234/osf.io/cne9j_v3)
 
-* [Ruijten-Dodoiu, P. A., **Oliveira, M.**, & Ventura-Medina, E. (2025). Towards Scalable AI Feedback Systems: Preparing A Turing-Test-Inspired Experiment. In CEUR Workshop Proceedings (Vol. 3994, pp. 60-64).](http://ceur-ws.org/Vol-3994/paper10.pdf)
+[Ruijten-Dodoiu, P. A., **Oliveira, M.**, & Ventura-Medina, E. (2025). Towards Scalable AI Feedback Systems: Preparing A Turing-Test-Inspired Experiment. In CEUR Workshop Proceedings (Vol. 3994, pp. 60-64).](http://ceur-ws.org/Vol-3994/paper10.pdf)
 
 ### 2024
 
