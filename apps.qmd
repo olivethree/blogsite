@@ -1,13 +1,16 @@
 ## CARefully prompt your AI
 
-**Ethical guidance for GEnAI-assisted academic writing**
+**Ethical guidance for GenAI-assisted academic writing**
 
-This interactive prompt library was developed to support PhD students and early-career researchers in navigating the complex ethics of using Generative AI in academic writing activities. This tool was developed for a workshop at the [**2025 SEFI Summer School**](https://sites.google.com/4tu.nl/sefi-phd-summer-school/home)(20-23 May @ Den Bosch, The Netherlands), it operationalizes the recent ethical framework by **Cheng et al. (2025)** to help writers make informed decisions.
+[Launch the CARefully Prompt Library](https://olivethree.github.io/carefullyprompt/)
+
+This interactive prompt library was developed to support PhD students and early-career researchers in navigating the complex ethics of using Generative AI in academic writing activities. This tool was developed for a workshop at the [**2025 SEFI Summer School**](https://sites.google.com/4tu.nl/sefi-phd-summer-school/home)(20-23 May @ Den Bosch, The Netherlands), it operationalizes the recent ethical framework by [**Cheng et al. (2025)**](https://doi.org/10.1186/s41077-025-00350-6)to help writers make informed decisions.
 
 -   **Ethical tiers:** Prompts are classified (Tier 1-3) based on Cheng et al.'s taxonomy, helping you distinguish between "safe" tasks (e.g., editing) and those requiring heavy oversight (e.g., ideation).
+
 -   **Offers a structured starting point:** While not an empirically validated tool (feel free to use it in your educational pilot studies though!), this library offers a structured "sandbox" of templates and examples. Its goal is to inspire better prompting habits and provide a concrete way to reflect on the ethical weight of different writing tasks.
+
 -   **Writing goal-oriented :** Browse prompts for specific needs like for example *Improving Clarity*, *Drafting Assistance,* or *Maintaining Authorial Voice*.
--   **Access:** [Launch the CARefully Prompt Library](https://olivethree.github.io/carefullyprompt/)
 
 ------------------------------------------------------------------------
 
@@ -20,6 +23,7 @@ This interactive prompt library was developed to support PhD students and early-
 In this demo you can see how the full task works and obtain actual results you can use for learning. Using the target category "Star Wars Fan" for the sake of demonstration. Prefer Star Trek? Let me know and I'll make that version! :)
 
 ::: {.callout-note collapse="true" title="Full Stimuli Generation Guide & R Script"}
+
 ### Tutorial: Generating stimuli for the task
 
 Select a base face image. In this example, I use the average of the average male and average female faces, facing forward and with neutral expression, from the Karolinska Face Database (Lundqvist, Flykt, & Öhman, 1998).
@@ -130,6 +134,8 @@ Importantly, this script generates the noise matrix file (very large file), that
 These instructions outline how to set up and run the Brief Reverse Correlation task developed by Schmitz et al. (2024) on your local machine.
 
 ::: {.callout-note collapse="true" title="Setup Instructions"}
+
+
 #### **1. Create a project folder:**
 
 Begin by creating a new folder on your computer to house the task files. Choose a descriptive name for this folder (e.g., `Brief_RC_Task`, `BRC_Experiment`, or similar). This will help keep your files organized.
