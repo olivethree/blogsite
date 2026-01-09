@@ -1,22 +1,26 @@
 ---
-title: "media"
+title: "Media & Outreach"
 editor: visual
 ---
 
 ## Podcasts
 
--   xxxxx
-
--   xxxxx
+-   **BNR Nieuwsradio (Wetenschap Vandaag)** \| *AI & Art*
+    -   **"When do we object to AI art? (*Kunst gemaakt door AI: wanneer vinden we dat erg?*)"** A discussion with Karlijn M. on the psychological friction between human creativity and algorithmic output. (English interview). [Listen here](https://www.bnr.nl/podcast/wetenschap-vandaag/10527476/bnr-x-betweter-kunst-gemaakt-door-ai-wanneer-vinden-we-dat-erg-engels)
 
 ## Interviews
 
--   xxxxx
-
--   xxxxx
+-   **Prolific Research Blog** \| *Trust in AI Faces*
+    -   **"The label effect"** Featured interview discussing my research on how the mere label of "AI" (or "artificial" or "synthetic") degrades trust in pictures and videos of human faces, and what this means for digital deception. [Read article](https://www.prolific.com/resources/the-psychology-of-human-ai-trust-an-interview-with-dr-manuel-oliveira)
 
 ## Public Engagement
 
--   xxxxx
+-   **Betweter Science Festival** \| *Live Public Experiment*
 
--   xxxxx
+    -   **"Imitation Games and AI-generated Art (Kunst Kunstmatig)":** Designed and executed a public experiment testing if groups of festival visitors could distinguish human art from AI generation. [LinkedIn post here](https://www.linkedin.com/posts/manueljbo_betweter-tivolivredenburg-activity-7116075634925125632-p5ub/)
+
+    ***Note***: Part of the visual stimuli were real hybrid human-AI artwork created by [Noah Hoeboer](https://www.linkedin.com/in/noah-h-45079398/)
+
+::: {layout-ncol="2"}
+![](assets/betweter_1.jpeg) ![](assets/betweter_2.jpeg) ![](assets/betweter_3.jpeg) ![](assets/betweter_4.jpeg) ![](assets/betweter_5.jpeg)
+:::
