@@ -12,8 +12,6 @@ website:
     right: 
       - icon: github
         href: https://github.com/olivethree
-      - icon: twitter-x
-        href: https://twitter.com/manueljbo
       - icon: linkedin
         href: https://www.linkedin.com/in/manueljbo/ 
     left:
@@ -36,7 +34,7 @@ website:
         text: About
         
   page-footer: 
-    left: "Copyright 2025, Manuel Oliveira" 
+    left: "Copyright 2026, Manuel Oliveira" 
   
   google-analytics: 
     tracking-id: "UA-176122484-2"
