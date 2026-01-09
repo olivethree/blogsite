@@ -1,5 +1,5 @@
 ---
-title: "Manuel Oliveira (he/him)"
+title: "Manuel Oliveira"
 about:
   template: trestles
   image: assets/profile_pic_crop.png
@@ -16,7 +16,7 @@ My background is rooted in **Social Cognition**. For over a decade, I have resea
 
 ### **Industry & Academia**
 
-Between academic roles, I worked for two years as a **Data Modeller & Researcher at Philips (R&D)**. This experience grounded my research in technical reality, where I learned to translate behavioral insights into viable clinical software and navigate complex product constraints. I combine this industrial discipline with strong technical proficiency in **R and Python**, building custom tools to support reproducible science.
+Between academic roles, I worked for some time as a **Data Modeller & Researcher at Philips**. This experience grounded my scientific research background in technical reality, where I learned to translate data insights into viable steps required to build clinical software, while navigating complex product constraints. I combine this industrial discipline with technical proficiency in coding (R, Python), building custom tools to support statistical analyses (e.g., [oddPower](https://olivethree.shinyapps.io/oddpoweR/)) or Generative AI literacy tools ([CARefully prompt](https://zenodo.org/records/15475953)).
 
 ### **Converting research into practice: AI in Education**
 

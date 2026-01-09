@@ -7,6 +7,8 @@ editor: visual
 
 [**Oliveira, M. J. B.**, Zednik, C., Bombaerts, G., Sadowski, B., & Conijn, R. (2025). Assessing students’ DRIVE: A framework to evaluate learning through interactions with generative AI. Computers and Education: Artificial Intelligence, 100497. https://doi.org/10.1016/j.caeai.2025.100497](https://doi.org/10.1016/j.caeai.2025.100497)
 
+[**Oliveira, M. (2025)**. CARefully prompt your AI: A prompt library for AI-assisted academic writing with ethical guidance (v.1.1). Zenodo. https://doi.org/10.5281/zenodo.15475953](https://olivethree.github.io/carefullyprompt/)
+
 [Ruijten-Dodoiu, P. A., **Oliveira, M.**, & Ventura-Medina, E. (2025). Towards Scalable AI Feedback Systems: Preparing A Turing-Test-Inspired Experiment. In CEUR Workshop Proceedings (Vol. 3994, pp. 60-64).](http://ceur-ws.org/Vol-3994/paper10.pdf)
 
 ### 2024
