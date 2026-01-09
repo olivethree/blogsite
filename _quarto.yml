@@ -22,6 +22,9 @@ website:
         
       - href: blog.qmd
         text: Blog
+        
+      - href: media.qmd
+        text: Media
 
       - href: publications.qmd
         text: Publications

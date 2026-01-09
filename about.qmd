@@ -12,66 +12,48 @@ about:
 
 **Manuel Oliveira** (he/him)
 
-Currently, I'm a postdoctoral researcher at **Eindhoven University of Technology** working on the topic of **AI in Education**.
+I am a scientist and strategist working at the intersection of **Social Psychology** and **Artificial Intelligence**. Currently, I serve as a researcher and advisor at Eindhoven University of Technology (TU/e), focusing on the critical integration of AI in Education.
 
-I have a background in Psychology and my doctoral work focused on the relation between personality stereotypes and social attributions based on facial appearance. Most of the work I've done in the past years involved statistics, programming (R, Python), experimental design, and scientific writing. After my Ph.D. I moved away from academia to work at Philips in a R&D role. There where I gained further experience with coding skills, how businesses operate, Artificial Intelligence (AI) applications, and working with teams with diverse professional backgrounds. During that period, I became increasingly interested in the challenges emerging from the growing presence of AI in society. This led me to seek new roles where I could learn more about how people interact with technology in general, and more specifically AI. I found my first opportunity to work on this topic in a postdoctoral position at Utrecht University, where I spent my time research topics of trust in AI and human-AI interaction in general.
+My background is rooted in **Social Cognition**. For over a decade, I have researched how humans form impressions and trust based on facial appearance and social categories. I now apply these frameworks to a new frontier: understanding how humans perceive and interact with artificial agents.
 
-Since 2024, I'm working on the topic of AI in Education as a postdoctoral researcher at Eindhoven University of Technology.
+**Industry & Academia**
+Between academic roles, I worked for two years as a **Data Modeller & Researcher at Philips (R&D)**. This experience grounded my research in technical reality, where I learned to translate behavioral insights into viable clinical software and navigate complex product constraints. I combine this industrial discipline with strong technical proficiency in **R and Python**, building custom tools to support reproducible science.
+
+**Converting research into practice: AI in Education**
+At TU/e, I play a supportive role in the university’s operational response to Generative AI. As a member of the **Taskforce AI in Education**, I translate research output into practical, institutional strategy. My work involves designing and leading activities to help stakeholders (faculty, support staff, students) adapt to educational transformation, specifically in redefining assessment methods and upskilling staff for an AI-integrated reality.
 
 ## Experience
 
--   Postdoctoral researcher, Coordination Human-AI Alliance program \@ Utrecht University \| 2022 - 2023
+-   **Advisor, Human-AI Interaction & Taskforce Member** | 2024 - Present
+    -   *Eindhoven University of Technology (IE&IS)*
+    -   Leading the translation of AI research into educational policy and practical advice for university stakeholders.
 
-    -   Teaching activities:
+-   **Postdoctoral Researcher** | 2024 - Present
+    -   *Eindhoven University of Technology*
+    -   Researching the impact of AI on educational ecosystems and human-AI trust mechanics.
 
-        -   Experimental Methods and Statistics, BSc in Artificial intelligence
+-   **Postdoctoral Researcher & Program Coordinator** | 2022 - 2023
+    -   *Utrecht University, Coordination Human-AI Alliance Program*
+    -   Managed inter-institutional grant calls and conducted research on trust in human-AI interaction.
+    -   *Lecturer & Supervisor:* Experimental Methods, AI Research Methods, and MSc Thesis Supervision.
 
-        -   Thesis supervision, BSc in Artificial intelligence
+-   **Data Modeller & Researcher (R&D)** | 2020 - 2022
+    -   *Philips, Digital Cognitive Diagnostics*
+    -   Developed data-driven models for clinical decision support and digital assessment tools.
 
-        -   Thesis supervision, MSc in Psychology
-
-        -   Methods for AI Research, MSc in Artificial Intelligence
-
-        -   Integrative Practicum - Scientific Writing, Correlational Designs and Data Analysis, Research MSc Psychology
-
--   Data Modeller & Researcher \@ Philips - Digital Cognitive Diagnostics \| 2020 - 2022
-
--   Teaching Assistant \@ ISPA - Instituto Universitário \| 2016 - 2019
-
-    -   Academic Skills
-
-    -   Data Processing
-
-    -   Experimental design
-
-    -   Face image manipulation
-
--   Research Assistant \@ ISCTE-IUL \| 2014
-
--   Teaching Assistant \@ University of Lisbon, Faculty of Psychology \| 2013 - 2014
-
-    -   Face image manipulation techniques
-
--   Research Assistant \@ University of Lisbon, Faculty of Psychology \| 2012 - 2014
-
--   Strategic Planning Internship \@ Publicis Groupe \| 2009 - 2010
+-   **Teaching Assistant & Researcher** | 2016 - 2019
+    -   *ISPA - Instituto Universitário*
+    -   Specialized in Experimental Design, Statistics, and Social Cognition.
 
 ## Education
 
-**PhD in Social Psychology** \| 2015 - 2019
+**PhD in Social Psychology** | 2015 - 2019
+-   *ISPA - Instituto Universitário (Lisbon) & Utrecht University (Netherlands)*
+    -   **Graduated with Honor and Distinction**
+    -   Dissertation: "The structuring role of valence in the relationship between and within models of face and trait impressions"
 
--   ISPA - Instituto Universitário \| Lisbon, Portugal & Utrecht, Netherlands
+**MSc in Social and Organizational Psychology** | 2009 - 2011
+-   *ISPA - Instituto Universitário | Lisbon, Portugal*
 
-    -   Graduated with Honor and Distinction
-
-    -   PhD Dissertation: "The structuring role of valence in the relationship between and within models of face and trait impressions"
-
-**MSc in Social and Organizational Psychology** \| 2009 - 2011
-
--   ISPA - Instituto Universitário \| Lisbon, Portugal
-
-**BSc in Psychology** \| 2006 - 2009
-
--   University of Aveiro \| Aveiro, Portugal
-
-## 
+**BSc in Psychology** | 2006 - 2009
+-   *University of Aveiro | Aveiro, Portugal*
