@@ -129,18 +129,18 @@ Once the generation is completed, you can find the image stimulus set in "img/re
 Importantly, this script generates the noise matrix file (very large file), that contains the information you need to compute the classification images after you run the experiment.
 :::
 
-## Setting up the experiment
+#### Setting up the experiment
 
 These instructions outline how to set up and run the Brief Reverse Correlation task developed by Schmitz et al. (2024) on your local machine.
 
 ::: {.callout-note collapse="true" title="Setup Instructions"}
 
 
-#### **1. Create a project folder:**
+##### **1. Create a project folder:**
 
 Begin by creating a new folder on your computer to house the task files. Choose a descriptive name for this folder (e.g., `Brief_RC_Task`, `BRC_Experiment`, or similar). This will help keep your files organized.
 
-#### **2. Download files from GitHub:**
+##### **2. Download files from GitHub:**
 
 Navigate to the GitHub repository: <https://github.com/olivethree/briefRC>. You will need to download the following:
 
@@ -148,7 +148,7 @@ Navigate to the GitHub repository: <https://github.com/olivethree/briefRC>. You 
 
 -   **`images` folder:** Download the entire `images` folder, including all its contents (the image files used in the task). *It is crucial to maintain the folder structure; do not just download the images individually.*
 
-#### **3. Project structure:**
+##### **3. Project structure:**
 
 Place the downloaded HTML file and the `images` folder (with its contents) directly into the project folder you created in Step 1. The structure should look like this:
 
@@ -161,22 +161,22 @@ Brief_RC_Task/       (Your project folder)
     └── ...          (Other image files)
 ```
 
-#### **4. Adjust experiment content to your needs:**
+##### **4. Adjust experiment content to your needs:**
 
 You can adjust the informed consent, task instructions, and trial instruction (very important as this is the target category you are interested in, e.g. Select the face that looks like \<YOUR_CATEGORY_OF_INTEREST\>).
 
 To adjust these instructions, you can simply edit the content of the HTML file by opening it in your favorite IDE (e.g. [Visual Code](https://code.visualstudio.com/), [Notepad++,](https://notepad-plus-plus.org/) Xcode, etc.) or text editor, and look for the text. In case you get lost, you can ask ChatGPT or similar chatbots for guidance on where to find this content (or even change it in a more efficient way through prompt engineering if you know what you're doing...just remember to be critical of the output of generative AI, always verify!).
 
-#### **5. Run the experiment**
+##### **5. Run the experiment**
 
 Open the HTML file (e.g., `index.html`) in your preferred web browser (e.g., Chrome, Firefox, Safari, Edge). The experiment should now load and be ready to use.
 
-#### **6. Results:**
+##### **6. Results:**
 
 Upon completion of a session, the results will be automatically saved to your browser's default downloads folder (typically named "Downloads").
 :::
 
-## Generating Individual Classification Images from Brief RC task data
+#### Generating Individual Classification Images from Brief RC task data
 
 In this section I provide an example of how to generate an individual classification image based on the data output of the Brief RC task. I will use the output format of the web version of the task I describe above (<https://olivethree.github.io/briefrc12online/>).
 
@@ -215,7 +215,7 @@ The output from the web version of the task I indicate above includes the follow
 
 Not that if your data looks different, you need to tweak the code to adapt it to your case (the moidified function should always stay the same though).
 
-## Modified function to generate BriefRC CIs
+#### Modified function to generate BriefRC CIs
 
 Create a .R file with this content (derived from Schmitz et al., 2024), and save it in your R projects' root directory (where .Rproj file is located).
 
@@ -403,7 +403,7 @@ getFaceRegion <- function(imgPath,
 }
 ```
 
-## Script to generate Individual CI
+#### Script to generate Individual CI
 
 Here is how you can generate the individual CI from the Brief RC task data:
 
@@ -477,7 +477,7 @@ rc_brief_dt[, genCI(
 You can find your individual CI result in the " ind_cis" folder. It's file name includes the participant number associated with it.
 :::
 
-## References
+### References
 
 -   Lundqvist, D., Flykt, A., & Öhman, A. (1998). *Karolinska Directed Emotional Faces (KDEF)* \[Database record\]. APA PsycTests. [https://doi.org/10.1037/t27732-000](https://psycnet.apa.org/doi/10.1037/t27732-000 "DOI link")
 -   Schmitz, M., Rougier, M., & Yzerbyt, V. (2024). Introducing the brief reverse correlation: An improved tool to assess visual representations. *European Journal of Social Psychology*. Advance Online Publication. [**https://doi.org/10.1002/ejsp.3100**](https://doi.org/10.1002/ejsp.3100)

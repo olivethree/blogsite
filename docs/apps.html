@@ -201,10 +201,10 @@ ga('send', {
    
   <ul>
   <li><a href="#carefully-prompt-your-ai" id="toc-carefully-prompt-your-ai" class="nav-link active" data-scroll-target="#carefully-prompt-your-ai">CARefully prompt your AI</a></li>
-  <li><a href="#brief-reverse-correlation-task" id="toc-brief-reverse-correlation-task" class="nav-link" data-scroll-target="#brief-reverse-correlation-task">Brief Reverse Correlation Task</a></li>
-  <li><a href="#setting-up-the-experiment" id="toc-setting-up-the-experiment" class="nav-link" data-scroll-target="#setting-up-the-experiment">Setting up the experiment</a></li>
-  <li><a href="#generating-individual-classification-images-from-brief-rc-task-data" id="toc-generating-individual-classification-images-from-brief-rc-task-data" class="nav-link" data-scroll-target="#generating-individual-classification-images-from-brief-rc-task-data">Generating Individual Classification Images from Brief RC task data</a></li>
+  <li><a href="#brief-reverse-correlation-task" id="toc-brief-reverse-correlation-task" class="nav-link" data-scroll-target="#brief-reverse-correlation-task">Brief Reverse Correlation Task</a>
+  <ul class="collapse">
   <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
+  </ul></li>
   <li><a href="#reverse-correlation-sampling-subgroup-cis" id="toc-reverse-correlation-sampling-subgroup-cis" class="nav-link" data-scroll-target="#reverse-correlation-sampling-subgroup-cis"><span>Reverse Correlation: Sampling Subgroup CIs</span></a></li>
   <li><a href="#face-masker" id="toc-face-masker" class="nav-link" data-scroll-target="#face-masker"><span>Face Masker</span></a></li>
   </ul>
@@ -338,9 +338,8 @@ Tutorial: Generating stimuli for the task
 </div>
 </div>
 </div>
-</section>
-<section id="setting-up-the-experiment" class="level2">
-<h2 class="anchored" data-anchor-id="setting-up-the-experiment">Setting up the experiment</h2>
+<section id="setting-up-the-experiment" class="level4">
+<h4 class="anchored" data-anchor-id="setting-up-the-experiment">Setting up the experiment</h4>
 <p>These instructions outline how to set up and run the Brief Reverse Correlation task developed by Schmitz et al.&nbsp;(2024) on your local machine.</p>
 <div class="callout-note callout callout-style-default callout-captioned">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
@@ -355,16 +354,16 @@ Tutorial: Generating stimuli for the task
 <div id="callout-2" class="callout-2-contents callout-collapse collapse">
 <div class="callout-body-container callout-body" title="Setup Instructions">
 <p>Begin by creating a new folder on your computer to house the task files. Choose a descriptive name for this folder (e.g., <code>Brief_RC_Task</code>, <code>BRC_Experiment</code>, or similar). This will help keep your files organized.</p>
-<section id="download-files-from-github" class="level4">
-<h4 class="anchored" data-anchor-id="download-files-from-github"><strong>2. Download files from GitHub:</strong></h4>
+<section id="download-files-from-github" class="level5">
+<h5 class="anchored" data-anchor-id="download-files-from-github"><strong>2. Download files from GitHub:</strong></h5>
 <p>Navigate to the GitHub repository: <a href="https://github.com/olivethree/briefRC" class="uri">https://github.com/olivethree/briefRC</a>. You will need to download the following:</p>
 <ul>
 <li><p><strong>HTML File:</strong> Download the HTML file that contains the application code.</p></li>
 <li><p><strong><code>images</code> folder:</strong> Download the entire <code>images</code> folder, including all its contents (the image files used in the task). <em>It is crucial to maintain the folder structure; do not just download the images individually.</em></p></li>
 </ul>
 </section>
-<section id="project-structure" class="level4">
-<h4 class="anchored" data-anchor-id="project-structure"><strong>3. Project structure:</strong></h4>
+<section id="project-structure" class="level5">
+<h5 class="anchored" data-anchor-id="project-structure"><strong>3. Project structure:</strong></h5>
 <p>Place the downloaded HTML file and the <code>images</code> folder (with its contents) directly into the project folder you created in Step 1. The structure should look like this:</p>
 <pre><code>Brief_RC_Task/       (Your project folder)
 ├── index.html      (Example HTML filename, but can be for example demo_briefrc_12.ENG.html)
@@ -373,25 +372,25 @@ Tutorial: Generating stimuli for the task
     ├── *.png
     └── ...          (Other image files)</code></pre>
 </section>
-<section id="adjust-experiment-content-to-your-needs" class="level4">
-<h4 class="anchored" data-anchor-id="adjust-experiment-content-to-your-needs"><strong>4. Adjust experiment content to your needs:</strong></h4>
+<section id="adjust-experiment-content-to-your-needs" class="level5">
+<h5 class="anchored" data-anchor-id="adjust-experiment-content-to-your-needs"><strong>4. Adjust experiment content to your needs:</strong></h5>
 <p>You can adjust the informed consent, task instructions, and trial instruction (very important as this is the target category you are interested in, e.g.&nbsp;Select the face that looks like &lt;YOUR_CATEGORY_OF_INTEREST&gt;).</p>
 <p>To adjust these instructions, you can simply edit the content of the HTML file by opening it in your favorite IDE (e.g.&nbsp;<a href="https://code.visualstudio.com/">Visual Code</a>, <a href="https://notepad-plus-plus.org/">Notepad++,</a> Xcode, etc.) or text editor, and look for the text. In case you get lost, you can ask ChatGPT or similar chatbots for guidance on where to find this content (or even change it in a more efficient way through prompt engineering if you know what you’re doing…just remember to be critical of the output of generative AI, always verify!).</p>
 </section>
-<section id="run-the-experiment" class="level4">
-<h4 class="anchored" data-anchor-id="run-the-experiment"><strong>5. Run the experiment</strong></h4>
+<section id="run-the-experiment" class="level5">
+<h5 class="anchored" data-anchor-id="run-the-experiment"><strong>5. Run the experiment</strong></h5>
 <p>Open the HTML file (e.g., <code>index.html</code>) in your preferred web browser (e.g., Chrome, Firefox, Safari, Edge). The experiment should now load and be ready to use.</p>
 </section>
-<section id="results" class="level4">
-<h4 class="anchored" data-anchor-id="results"><strong>6. Results:</strong></h4>
+<section id="results" class="level5">
+<h5 class="anchored" data-anchor-id="results"><strong>6. Results:</strong></h5>
 <p>Upon completion of a session, the results will be automatically saved to your browser’s default downloads folder (typically named “Downloads”).</p>
 </section>
 </div>
 </div>
 </div>
 </section>
-<section id="generating-individual-classification-images-from-brief-rc-task-data" class="level2">
-<h2 class="anchored" data-anchor-id="generating-individual-classification-images-from-brief-rc-task-data">Generating Individual Classification Images from Brief RC task data</h2>
+<section id="generating-individual-classification-images-from-brief-rc-task-data" class="level4">
+<h4 class="anchored" data-anchor-id="generating-individual-classification-images-from-brief-rc-task-data">Generating Individual Classification Images from Brief RC task data</h4>
 <p>In this section I provide an example of how to generate an individual classification image based on the data output of the Brief RC task. I will use the output format of the web version of the task I describe above (<a href="https://olivethree.github.io/briefrc12online/" class="uri">https://olivethree.github.io/briefrc12online/</a>).</p>
 <div class="callout-note callout callout-style-default callout-captioned">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
@@ -467,8 +466,8 @@ Note
 </tbody>
 </table>
 <p>Not that if your data looks different, you need to tweak the code to adapt it to your case (the moidified function should always stay the same though).</p>
-<section id="modified-function-to-generate-briefrc-cis" class="level2">
-<h2 class="anchored" data-anchor-id="modified-function-to-generate-briefrc-cis">Modified function to generate BriefRC CIs</h2>
+<section id="modified-function-to-generate-briefrc-cis" class="level4">
+<h4 class="anchored" data-anchor-id="modified-function-to-generate-briefrc-cis">Modified function to generate BriefRC CIs</h4>
 <p>Create a .R file with this content (derived from Schmitz et al., 2024), and save it in your R projects’ root directory (where .Rproj file is located).</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># BriefRC Task - Modified functions</span></span>
@@ -654,8 +653,8 @@ Note
 <span id="cb3-181"><a href="#cb3-181" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="script-to-generate-individual-ci" class="level2">
-<h2 class="anchored" data-anchor-id="script-to-generate-individual-ci">Script to generate Individual CI</h2>
+<section id="script-to-generate-individual-ci" class="level4">
+<h4 class="anchored" data-anchor-id="script-to-generate-individual-ci">Script to generate Individual CI</h4>
 <p>Here is how you can generate the individual CI from the Brief RC task data:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Clear environment</span></span>
@@ -729,13 +728,14 @@ Note
 </div>
 </div>
 </section>
-<section id="references" class="level2">
-<h2 class="anchored" data-anchor-id="references">References</h2>
+<section id="references" class="level3">
+<h3 class="anchored" data-anchor-id="references">References</h3>
 <ul>
 <li>Lundqvist, D., Flykt, A., &amp; Öhman, A. (1998). <em>Karolinska Directed Emotional Faces (KDEF)</em> [Database record]. APA PsycTests. <a href="https://psycnet.apa.org/doi/10.1037/t27732-000" title="DOI link">https://doi.org/10.1037/t27732-000</a></li>
 <li>Schmitz, M., Rougier, M., &amp; Yzerbyt, V. (2024). Introducing the brief reverse correlation: An improved tool to assess visual representations. <em>European Journal of Social Psychology</em>. Advance Online Publication. <a href="https://doi.org/10.1002/ejsp.3100"><strong>https://doi.org/10.1002/ejsp.3100</strong></a></li>
 </ul>
 <hr>
+</section>
 </section>
 <section id="reverse-correlation-sampling-subgroup-cis" class="level1">
 <h1><a href="https://olivethree.shinyapps.io/shinyRC_subgroup_cis/">Reverse Correlation: Sampling Subgroup CIs</a></h1>
