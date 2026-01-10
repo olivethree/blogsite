@@ -12,24 +12,24 @@ about:
 
 My interests and work are best placed at the intersection of **Psychology** and **Artificial Intelligence**. Currently, I serve as a researcher and advisor at Eindhoven University of Technology (TU/e), focusing on topics of AI in Education.
 
-My background is rooted in **Social Cognition**. For over a decade, I have researched how humans form impressions and trust based on facial appearance and social categories. I now apply these frameworks to a new frontier: understanding how humans perceive and interact with artificial agents.
+My background is rooted in **Social Cognition**. For most of my academic journey, I have researched how humans form impressions about other humans. With the increasing presence of AI in society, my research interests started to drift towards questions related with human-AI interaction and the inopact of AI in society. Some of the questions I have worked on include: how humans perceive and trust non-human/articial entities, how they perceive the capabilities of LLMs to match humanlike abilities to judge human behaviors, how students perceive and engage with AI in high-stakes assessment contexts (and importantly *what to do about it?)*.
 
 ### **Industry & Academia**
 
-Between academic roles, I worked for some time as a **Data Modeller & Researcher at Philips**. This experience grounded my scientific research background in technical reality, where I learned to translate data insights into viable steps required to build clinical software, while navigating complex product constraints. I combine this industrial discipline with technical proficiency in coding (R, Python), building custom tools to support statistical analyses (e.g., [oddPower](https://olivethree.shinyapps.io/oddpoweR/)) or Generative AI literacy tools ([CARefully prompt](https://zenodo.org/records/15475953)).
+Between academic roles, I worked for some time as a **Data Modeller & Researcher at Philips**. This experience grounded my scientific research background in the fast-opaced high-stakes business reality. There I learned how to translate data insights into viable steps required to build clinical software, while navigating complex product constraints and stakeholders with diverse backgrounds and motivations. I combine my industry experience with the technical proficiency in coding (R, Python) I matured over the las tdecade, to build digital tools that can support people in activities related to whatever projects I work on. Examples include custom tools to support statistical analyses of student research projects (e.g., [oddPower](https://olivethree.shinyapps.io/oddpoweR/)) or Generative AI literacy tools for academics and educators (e.g. [CARefully prompt](https://zenodo.org/records/15475953)).
 
 ### **Converting research into practice: AI in Education**
 
-At TU/e, I play a supportive role in the university’s operational response to Generative AI. As a member of the **Taskforce AI in Education**, I translate research output into practical, institutional strategy. My work involves designing and leading activities to help stakeholders (faculty, support staff, students) adapt to educational transformation, specifically in redefining assessment methods and upskilling staff for an AI-integrated reality.
+At TU/e, I play a supportive role in the university’s operational response to Generative AI. As a member of the [Task force AI in Education](https://tueindhoven.ai/education/teaching/index.html), I translate research output into practical, institutional strategy. My work involves designing and leading activities to help stakeholders (faculty, support staff, students) adapt to educational transformation, specifically in redefining assessment methods and upskilling staff for an AI-integrated reality.
 
 ## Experience
 
--   **Advisor, Human-AI Interaction & Taskforce Member** \| 2024 - Present
+-    **Task force AI in Education** \| 2024 - Present
     -   *Eindhoven University of Technology (IE&IS)*
-    -   Leading the translation of AI research into educational policy and practical advice for university stakeholders.
+    -   In this role, I provide input on the latest relevant research and technological developments, with the aim to inform educational policy makers. Other activities include: writing content for public engagement (newsletter, website), designing and conducting workshops to inform and up-skill relevant stakeholders (faculty, support staff, students, entrepreneurs).
 -   **Postdoctoral Researcher** \| 2024 - Present
     -   *Eindhoven University of Technology*
-    -   Researching the impact of AI on educational ecosystems and human-AI trust mechanics.
+    -   My research focuses on finding novel assessment approaches to capture evidence of learning in written assignments despite the use of Generative AI tools (e.g. [Oliveira et al., 2025](https://doi.org/10.1016/j.caeai.2025.100497)). Other projects I worked in explored the utility of GenAI technology to scaffold teacher feedback to students in CBL contexts ([preprint](https://doi.org/10.21203/rs.3.rs-7486768/v1))).
 -   **Postdoctoral Researcher & Program Coordinator** \| 2022 - 2023
     -   *Utrecht University, Coordination Human-AI Alliance Program*
     -   Managed inter-institutional grant calls and conducted research on trust in human-AI interaction.

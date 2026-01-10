@@ -19,8 +19,11 @@ editor: visual
 
     -   **"Imitation Games and AI-generated Art (Kunst Kunstmatig)":** Designed and executed a public experiment testing if groups of festival visitors could distinguish human art from AI generation. [LinkedIn post here](https://www.linkedin.com/posts/manueljbo_betweter-tivolivredenburg-activity-7116075634925125632-p5ub/)
 
-    ***Note***: Part of the visual stimuli were real hybrid human-AI artwork created by [Noah Hoeboer](https://www.linkedin.com/in/noah-h-45079398/)
+    This experiment simulated the experience of visiting a museum in the near future, where artworks can be human-made or AI-generated. The experiment tested how the confirmation or disconfirmation of our expectations regarding who created an artwork (AI, Human, or Co-creation with AI) impacted how we felt about the artwork after learning how it was created. For example, will you like an artwork more if you think it was made by an AI, but turns out it was made by a human? \
 
-::: {layout-ncol="2"}
-![](assets/betweter_1.jpeg) ![](assets/betweter_2.jpeg) ![](assets/betweter_3.jpeg) ![](assets/betweter_4.jpeg) ![](assets/betweter_5.jpeg)
-:::
+***Note***: Part of the visual stimuli were real hybrid human-AI artwork created by [Noah Hoeboer](https://www.linkedin.com/in/noah-h-45079398/)
+
+![](assets/betweter_imgs.png)
+
+\
+Our preliminary results (see images) revealed that when expectations about the creator of the artwork were confirmed (guessing human when it was human), people evaluated human-made art more positively than CO-created or AI-generated art. When expectations were disconfirmed (guess human but it was AI), people evaluated Co-created art more negatively than both AI or Human-generated art. Regardless of these findings, most people preferred to take home a postcard of the human-made artworks.
