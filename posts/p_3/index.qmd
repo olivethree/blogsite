@@ -9,9 +9,7 @@ categories:
   - Package
 ---
 
-![Image generated with Gemini 3 Flash Image (Nano banana 2 model)](post_rcicrdiag_cover.png){fig-align="center"}
-
-![](post_rcicrdiag_cover.png){fig-align="center"}
+![Image generated with Gemini 3 Flash Image (Nano banana 2).](post_rcicrdiag_cover.png){fig-align="center"}
 
 If you've ever run a reverse correlation (RC) experiment, you've probably lived this moment before: you feed your data into the classification image (CI) generation pipeline, look at the output, and something just feels *off* (but apparently nothing technically broke). You see no errors or warnings, just a CI that *looks* plausible and yet doesn't quite add up (if you're critical enough to even notice, which I'm hoping we all are ;) ).
 

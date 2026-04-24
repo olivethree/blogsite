@@ -22,12 +22,7 @@
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="https://manueloliveira.nl/posts/p_3/post_rcicrdiag_cover.png" class="img-fluid figure-img"></p>
-<p></p><figcaption class="figure-caption">Image generated with Gemini 3 Flash Image (Nano banana 2 model)</figcaption><p></p>
-</figure>
-</div>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="https://manueloliveira.nl/posts/p_3/post_rcicrdiag_cover.png" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">Image generated with Gemini 3 Flash Image (Nano banana 2).</figcaption><p></p>
 </figure>
 </div>
 <p>If you’ve ever run a reverse correlation (RC) experiment, you’ve probably lived this moment before: you feed your data into the classification image (CI) generation pipeline, look at the output, and something just feels <em>off</em> (but apparently nothing technically broke). You see no errors or warnings, just a CI that <em>looks</em> plausible and yet doesn’t quite add up (if you’re critical enough to even notice, which I’m hoping we all are ;) ).</p>
