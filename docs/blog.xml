@@ -10,7 +10,137 @@
 <atom:link href="https://manueloliveira.nl/blog.xml" rel="self" type="application/rss+xml"/>
 <description>Explore research tools and apps developed by Manuel Oliveira. Includes coding projects, academic resources, tools and tutorials for anyone conducting Psychology research or interested in reverse-correlation methods, face image manipulation, or data analysis with R and specific R packages for experimental psychology research. Learn more today!</description>
 <generator>quarto-1.0.37</generator>
-<lastBuildDate>Sat, 10 Jun 2023 22:00:00 GMT</lastBuildDate>
+<lastBuildDate>Thu, 23 Apr 2026 22:00:00 GMT</lastBuildDate>
+<item>
+  <title>Introducing rcicrdiagnostics: an R package that runs data quality checks on your reverse correlation data</title>
+  <dc:creator>M. Oliveira</dc:creator>
+  <link>https://manueloliveira.nl/posts/p_3/index.html</link>
+  <description><![CDATA[ 
+
+
+
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://manueloliveira.nl/posts/p_3/post_rcicrdiag_cover.png" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">Image generated with Gemini 3 Flash Image (Nano banana 2 model)</figcaption><p></p>
+</figure>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://manueloliveira.nl/posts/p_3/post_rcicrdiag_cover.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+<p>If you’ve ever run a reverse correlation (RC) experiment, you’ve probably lived this moment before: you feed your data into the classification image (CI) generation pipeline, look at the output, and something just feels <em>off</em> (but apparently nothing technically broke). You see no errors or warnings, just a CI that <em>looks</em> plausible and yet doesn’t quite add up (if you’re critical enough to even notice, which I’m hoping we all are ;) ).</p>
+<p>More often than not, the issue is not with your theory, but with your data pipeline. AS a Super Mario fan, I was waiting for the moment I could write this in a blog post about research stuff: <em>Time for some plumbing, let’sa gooo!</em> (yes, that’s how bad my sense of humor can be ;) )</p>
+<p>RC pipelines are unusually fragile to small data mistakes. Some examples: a response column coded as <code>{0, 1}</code> instead of <code>{-1, 1}</code>, stimulus IDs that are off by one, a noise matrix whose dimensions don’t match what your response data assumes, an <code>.RData</code> parameter file from a different stimulus batch than the one your participants actually saw. None of these throw an error. All of them produce a CI that looks convincing but may carry some unwanted mathematical distortions behind the scenes. Worse, because CIs are visually interpretable, a broken pipeline can still look “like a face” and trick us into believing the result.</p>
+<p>After running into these kinds of issues more times than I’d like to admit — both in my own projects and when helping others — I decided to put together a toolkit that checks for them systematically. It’s called <strong><code>rcicrdiagnostics</code></strong> and I’m releasing v0.1.0 today.</p>
+<section id="what-it-does" class="level2">
+<h2 class="anchored" data-anchor-id="what-it-does">What it does</h2>
+<p><code>rcicrdiagnostics</code> is an R package that runs a battery of data-quality diagnostics on your response data <em>before</em> you compute any CIs or information values. Think of it as a pre-flight checklist: you load your response CSV and the auxiliary file that describes your stimuli, call <code>run_diagnostics()</code>, and get back a clear <strong>pass / warn / fail</strong> report per check.</p>
+<p>It supports both of the pipelines that currently dominate the field:</p>
+<ul>
+<li><strong>Two-image forced choice (2IFC)</strong> — the classical reverse correlation paradigm implemented in the <a href="https://github.com/rdotsch/rcicr"><code>rcicr</code></a> package (Dotsch, 2016, 2023).</li>
+<li><strong>Brief-RC</strong> — the more recent variant introduced by <a href="https://doi.org/10.1002/ejsp.3100">Schmitz, Rougier, and Yzerbyt (2024)</a> that shows 12 or 20 noisy faces per trial instead of two.</li>
+</ul>
+<p>A single <code>method</code> argument decides which pipeline to validate; the rest of the API is shared.</p>
+</section>
+<section id="what-the-checks-actually-catch" class="level2">
+<h2 class="anchored" data-anchor-id="what-the-checks-actually-catch">What the checks actually catch</h2>
+<p>Here’s a flavour of what comes out of <code>run_diagnostics()</code>. Every finding lands in one of four buckets (<strong>pass</strong>, <strong>warn</strong>, <strong>fail</strong>, <strong>skip</strong>), and each check names the participants or trials involved so you can jump straight to fixing them.</p>
+<ul>
+<li><strong>Response coding.</strong> Are responses <code>{-1, +1}</code> as the pipeline expects, or accidentally <code>{0, 1}</code> from your data-collection tool? This is easy to miss and it silently halves your CI.</li>
+<li><strong>Trial counts.</strong> Does every participant have the number of trials you expected? Participants who terminated early or whose data got partially lost skew your group-level CIs.</li>
+<li><strong>Stimulus alignment.</strong> Do the stimulus IDs in your response data actually exist in your stimulus pool, and are they within range? Off-by-one errors here are surprisingly common and hard to spot visually.</li>
+<li><strong>Response bias.</strong> Are some participants just clicking the same side over and over? These produce near-constant “CIs” that carry no signal.</li>
+<li><strong>Reaction times.</strong> Any participants with an unusually high rate of extremely fast responses? Likely rushed or inattentive trials that contaminate the CI.</li>
+<li><strong>Version compatibility.</strong> Is your <code>.RData</code> parameter file from the same <code>rcicr</code> version you’re now trying to analyse with?</li>
+<li><strong>Response inversion.</strong> Does a participant’s CI look like its own mirror image? A small but real fraction of participants get confused about which face they’re supposed to be picking, and their “inverted” CIs cancel out everyone else’s.</li>
+</ul>
+<p>If everything passes, you can move on to generating CIs and computing infoVal with confidence. If something fails, the report tells you exactly which participants or rows to investigate before you continue.</p>
+</section>
+<section id="quick-look" class="level2">
+<h2 class="anchored" data-anchor-id="quick-look">Quick look</h2>
+<p>The package ships with a runnable demo that you can try without any real study data. It generates synthetic 2IFC and Brief-RC datasets using an AI-generated base face (<a href="https://thispersondoesnotexist.com/">thispersondoesnotexist.com</a>), runs the full diagnostic battery on each, and prints the reports:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><span class="co" style="color: #5E5E5E;"># install.packages("remotes")</span></span>
+<span id="cb1-2">remotes<span class="sc" style="color: #5E5E5E;">::</span><span class="fu" style="color: #4758AB;">install_github</span>(<span class="st" style="color: #20794D;">"olivethree/rcicrdiagnostics"</span>)</span>
+<span id="cb1-3"></span>
+<span id="cb1-4"><span class="fu" style="color: #4758AB;">library</span>(rcicrdiagnostics)</span>
+<span id="cb1-5"></span>
+<span id="cb1-6"><span class="co" style="color: #5E5E5E;"># Source the runnable examples in order (about a minute total).</span></span>
+<span id="cb1-7"><span class="fu" style="color: #4758AB;">source</span>(<span class="fu" style="color: #4758AB;">system.file</span>(<span class="st" style="color: #20794D;">"examples"</span>, <span class="st" style="color: #20794D;">"01_generate_stimuli.R"</span>,          <span class="at" style="color: #657422;">package =</span> <span class="st" style="color: #20794D;">"rcicrdiagnostics"</span>))</span>
+<span id="cb1-8"><span class="fu" style="color: #4758AB;">source</span>(<span class="fu" style="color: #4758AB;">system.file</span>(<span class="st" style="color: #20794D;">"examples"</span>, <span class="st" style="color: #20794D;">"02a_bogus_responses_2ifc.R"</span>,     <span class="at" style="color: #657422;">package =</span> <span class="st" style="color: #20794D;">"rcicrdiagnostics"</span>))</span>
+<span id="cb1-9"><span class="fu" style="color: #4758AB;">source</span>(<span class="fu" style="color: #4758AB;">system.file</span>(<span class="st" style="color: #20794D;">"examples"</span>, <span class="st" style="color: #20794D;">"02b_bogus_responses_briefrc12.R"</span>, <span class="at" style="color: #657422;">package =</span> <span class="st" style="color: #20794D;">"rcicrdiagnostics"</span>))</span>
+<span id="cb1-10"><span class="fu" style="color: #4758AB;">source</span>(<span class="fu" style="color: #4758AB;">system.file</span>(<span class="st" style="color: #20794D;">"examples"</span>, <span class="st" style="color: #20794D;">"02c_bogus_responses_briefrc20.R"</span>, <span class="at" style="color: #657422;">package =</span> <span class="st" style="color: #20794D;">"rcicrdiagnostics"</span>))</span>
+<span id="cb1-11"><span class="fu" style="color: #4758AB;">source</span>(<span class="fu" style="color: #4758AB;">system.file</span>(<span class="st" style="color: #20794D;">"examples"</span>, <span class="st" style="color: #20794D;">"03_run_diagnostics_demo.R"</span>,       <span class="at" style="color: #657422;">package =</span> <span class="st" style="color: #20794D;">"rcicrdiagnostics"</span>))</span></code></pre></div>
+</div>
+<p>For your own data, the minimum you need is a response CSV with <code>participant_id</code>, <code>stimulus</code>, and <code>response</code> columns (optionally <code>rt</code>), plus either an <code>rcicr</code> <code>.RData</code> for 2IFC or a noise matrix for Brief-RC:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1">responses <span class="ot" style="color: #003B4F;">&lt;-</span> <span class="fu" style="color: #4758AB;">read.csv</span>(<span class="st" style="color: #20794D;">"path/to/your/responses.csv"</span>)</span>
+<span id="cb2-2"></span>
+<span id="cb2-3">report <span class="ot" style="color: #003B4F;">&lt;-</span> <span class="fu" style="color: #4758AB;">run_diagnostics</span>(</span>
+<span id="cb2-4">  responses,</span>
+<span id="cb2-5">  <span class="at" style="color: #657422;">method =</span> <span class="st" style="color: #20794D;">"2ifc"</span>,</span>
+<span id="cb2-6">  <span class="at" style="color: #657422;">rdata  =</span> <span class="st" style="color: #20794D;">"path/to/your/rcicr_stimuli.RData"</span>,</span>
+<span id="cb2-7">  <span class="at" style="color: #657422;">col_rt =</span> <span class="st" style="color: #20794D;">"rt"</span></span>
+<span id="cb2-8">)</span>
+<span id="cb2-9"><span class="fu" style="color: #4758AB;">print</span>(report)</span></code></pre></div>
+</div>
+<p>That’s it.</p>
+</section>
+<section id="a-note-on-ci-scaling-decisions" class="level2">
+<h2 class="anchored" data-anchor-id="a-note-on-ci-scaling-decisions">A note on CI scaling decisions</h2>
+<p>The package ships with a <a href="https://olivethree.github.io/rcicrdiagnostics/articles/tutorial.html">user’s guide</a> which, besides covering every function with runnable examples, includes a chapter I hope will save some headaches: <strong><em>Choosing a CI scaling option</em></strong>.</p>
+<p>It answers three questions that come up in pretty much every RC project:</p>
+<ol type="1">
+<li>What does the <code>scaling</code> argument in <code>rcicr</code> actually do?</li>
+<li>Which scaling option should I use for which downstream analysis — infoVal, pixel-wise correlations, rating-task stimuli, figures?</li>
+<li>When does scaling affect my results, and when does it not?</li>
+</ol>
+<p>There is a lot of confusion in the literature about this, and it shows up in how people interpret their CIs, how they present them to judges, and how they compare CIs across conditions or studies. The chapter lays out the distinction between the <strong>raw CI</strong> (the data you do statistics on) and the <strong>scaled CI</strong> (the display-ready image you show to eyes), and provides a decision table for picking the right scaling per analytical goal.</p>
+</section>
+<section id="status-and-whats-next" class="level2">
+<h2 class="anchored" data-anchor-id="status-and-whats-next">Status and what’s next</h2>
+<p>v0.1.0 is the first tagged release. The API is not yet frozen, I expect to refine function signatures and defaults before a potenial new future release, so please indicate the current version if you use it in any of your papers. Distribution is GitHub-only for now; there is no CRAN plan at this stage as working on the RC methods toipic is mainly a “hobby” beyond my daily job research focus.</p>
+<p>Feedback, bug reports, and feature requests are very welcome. Please open an issue on GitHub or reach out directly (m.j.barbosa.de.oliveira@tue.nl).</p>
+</section>
+<section id="links" class="level2">
+<h2 class="anchored" data-anchor-id="links">Links</h2>
+<ul>
+<li><strong>Package on GitHub</strong>: <a href="https://github.com/olivethree/rcicrdiagnostics" class="uri">https://github.com/olivethree/rcicrdiagnostics</a></li>
+<li><strong>User’s guide</strong> (with the scaling chapter): <a href="https://olivethree.github.io/rcicrdiagnostics/articles/tutorial.html" class="uri">https://olivethree.github.io/rcicrdiagnostics/articles/tutorial.html</a></li>
+<li><strong>Zenodo record</strong>: <a href="https://doi.org/10.5281/zenodo.19734757" class="uri">https://doi.org/10.5281/zenodo.19734757</a></li>
+</ul>
+</section>
+<section id="how-to-cite" class="level2">
+<h2 class="anchored" data-anchor-id="how-to-cite">How to cite</h2>
+<blockquote class="blockquote">
+<p>Oliveira, M. (2026). <em>rcicrdiagnostics: Data quality diagnostics for reverse correlation experiments in social psychology using the rcicr package</em> (Version 0.1.0) [R package]. Zenodo. <a href="https://doi.org/10.5281/zenodo.19734757" class="uri">https://doi.org/10.5281/zenodo.19734757</a></p>
+</blockquote>
+<p>Or from within R: <code>citation("rcicrdiagnostics")</code>.</p>
+<p>Thanks for reading!</p>
+</section>
+<section id="references" class="level2">
+<h2 class="anchored" data-anchor-id="references">References</h2>
+<ul>
+<li><p>Brinkman, L., Goffin, S., van de Schoot, R., van Haren, N. E. M., Dotsch, R., &amp; Aarts, H. (2019). Quantifying the informational value of classification images. <em>Behavior Research Methods</em>, <em>51</em>(5), 2059–2073. <a href="https://doi.org/10.3758/s13428-019-01232-2" class="uri">https://doi.org/10.3758/s13428-019-01232-2</a></p></li>
+<li><p>Dotsch, R. (2016). <em>rcicr: Reverse-correlation image-classification toolbox</em> [R package, development versions]. <a href="https://github.com/rdotsch/rcicr" class="uri">https://github.com/rdotsch/rcicr</a></p></li>
+<li><p>Dotsch, R. (2023). <em>rcicr: Reverse correlation image classification toolbox</em> (Version 1.0.1) [R package]. <a href="https://github.com/rdotsch/rcicr" class="uri">https://github.com/rdotsch/rcicr</a></p></li>
+<li><p>Schmitz, M., Rougier, M., &amp; Yzerbyt, V. (2024). Introducing the brief reverse correlation: An improved tool to assess visual representations. <em>European Journal of Social Psychology</em>. <a href="https://doi.org/10.1002/ejsp.3100" class="uri">https://doi.org/10.1002/ejsp.3100</a></p></li>
+</ul>
+
+
+</section>
+
+ ]]></description>
+  <category>R</category>
+  <category>Reverse Correlation</category>
+  <category>Psychology</category>
+  <category>Package</category>
+  <guid>https://manueloliveira.nl/posts/p_3/index.html</guid>
+  <pubDate>Thu, 23 Apr 2026 22:00:00 GMT</pubDate>
+  <media:content url="https://manueloliveira.nl/posts/p_3/post_rcicrdiag_cover.png" medium="image" type="image/png" height="80" width="144"/>
+</item>
 <item>
   <title>Using Reverse Correlation Methods in Psychology Research: R tutorial and Recommended Practices</title>
   <dc:creator>M. Oliveira</dc:creator>

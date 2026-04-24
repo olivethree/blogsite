@@ -200,7 +200,8 @@ ga('send', {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#carefully-prompt-your-ai" id="toc-carefully-prompt-your-ai" class="nav-link active" data-scroll-target="#carefully-prompt-your-ai">CARefully prompt your AI</a></li>
+  <li><a href="#rcicrdiagnostics" id="toc-rcicrdiagnostics" class="nav-link active" data-scroll-target="#rcicrdiagnostics">rcicrdiagnostics</a></li>
+  <li><a href="#carefully-prompt-your-ai" id="toc-carefully-prompt-your-ai" class="nav-link" data-scroll-target="#carefully-prompt-your-ai">CARefully prompt your AI</a></li>
   <li><a href="#brief-reverse-correlation-task" id="toc-brief-reverse-correlation-task" class="nav-link" data-scroll-target="#brief-reverse-correlation-task">Brief Reverse Correlation Task</a>
   <ul class="collapse">
   <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
@@ -215,9 +216,23 @@ ga('send', {
 
 
 
+<section id="rcicrdiagnostics" class="level2">
+<h2 class="anchored" data-anchor-id="rcicrdiagnostics">rcicrdiagnostics</h2>
+<p><strong>Data-quality diagnostics for reverse correlation experiments in social psychology.</strong></p>
+<p><a href="https://github.com/olivethree/rcicrdiagnostics"><strong>Package available on GitHub</strong></a> | <a href="https://olivethree.github.io/rcicrdiagnostics/articles/tutorial.html"><strong>User’s Guide</strong></a> | <a href="./posts/p_3/index.html"><strong>Blog post</strong></a> | <a href="https://doi.org/10.5281/zenodo.19734757"><strong>DOI</strong></a></p>
+<p>Reverse correlation pipelines fail quietly. A response column coded <code>{0, 1}</code> instead of <code>{-1, 1}</code>, stimulus IDs that are off by one, a noise matrix whose dimensions don’t match the response data, a parameter file from the wrong stimulus batch — none of these throw errors, but all of them produce a classification image (CI) that looks convincing and is mathematically wrong.</p>
+<p><code>rcicrdiagnostics</code> is an R package I put together to catch those silent failures <strong>before</strong> you compute any CI or information value. You give it a response CSV plus your auxiliary stimulus file, call <code>run_diagnostics()</code>, and get back a clean pass / warn / fail report per check.</p>
+<ul>
+<li><p><strong>Covers both pipelines</strong> through a single <code>method</code> argument: the classical two-image forced choice (2IFC) via the <code>rcicr</code> package (Dotsch, 2016, 2023), and Brief-RC (<a href="https://doi.org/10.1002/ejsp.3100">Schmitz, Rougier, &amp; Yzerbyt, 2024</a>).</p></li>
+<li><p><strong>Runnable demo ships with the package.</strong> An AI-generated base face (thispersondoesnotexist.com) and bogus-data generators for 2IFC, Brief-RC 12, and Brief-RC 20 let you try the full flow in about a minute without collecting any real study data.</p></li>
+<li><p><strong>User’s guide with a dedicated chapter on CI scaling decisions</strong> — which option to use for infoVal, pixel-wise correlations, rating-task stimuli, and figures. Aims to clear up confusion that shows up in the literature and personal projects.</p></li>
+</ul>
+<p>Citable via Zenodo (<a href="https://doi.org/10.5281/zenodo.19734757">10.5281/zenodo.19734757</a>). Feedback and bug reports welcome on the <a href="https://github.com/olivethree/rcicrdiagnostics/issues">issue tracker</a>.</p>
+<hr>
+</section>
 <section id="carefully-prompt-your-ai" class="level2">
 <h2 class="anchored" data-anchor-id="carefully-prompt-your-ai">CARefully prompt your AI</h2>
-<p><strong>Ethical guidance for GenAI-assisted academic writing</strong></p>
+<p><strong>First steps on eEthical guidance for GenAI-assisted academic writing</strong></p>
 <p><a href="https://olivethree.github.io/carefullyprompt/">Launch the CARefully Prompt Library</a></p>
 <p>This interactive prompt library was developed to support PhD students and early-career researchers in navigating the complex ethics of using Generative AI in academic writing activities. This tool was developed for a workshop at the <a href="https://sites.google.com/4tu.nl/sefi-phd-summer-school/home"><strong>2025 SEFI Summer School</strong></a>(20-23 May @ Den Bosch, The Netherlands), it operationalizes the recent ethical framework by <a href="https://doi.org/10.1186/s41077-025-00350-6"><strong>Cheng et al.&nbsp;(2025)</strong></a> to help writers make informed decisions.</p>
 <ul>

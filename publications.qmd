@@ -3,6 +3,10 @@ title: "Publications"
 editor: visual
 ---
 
+### 2026
+
+[**Oliveira, M. (2026)**. rcicrdiagnostics: Data quality diagnostics for reverse correlation experiments in social psychology using the rcicr package (Version 0.1.0) \[R package\]. Zenodo. https://doi.org/10.5281/zenodo.19734757](https://doi.org/10.5281/zenodo.19734757)
+
 ### 2025
 
 [**Oliveira, M. J. B.**, Zednik, C., Bombaerts, G., Sadowski, B., & Conijn, R. (2025). Assessing students’ DRIVE: A framework to evaluate learning through interactions with generative AI. Computers and Education: Artificial Intelligence, 100497. https://doi.org/10.1016/j.caeai.2025.100497](https://doi.org/10.1016/j.caeai.2025.100497)

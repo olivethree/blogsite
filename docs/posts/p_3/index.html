@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.37">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="M. Oliveira">
+<meta name="dcterms.date" content="2026-04-24">
+
+<title>Manuel Oliveira - Introducing rcicrdiagnostics: an R package that runs data quality checks on your reverse correlation data</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../assets/robots.png" rel="icon" type="image/png">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-dark.min.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+<script type="text/javascript">
+
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-176122484-2', 'auto');
+
+ga('send', {
+  hitType: 'pageview',
+  'anonymizeIp': true,
+});
+</script>
+
+
+<link rel="stylesheet" href="../../styles.css">
+<meta property="og:title" content="Manuel Oliveira - Introducing rcicrdiagnostics: an R package that runs data quality checks on your reverse correlation data">
+<meta property="og:description" content="If you’ve ever run a reverse correlation (RC) experiment, you’ve probably lived this moment before: you feed your data into the classification image (CI) generation pipeline, look at the output, and…">
+<meta property="og:image" content="https://manueloliveira.nl/posts/p_3/post_rcicrdiag_cover.png">
+<meta property="og:site-name" content="Manuel Oliveira">
+<meta property="og:image:height" content="1536">
+<meta property="og:image:width" content="2752">
+<meta name="twitter:title" content="Manuel Oliveira - Introducing rcicrdiagnostics: an R package that runs data quality checks on your reverse correlation data">
+<meta name="twitter:description" content="If you’ve ever run a reverse correlation (RC) experiment, you’ve probably lived this moment before: you feed your data into the classification image (CI) generation pipeline, look at the output, and…">
+<meta name="twitter:image" content="https://manueloliveira.nl/posts/p_3/post_rcicrdiag_cover.png">
+<meta name="twitter:image-height" content="1536">
+<meta name="twitter:image-width" content="2752">
+<meta name="twitter:card" content="summary_large_image">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">Manuel Oliveira</span>
+  </a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.html">Home</a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../blog.html">Blog</a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../media.html">Media</a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../publications.html">Publications</a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../apps.html">Tools</a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html">About</a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/olivethree"><i class="bi bi-github" role="img">
+</i> 
+ </a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://www.linkedin.com/in/manueljbo/"><i class="bi bi-linkedin" role="img">
+</i> 
+ </a>
+  </li>  
+</ul>
+              <div class="quarto-toggle-container">
+                  <a href="" class="quarto-color-scheme-toggle nav-link" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+              </div>
+              <div id="quarto-search" class="" title="Search"></div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#what-it-does" id="toc-what-it-does" class="nav-link active" data-scroll-target="#what-it-does">What it does</a></li>
+  <li><a href="#what-the-checks-actually-catch" id="toc-what-the-checks-actually-catch" class="nav-link" data-scroll-target="#what-the-checks-actually-catch">What the checks actually catch</a></li>
+  <li><a href="#quick-look" id="toc-quick-look" class="nav-link" data-scroll-target="#quick-look">Quick look</a></li>
+  <li><a href="#a-note-on-ci-scaling-decisions" id="toc-a-note-on-ci-scaling-decisions" class="nav-link" data-scroll-target="#a-note-on-ci-scaling-decisions">A note on CI scaling decisions</a></li>
+  <li><a href="#status-and-whats-next" id="toc-status-and-whats-next" class="nav-link" data-scroll-target="#status-and-whats-next">Status and what’s next</a></li>
+  <li><a href="#links" id="toc-links" class="nav-link" data-scroll-target="#links">Links</a></li>
+  <li><a href="#how-to-cite" id="toc-how-to-cite" class="nav-link" data-scroll-target="#how-to-cite">How to cite</a></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Introducing rcicrdiagnostics: an R package that runs data quality checks on your reverse correlation data</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">R</div>
+    <div class="quarto-category">Reverse Correlation</div>
+    <div class="quarto-category">Psychology</div>
+    <div class="quarto-category">Package</div>
+  </div>
+  </div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>M. Oliveira </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">April 24, 2026</p>
+    </div>
+  </div>
+    
+  </div>
+  
+
+</header>
+
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="post_rcicrdiag_cover.png" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">Image generated with Gemini 3 Flash Image (Nano banana 2 model)</figcaption><p></p>
+</figure>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="post_rcicrdiag_cover.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+<p>If you’ve ever run a reverse correlation (RC) experiment, you’ve probably lived this moment before: you feed your data into the classification image (CI) generation pipeline, look at the output, and something just feels <em>off</em> (but apparently nothing technically broke). You see no errors or warnings, just a CI that <em>looks</em> plausible and yet doesn’t quite add up (if you’re critical enough to even notice, which I’m hoping we all are ;) ).</p>
+<p>More often than not, the issue is not with your theory, but with your data pipeline. AS a Super Mario fan, I was waiting for the moment I could write this in a blog post about research stuff: <em>Time for some plumbing, let’sa gooo!</em> (yes, that’s how bad my sense of humor can be ;) )</p>
+<p>RC pipelines are unusually fragile to small data mistakes. Some examples: a response column coded as <code>{0, 1}</code> instead of <code>{-1, 1}</code>, stimulus IDs that are off by one, a noise matrix whose dimensions don’t match what your response data assumes, an <code>.RData</code> parameter file from a different stimulus batch than the one your participants actually saw. None of these throw an error. All of them produce a CI that looks convincing but may carry some unwanted mathematical distortions behind the scenes. Worse, because CIs are visually interpretable, a broken pipeline can still look “like a face” and trick us into believing the result.</p>
+<p>After running into these kinds of issues more times than I’d like to admit — both in my own projects and when helping others — I decided to put together a toolkit that checks for them systematically. It’s called <strong><code>rcicrdiagnostics</code></strong> and I’m releasing v0.1.0 today.</p>
+<section id="what-it-does" class="level2">
+<h2 class="anchored" data-anchor-id="what-it-does">What it does</h2>
+<p><code>rcicrdiagnostics</code> is an R package that runs a battery of data-quality diagnostics on your response data <em>before</em> you compute any CIs or information values. Think of it as a pre-flight checklist: you load your response CSV and the auxiliary file that describes your stimuli, call <code>run_diagnostics()</code>, and get back a clear <strong>pass / warn / fail</strong> report per check.</p>
+<p>It supports both of the pipelines that currently dominate the field:</p>
+<ul>
+<li><strong>Two-image forced choice (2IFC)</strong> — the classical reverse correlation paradigm implemented in the <a href="https://github.com/rdotsch/rcicr"><code>rcicr</code></a> package (Dotsch, 2016, 2023).</li>
+<li><strong>Brief-RC</strong> — the more recent variant introduced by <a href="https://doi.org/10.1002/ejsp.3100">Schmitz, Rougier, and Yzerbyt (2024)</a> that shows 12 or 20 noisy faces per trial instead of two.</li>
+</ul>
+<p>A single <code>method</code> argument decides which pipeline to validate; the rest of the API is shared.</p>
+</section>
+<section id="what-the-checks-actually-catch" class="level2">
+<h2 class="anchored" data-anchor-id="what-the-checks-actually-catch">What the checks actually catch</h2>
+<p>Here’s a flavour of what comes out of <code>run_diagnostics()</code>. Every finding lands in one of four buckets (<strong>pass</strong>, <strong>warn</strong>, <strong>fail</strong>, <strong>skip</strong>), and each check names the participants or trials involved so you can jump straight to fixing them.</p>
+<ul>
+<li><strong>Response coding.</strong> Are responses <code>{-1, +1}</code> as the pipeline expects, or accidentally <code>{0, 1}</code> from your data-collection tool? This is easy to miss and it silently halves your CI.</li>
+<li><strong>Trial counts.</strong> Does every participant have the number of trials you expected? Participants who terminated early or whose data got partially lost skew your group-level CIs.</li>
+<li><strong>Stimulus alignment.</strong> Do the stimulus IDs in your response data actually exist in your stimulus pool, and are they within range? Off-by-one errors here are surprisingly common and hard to spot visually.</li>
+<li><strong>Response bias.</strong> Are some participants just clicking the same side over and over? These produce near-constant “CIs” that carry no signal.</li>
+<li><strong>Reaction times.</strong> Any participants with an unusually high rate of extremely fast responses? Likely rushed or inattentive trials that contaminate the CI.</li>
+<li><strong>Version compatibility.</strong> Is your <code>.RData</code> parameter file from the same <code>rcicr</code> version you’re now trying to analyse with?</li>
+<li><strong>Response inversion.</strong> Does a participant’s CI look like its own mirror image? A small but real fraction of participants get confused about which face they’re supposed to be picking, and their “inverted” CIs cancel out everyone else’s.</li>
+</ul>
+<p>If everything passes, you can move on to generating CIs and computing infoVal with confidence. If something fails, the report tells you exactly which participants or rows to investigate before you continue.</p>
+</section>
+<section id="quick-look" class="level2">
+<h2 class="anchored" data-anchor-id="quick-look">Quick look</h2>
+<p>The package ships with a runnable demo that you can try without any real study data. It generates synthetic 2IFC and Brief-RC datasets using an AI-generated base face (<a href="https://thispersondoesnotexist.com/">thispersondoesnotexist.com</a>), runs the full diagnostic battery on each, and prints the reports:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># install.packages("remotes")</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">"olivethree/rcicrdiagnostics"</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rcicrdiagnostics)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Source the runnable examples in order (about a minute total).</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="fu">system.file</span>(<span class="st">"examples"</span>, <span class="st">"01_generate_stimuli.R"</span>,          <span class="at">package =</span> <span class="st">"rcicrdiagnostics"</span>))</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="fu">system.file</span>(<span class="st">"examples"</span>, <span class="st">"02a_bogus_responses_2ifc.R"</span>,     <span class="at">package =</span> <span class="st">"rcicrdiagnostics"</span>))</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="fu">system.file</span>(<span class="st">"examples"</span>, <span class="st">"02b_bogus_responses_briefrc12.R"</span>, <span class="at">package =</span> <span class="st">"rcicrdiagnostics"</span>))</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="fu">system.file</span>(<span class="st">"examples"</span>, <span class="st">"02c_bogus_responses_briefrc20.R"</span>, <span class="at">package =</span> <span class="st">"rcicrdiagnostics"</span>))</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="fu">system.file</span>(<span class="st">"examples"</span>, <span class="st">"03_run_diagnostics_demo.R"</span>,       <span class="at">package =</span> <span class="st">"rcicrdiagnostics"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>For your own data, the minimum you need is a response CSV with <code>participant_id</code>, <code>stimulus</code>, and <code>response</code> columns (optionally <code>rt</code>), plus either an <code>rcicr</code> <code>.RData</code> for 2IFC or a noise matrix for Brief-RC:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>responses <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"path/to/your/responses.csv"</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>report <span class="ot">&lt;-</span> <span class="fu">run_diagnostics</span>(</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  responses,</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">method =</span> <span class="st">"2ifc"</span>,</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">rdata  =</span> <span class="st">"path/to/your/rcicr_stimuli.RData"</span>,</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">col_rt =</span> <span class="st">"rt"</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(report)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>That’s it.</p>
+</section>
+<section id="a-note-on-ci-scaling-decisions" class="level2">
+<h2 class="anchored" data-anchor-id="a-note-on-ci-scaling-decisions">A note on CI scaling decisions</h2>
+<p>The package ships with a <a href="https://olivethree.github.io/rcicrdiagnostics/articles/tutorial.html">user’s guide</a> which, besides covering every function with runnable examples, includes a chapter I hope will save some headaches: <strong><em>Choosing a CI scaling option</em></strong>.</p>
+<p>It answers three questions that come up in pretty much every RC project:</p>
+<ol type="1">
+<li>What does the <code>scaling</code> argument in <code>rcicr</code> actually do?</li>
+<li>Which scaling option should I use for which downstream analysis — infoVal, pixel-wise correlations, rating-task stimuli, figures?</li>
+<li>When does scaling affect my results, and when does it not?</li>
+</ol>
+<p>There is a lot of confusion in the literature about this, and it shows up in how people interpret their CIs, how they present them to judges, and how they compare CIs across conditions or studies. The chapter lays out the distinction between the <strong>raw CI</strong> (the data you do statistics on) and the <strong>scaled CI</strong> (the display-ready image you show to eyes), and provides a decision table for picking the right scaling per analytical goal.</p>
+</section>
+<section id="status-and-whats-next" class="level2">
+<h2 class="anchored" data-anchor-id="status-and-whats-next">Status and what’s next</h2>
+<p>v0.1.0 is the first tagged release. The API is not yet frozen, I expect to refine function signatures and defaults before a potenial new future release, so please indicate the current version if you use it in any of your papers. Distribution is GitHub-only for now; there is no CRAN plan at this stage as working on the RC methods toipic is mainly a “hobby” beyond my daily job research focus.</p>
+<p>Feedback, bug reports, and feature requests are very welcome. Please open an issue on GitHub or reach out directly (m.j.barbosa.de.oliveira@tue.nl).</p>
+</section>
+<section id="links" class="level2">
+<h2 class="anchored" data-anchor-id="links">Links</h2>
+<ul>
+<li><strong>Package on GitHub</strong>: <a href="https://github.com/olivethree/rcicrdiagnostics" class="uri">https://github.com/olivethree/rcicrdiagnostics</a></li>
+<li><strong>User’s guide</strong> (with the scaling chapter): <a href="https://olivethree.github.io/rcicrdiagnostics/articles/tutorial.html" class="uri">https://olivethree.github.io/rcicrdiagnostics/articles/tutorial.html</a></li>
+<li><strong>Zenodo record</strong>: <a href="https://doi.org/10.5281/zenodo.19734757" class="uri">https://doi.org/10.5281/zenodo.19734757</a></li>
+</ul>
+</section>
+<section id="how-to-cite" class="level2">
+<h2 class="anchored" data-anchor-id="how-to-cite">How to cite</h2>
+<blockquote class="blockquote">
+<p>Oliveira, M. (2026). <em>rcicrdiagnostics: Data quality diagnostics for reverse correlation experiments in social psychology using the rcicr package</em> (Version 0.1.0) [R package]. Zenodo. <a href="https://doi.org/10.5281/zenodo.19734757" class="uri">https://doi.org/10.5281/zenodo.19734757</a></p>
+</blockquote>
+<p>Or from within R: <code>citation("rcicrdiagnostics")</code>.</p>
+<p>Thanks for reading!</p>
+</section>
+<section id="references" class="level2">
+<h2 class="anchored" data-anchor-id="references">References</h2>
+<ul>
+<li><p>Brinkman, L., Goffin, S., van de Schoot, R., van Haren, N. E. M., Dotsch, R., &amp; Aarts, H. (2019). Quantifying the informational value of classification images. <em>Behavior Research Methods</em>, <em>51</em>(5), 2059–2073. <a href="https://doi.org/10.3758/s13428-019-01232-2" class="uri">https://doi.org/10.3758/s13428-019-01232-2</a></p></li>
+<li><p>Dotsch, R. (2016). <em>rcicr: Reverse-correlation image-classification toolbox</em> [R package, development versions]. <a href="https://github.com/rdotsch/rcicr" class="uri">https://github.com/rdotsch/rcicr</a></p></li>
+<li><p>Dotsch, R. (2023). <em>rcicr: Reverse correlation image classification toolbox</em> (Version 1.0.1) [R package]. <a href="https://github.com/rdotsch/rcicr" class="uri">https://github.com/rdotsch/rcicr</a></p></li>
+<li><p>Schmitz, M., Rougier, M., &amp; Yzerbyt, V. (2024). Introducing the brief reverse correlation: An improved tool to assess visual representations. <em>European Journal of Social Psychology</em>. <a href="https://doi.org/10.1002/ejsp.3100" class="uri">https://doi.org/10.1002/ejsp.3100</a></p></li>
+</ul>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const disableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'prefetch';
+    }
+  }
+  const enableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'stylesheet';
+    }
+  }
+  const manageTransitions = (selector, allowTransitions) => {
+    const els = window.document.querySelectorAll(selector);
+    for (let i=0; i < els.length; i++) {
+      const el = els[i];
+      if (allowTransitions) {
+        el.classList.remove('notransition');
+      } else {
+        el.classList.add('notransition');
+      }
+    }
+  }
+  const toggleColorMode = (alternate) => {
+    // Switch the stylesheets
+    const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+    manageTransitions('#quarto-margin-sidebar .nav-link', false);
+    if (alternate) {
+      enableStylesheet(alternateStylesheets);
+      for (const sheetNode of alternateStylesheets) {
+        if (sheetNode.id === "quarto-bootstrap") {
+          toggleBodyColorMode(sheetNode);
+        }
+      }
+    } else {
+      disableStylesheet(alternateStylesheets);
+      toggleBodyColorPrimary();
+    }
+    manageTransitions('#quarto-margin-sidebar .nav-link', true);
+    // Switch the toggles
+    const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+    for (let i=0; i < toggles.length; i++) {
+      const toggle = toggles[i];
+      if (toggle) {
+        if (alternate) {
+          toggle.classList.add("alternate");     
+        } else {
+          toggle.classList.remove("alternate");
+        }
+      }
+    }
+  }
+  const isFileUrl = () => { 
+    return window.location.protocol === 'file:';
+  }
+  const hasAlternateSentinel = () => {  
+    let styleSentinel = getColorSchemeSentinel();
+    if (styleSentinel !== null) {
+      return styleSentinel === "alternate";
+    } else {
+      return false;
+    }
+  }
+  const setStyleSentinel = (alternate) => {
+    const value = alternate ? "alternate" : "default";
+    if (!isFileUrl()) {
+      window.localStorage.setItem("quarto-color-scheme", value);
+    } else {
+      localAlternateSentinel = value;
+    }
+  }
+  const getColorSchemeSentinel = () => {
+    if (!isFileUrl()) {
+      const storageValue = window.localStorage.getItem("quarto-color-scheme");
+      return storageValue != null ? storageValue : localAlternateSentinel;
+    } else {
+      return localAlternateSentinel;
+    }
+  }
+  let localAlternateSentinel = 'default';
+  // Dark / light mode switch
+  window.quartoToggleColorScheme = () => {
+    // Read the current dark / light value 
+    let toAlternate = !hasAlternateSentinel();
+    toggleColorMode(toAlternate);
+    setStyleSentinel(toAlternate);
+  };
+  // Ensure there is a toggle, if there isn't float one in the top right
+  if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+    const a = window.document.createElement('a');
+    a.classList.add('top-right');
+    a.classList.add('quarto-color-scheme-toggle');
+    a.href = "";
+    a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+    const i = window.document.createElement("i");
+    i.classList.add('bi');
+    a.appendChild(i);
+    window.document.body.appendChild(a);
+  }
+  // Switch to dark mode if need be
+  if (hasAlternateSentinel()) {
+    toggleColorMode(true);
+  } 
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">Copyright 2026, Manuel Oliveira</div>   
+  </div>
+</footer>
+
+
+
+</body></html>
