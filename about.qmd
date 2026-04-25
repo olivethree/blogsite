@@ -2,7 +2,7 @@
 title: "Manuel Oliveira"
 about:
   template: trestles
-  image: assets/profile_pic_crop.png
+  image: assets/profile_pic.png
   links:
     - icon: linkedin
       href: https://www.linkedin.com/in/manueljbo/
