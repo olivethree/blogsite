@@ -53,7 +53,7 @@
     "href": "posts/p_3/index.html#status-and-whats-next",
     "title": "Introducing rcicrdiagnostics: an R package that runs data quality checks on your reverse correlation data",
     "section": "Status and what’s next",
-    "text": "Status and what’s next\nv0.1.0 is the first tagged release. The API is not yet frozen, I expect to refine function signatures and defaults before a potenial new future release, so please indicate the current version if you use it in any of your papers. Distribution is GitHub-only for now; there is no CRAN plan at this stage as working on the RC methods toipic is mainly a “hobby” beyond my daily job research focus.\nFeedback, bug reports, and feature requests are very welcome. Please open an issue on GitHub or reach out directly (m.j.barbosa.de.oliveira@tue.nl)."
+    "text": "Status and what’s next\nv0.1.0 is the first tagged release. The API is not yet frozen, I expect to refine function signatures and defaults before a potenial new future release, so please indicate the current version if you use it in any of your papers. Distribution is GitHub-only for now; there is no CRAN plan at this stage as working on RC methods stuff is mainly a “hobby” beyond my daily job research focus.\nFeedback, bug reports, and feature requests are very welcome. Please open an issue on GitHub or reach out directly (m.j.barbosa.de.oliveira@tue.nl)."
   },
   {
     "objectID": "posts/p_3/index.html#links",
