@@ -9,9 +9,11 @@ categories:
   - Psychology
 ---
 
-If you've ever generated a classification image (CI) with [`rcicr`](https://github.com/rdotsch/rcicr) (Dotsch, 2023), you've had to pick a `scaling` argument. There are five options and the documentation mostly tells you what each one does, not which one to use for what. After running into this question more times than I'd like to admit, I wrote down the answer for myself. Here it is.
+If you've ever generated a classification image (CI) with [`rcicr`](https://github.com/rdotsch/rcicr) (Dotsch, 2023), you've had to pick a `scaling` argument. There are five options and the documentation mostly tells you what each one does, not which one to use for what. After running into this question more times than I'd like to admit, I wrote down the answer for myself and thought I might as well share with the research community.
 
-This post is a standalone version of the scaling chapter in the [`rcicrdiagnostics` user's guide](https://olivethree.github.io/rcicrdiagnostics/articles/tutorial.html). Worth reading even if you don't use the package.
+This post is a standalone version of the scaling chapter in the [`rcicrdiagnostics` user's guide](https://olivethree.github.io/rcicrdiagnostics/articles/tutorial.html). Worth reading even if you don't use that package.
+
+![Confused RC-obsessed researchers looking at a huge laptop from an odd angle (thanks to Gemini nano banana 2, my personal human wannabe RA of late)](ciscaling_post_cover.png)
 
 ## What scaling is, and why it exists
 
@@ -29,12 +31,12 @@ The raw field is **unchanged** regardless of which scaling option you pass. Only
 ## The five options
 
 | Option | What it does | When to consider it |
-|---|---|---|
+|------------------------|------------------------|------------------------|
 | `none` | Leaves the CI unchanged in `$scaled`. | Numerical inspection; any computation you want in raw CI units. |
 | `constant` | $(CI + c) / (2c)$ with $c$ fixed (default $c = 0.1$). The same $c$ gives identical mapping across CIs. | Visual comparability across CIs when you want to preserve relative intensity and have within-study control over the display scale. |
 | `independent` | Same formula, but $c = \max\|CI\|$ computed *separately* for each CI. Each CI is stretched to $[0, 1]$ using its own range. | Maximum visual contrast for a single CI viewed alone. Not for comparisons across CIs. |
 | `matched` | Linearly remaps the CI to match the base image's pixel range. | Overlaying the CI on the base image; rating-task stimuli that should blend with the base face. |
-| `autoscale` | Batch version of `independent`: one shared constant computed from the widest-range CI in the batch. | Sets of CIs that will be viewed side by side, e.g., group-level CIs per condition. |
+| `autoscale` | Looks across every CI in the batch, finds the widest-range one (the largest $\max\|CI\|$), and uses that single value as the shared scaling constant $c$ for every CI. The strongest-signal CI then occupies the full display range and weaker-signal CIs occupy proportionally less of it, which preserves real intensity differences between CIs. | When you want a set of CIs to be visually comparable to each other within the same study: figure panels of group-level CIs across conditions, or a batch of CIs that will be used as stimuli in a downstream rating task. |
 
 A small detail that catches people out: the default scaling is **different across functions**. `batchGenerateCI2IFC()` defaults to `"autoscale"`; `generateCI2IFC()` defaults to `"independent"`. Two pipelines that both claim to use "rcicr defaults" can therefore produce visually different images from the same underlying raw CIs. Document which one you used.
 
@@ -45,11 +47,11 @@ The short version: **numerical analyses operate on `ci$ci`; visualisation choice
 The longer version, by use case:
 
 | Your goal | Correct choice | Reasoning |
-|---|---|---|
+|------------------------|------------------------|------------------------|
 | **Computing infoVal** | Any scaling | `rcicr::computeInfoVal2IFC()` reads `ci$ci` internally. The `scaling` argument has no effect on the returned z-score. |
 | **Pixel-wise correlations between CIs** (similarity) | Use `ci$ci` | Pearson correlation is preserved only under *uniform* linear rescalings. `independent` and `matched` apply CI-specific rescalings, which distort correlations. |
 | **Euclidean distance between CIs** (e.g., the objective discriminability ratio in Brinkman et al., 2019) | Use `ci$ci` | Same reasoning. CI-dependent rescalings change distances non-uniformly. |
-| **Producing CIs for a trait-rating task** | `autoscale` (one batch viewed together) or `constant` with a fixed $c$ (across-study consistency) | Raters should perceive genuine signal differences across CIs. `independent` defeats this because every CI is stretched to the same display range; a weak-signal CI then looks as intense as a strong-signal CI. |
+| **Producing CIs for a trait-rating task** | `autoscale` for one within-study batch, or `constant` with a fixed $c$ if you need consistency across studies | Raters should perceive genuine signal differences between CIs. `independent` defeats this because every CI is stretched to the same display range; a weak-signal CI then looks as intense as a strong-signal CI. |
 | **Saving PNG figures for a paper** | `matched` for base-image overlays; `autoscale` for grids of CIs | Pick one and document it. Mixing options across figures in the same paper makes them visually incomparable even when the underlying data are identical. |
 | **Pixel / cluster statistical tests** (Chauvin et al., 2005) | `rcicr::plotZmap()` (handles the raw CI internally) | Do not hand-construct a z-map from `ci$scaled`. |
 | **Reporting CI magnitude or effect size** | `ci$ci` | Scaled CIs have arbitrary units determined by the option chosen. |
@@ -77,8 +79,9 @@ When in doubt:
 ## A typical workflow
 
 ```{r eval=FALSE}
-# 1. Generate CIs with autoscale for a visually-comparable set of images
-#    (useful for rating-task stimuli or figure panels).
+# 1. Generate CIs with autoscale for a visually-comparable set of images.
+#    Useful for rating-task stimuli or figure panels: the strongest-signal
+#    CI uses the full display range and weaker-signal CIs scale proportionally.
 cis <- rcicr::batchGenerateCI2IFC(
   data        = responses,
   by          = "participant_id",
@@ -99,7 +102,7 @@ iv <- sapply(cis, function(ci) {
 r <- cor(c(cis[[1]]$ci), c(cis[[2]]$ci))
 ```
 
-The PNGs from step 1 are visually comparable across participants because `autoscale` applies one shared constant across the batch. The statistical results in steps 2 and 3 are computed on the raw CI and are independent of the scaling argument.
+The PNGs from step 1 are visually comparable across participants because `autoscale` applies one shared constant across the batch (derived from the widest-range CI), so genuine differences in signal strength remain visible. The statistical results in steps 2 and 3 are computed on the raw CI and are independent of the scaling argument.
 
 ## TL;DR
 

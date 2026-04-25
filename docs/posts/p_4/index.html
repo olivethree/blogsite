@@ -141,10 +141,16 @@ ga('send', {
 <link rel="stylesheet" href="../../styles.css">
 <meta property="og:title" content="Manuel Oliveira - Choosing a CI scaling option in rcicr">
 <meta property="og:description" content="If you’ve ever generated a classification image (CI) with rcicr (Dotsch, 2023), you’ve had to pick a scaling argument.">
+<meta property="og:image" content="https://manueloliveira.nl/posts/p_4/ciscaling_post_cover.png">
 <meta property="og:site-name" content="Manuel Oliveira">
+<meta property="og:image:height" content="2048">
+<meta property="og:image:width" content="2048">
 <meta name="twitter:title" content="Manuel Oliveira - Choosing a CI scaling option in rcicr">
 <meta name="twitter:description" content="If you’ve ever generated a classification image (CI) with rcicr (Dotsch, 2023), you’ve had to pick a scaling argument.">
-<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://manueloliveira.nl/posts/p_4/ciscaling_post_cover.png">
+<meta name="twitter:image-height" content="2048">
+<meta name="twitter:image-width" content="2048">
+<meta name="twitter:card" content="summary_large_image">
 </head>
 
 <body class="nav-fixed">
@@ -257,8 +263,14 @@ ga('send', {
 
 </header>
 
-<p>If you’ve ever generated a classification image (CI) with <a href="https://github.com/rdotsch/rcicr"><code>rcicr</code></a> (Dotsch, 2023), you’ve had to pick a <code>scaling</code> argument. There are five options and the documentation mostly tells you what each one does, not which one to use for what. After running into this question more times than I’d like to admit, I wrote down the answer for myself. Here it is.</p>
-<p>This post is a standalone version of the scaling chapter in the <a href="https://olivethree.github.io/rcicrdiagnostics/articles/tutorial.html"><code>rcicrdiagnostics</code> user’s guide</a>. Worth reading even if you don’t use the package.</p>
+<p>If you’ve ever generated a classification image (CI) with <a href="https://github.com/rdotsch/rcicr"><code>rcicr</code></a> (Dotsch, 2023), you’ve had to pick a <code>scaling</code> argument. There are five options and the documentation mostly tells you what each one does, not which one to use for what. After running into this question more times than I’d like to admit, I wrote down the answer for myself and thought I might as well share with the research community.</p>
+<p>This post is a standalone version of the scaling chapter in the <a href="https://olivethree.github.io/rcicrdiagnostics/articles/tutorial.html"><code>rcicrdiagnostics</code> user’s guide</a>. Worth reading even if you don’t use that package.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="ciscaling_post_cover.png" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">Confused RC-obsessed researchers looking at a huge laptop from an odd angle (thanks to Gemini nano banana 2, my personal human wannabe RA of late)</figcaption><p></p>
+</figure>
+</div>
 <section id="what-scaling-is-and-why-it-exists" class="level2">
 <h2 class="anchored" data-anchor-id="what-scaling-is-and-why-it-exists">What scaling is, and why it exists</h2>
 <p>When <code>rcicr::batchGenerateCI2IFC()</code> (or <code>generateCI2IFC()</code>) computes a CI, the underlying math produces a 2D pixel array whose values are typically centred near zero and span a small range, often somewhere between -0.01 and +0.01, depending on signal strength and number of trials. <strong>These numbers are the real signal</strong>: they encode how much each pixel contributes to the participant’s mental image.</p>
@@ -308,8 +320,8 @@ ga('send', {
 </tr>
 <tr class="odd">
 <td><code>autoscale</code></td>
-<td>Batch version of <code>independent</code>: one shared constant computed from the widest-range CI in the batch.</td>
-<td>Sets of CIs that will be viewed side by side, e.g., group-level CIs per condition.</td>
+<td>Looks across every CI in the batch, finds the widest-range one (the largest <span class="math inline">\(\max\|CI\|\)</span>), and uses that single value as the shared scaling constant <span class="math inline">\(c\)</span> for every CI. The strongest-signal CI then occupies the full display range and weaker-signal CIs occupy proportionally less of it, which preserves real intensity differences between CIs.</td>
+<td>When you want a set of CIs to be visually comparable to each other within the same study: figure panels of group-level CIs across conditions, or a batch of CIs that will be used as stimuli in a downstream rating task.</td>
 </tr>
 </tbody>
 </table>
@@ -350,8 +362,8 @@ ga('send', {
 </tr>
 <tr class="even">
 <td><strong>Producing CIs for a trait-rating task</strong></td>
-<td><code>autoscale</code> (one batch viewed together) or <code>constant</code> with a fixed <span class="math inline">\(c\)</span> (across-study consistency)</td>
-<td>Raters should perceive genuine signal differences across CIs. <code>independent</code> defeats this because every CI is stretched to the same display range; a weak-signal CI then looks as intense as a strong-signal CI.</td>
+<td><code>autoscale</code> for one within-study batch, or <code>constant</code> with a fixed <span class="math inline">\(c\)</span> if you need consistency across studies</td>
+<td>Raters should perceive genuine signal differences between CIs. <code>independent</code> defeats this because every CI is stretched to the same display range; a weak-signal CI then looks as intense as a strong-signal CI.</td>
 </tr>
 <tr class="odd">
 <td><strong>Saving PNG figures for a paper</strong></td>
@@ -393,28 +405,29 @@ ga('send', {
 <section id="a-typical-workflow" class="level2">
 <h2 class="anchored" data-anchor-id="a-typical-workflow">A typical workflow</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Generate CIs with autoscale for a visually-comparable set of images</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co">#    (useful for rating-task stimuli or figure panels).</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>cis <span class="ot">&lt;-</span> rcicr<span class="sc">::</span><span class="fu">batchGenerateCI2IFC</span>(</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">data        =</span> responses,</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">by          =</span> <span class="st">"participant_id"</span>,</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">stimuli     =</span> <span class="st">"stimulus"</span>,</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">responses   =</span> <span class="st">"response"</span>,</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">baseimage   =</span> <span class="st">"base"</span>,</span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">rdata       =</span> <span class="st">"stimuli.RData"</span>,</span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">save_as_png =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">scaling     =</span> <span class="st">"autoscale"</span></span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Compute infoVal per participant. Operates on ci$ci internally.</span></span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>iv <span class="ot">&lt;-</span> <span class="fu">sapply</span>(cis, <span class="cf">function</span>(ci) {</span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>  rcicr<span class="sc">::</span><span class="fu">computeInfoVal2IFC</span>(ci, <span class="at">rdata =</span> <span class="st">"stimuli.RData"</span>)</span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>})</span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. Pixel-wise similarity between two CIs. Compute on the raw CI.</span></span>
-<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>r <span class="ot">&lt;-</span> <span class="fu">cor</span>(<span class="fu">c</span>(cis[[<span class="dv">1</span>]]<span class="sc">$</span>ci), <span class="fu">c</span>(cis[[<span class="dv">2</span>]]<span class="sc">$</span>ci))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Generate CIs with autoscale for a visually-comparable set of images.</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co">#    Useful for rating-task stimuli or figure panels: the strongest-signal</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co">#    CI uses the full display range and weaker-signal CIs scale proportionally.</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>cis <span class="ot">&lt;-</span> rcicr<span class="sc">::</span><span class="fu">batchGenerateCI2IFC</span>(</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">data        =</span> responses,</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">by          =</span> <span class="st">"participant_id"</span>,</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">stimuli     =</span> <span class="st">"stimulus"</span>,</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">responses   =</span> <span class="st">"response"</span>,</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">baseimage   =</span> <span class="st">"base"</span>,</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">rdata       =</span> <span class="st">"stimuli.RData"</span>,</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">save_as_png =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">scaling     =</span> <span class="st">"autoscale"</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Compute infoVal per participant. Operates on ci$ci internally.</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>iv <span class="ot">&lt;-</span> <span class="fu">sapply</span>(cis, <span class="cf">function</span>(ci) {</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>  rcicr<span class="sc">::</span><span class="fu">computeInfoVal2IFC</span>(ci, <span class="at">rdata =</span> <span class="st">"stimuli.RData"</span>)</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. Pixel-wise similarity between two CIs. Compute on the raw CI.</span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>r <span class="ot">&lt;-</span> <span class="fu">cor</span>(<span class="fu">c</span>(cis[[<span class="dv">1</span>]]<span class="sc">$</span>ci), <span class="fu">c</span>(cis[[<span class="dv">2</span>]]<span class="sc">$</span>ci))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>The PNGs from step 1 are visually comparable across participants because <code>autoscale</code> applies one shared constant across the batch. The statistical results in steps 2 and 3 are computed on the raw CI and are independent of the scaling argument.</p>
+<p>The PNGs from step 1 are visually comparable across participants because <code>autoscale</code> applies one shared constant across the batch (derived from the widest-range CI), so genuine differences in signal strength remain visible. The statistical results in steps 2 and 3 are computed on the raw CI and are independent of the scaling argument.</p>
 </section>
 <section id="tldr" class="level2">
 <h2 class="anchored" data-anchor-id="tldr">TL;DR</h2>

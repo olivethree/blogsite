@@ -1,14 +1,12 @@
 ---
 title: "Introducing rcicrdiagnostics: an R package that runs data quality checks on your reverse correlation data"
 author: "M. Oliveira"
-date: "4/24/2026"
-date-modified: "4/25/2026"
+date: "4/25/2026"
 categories:
   - R
   - Reverse Correlation
-  - Social Psychology
-  - Toolkit
-  - Data quality
+  - Psychology
+  - Package
 ---
 
 ![Image generated with Gemini 3 Flash Image (Nano banana 2).](post_rcicrdiag_cover.png){fig-align="center"}
@@ -19,7 +17,7 @@ More often than not, the issue is not with your theory, but with your data pipel
 
 RC pipelines are unusually fragile to small data mistakes. Some examples: a response column coded as `{0, 1}` instead of `{-1, 1}`, stimulus IDs that are off by one, a noise matrix whose dimensions don't match what your response data assumes, an `.RData` parameter file from a different stimulus batch than the one your participants actually saw. None of these throw an error. All of them produce a CI that looks convincing but may carry some unwanted mathematical distortions behind the scenes. Worse, because CIs are visually interpretable, a broken pipeline can still look "like a face" and trick us into believing the result.
 
-After running into these kinds of issues more times than I'd like to admit (both in my own projects and when helping others), I decided to put together a toolkit that checks for them systematically. It's called **`rcicrdiagnostics`** and I'm releasing v0.1.0 today.
+After running into these kinds of issues more times than I'd like to admit (both in my own projects and when helping others), I decided to put together a toolkit that checks for them systematically. It's called **`rcicrdiagnostics`** and I'm releasing it now at v0.2.0.
 
 ## What it does
 
@@ -50,7 +48,7 @@ If everything passes, you can move on to generating CIs and computing infoVal wi
 
 A persistent question in RC practice is whether a low or negative individual-level **infoVal** score (Brinkman et al., 2019) means the data are broken or the metric is just noisy. `rcicrdiagnostics` ships three functions that try to make that question answerable instead of guessable:
 
--   **`infoval()`** computes per-producer infoVal with a reference distribution keyed on each producer's actual trial count. This closes a calibration gap in the original `rcicr::computeInfoVal2IFC()`, which keys the reference on pool size and biases Brief-RC infoVals downward.
+-   **`infoval()`** computes per-producer infoVal with a reference distribution keyed on each producer's actual trial count. This closes a calibration gap in the canonical `rcicr::computeInfoVal2IFC()`, which keys the reference on pool size and biases Brief-RC infoVals downward.
 -   **`face_mask()`** generates the oval face-region masks used by [Schmitz et al. (2024)](https://doi.org/10.1002/ejsp.3100) (and sub-regions: eyes, nose, mouth, upper / lower face). Pass it to the infoVal computation to restrict the Frobenius norm to the face area instead of integrating over hair and background.
 -   **`diagnose_infoval()`** is a guided diagnostic that runs in six steps: simulate the reference at every trial count in the data, sanity-check it with a random responder, compute per-producer z unmasked, compute it masked, compute the group-mean CI's z, and tally the per-producer distribution. The report explains what to look at first and what is honest to put in a methods section. Both 2IFC and Brief-RC are supported natively.
 
@@ -102,7 +100,7 @@ The user's guide also includes the same chapter for offline reference: ***Choosi
 
 ## Status and what's next
 
-v0.1.0 is the first tagged release. The API is not yet frozen, I expect to refine function signatures and defaults before a potenial new future release, so please indicate the current version if you use it in any of your papers. Distribution is GitHub-only for now; there is no CRAN plan at this stage as working on RC methods stuff is mainly a "hobby" beyond my daily job research focus.
+v0.2.0 is the first public release. The API is not yet frozen, I expect to refine function signatures and defaults before any future release, so please indicate the current version if you use it in any of your papers. Distribution is GitHub-only for now; there is no CRAN plan at this stage as working on RC methods stuff is mainly a "hobby" beyond my daily job research focus.
 
 Feedback, bug reports, and feature requests are very welcome. Please open an issue on GitHub or reach out directly (m.j.barbosa.de.oliveira\@tue.nl).
 
@@ -114,7 +112,7 @@ Feedback, bug reports, and feature requests are very welcome. Please open an iss
 
 ## How to cite
 
-> Oliveira, M. (2026). *rcicrdiagnostics: Data quality diagnostics for reverse correlation experiments in social psychology using the rcicr package* (Version 0.1.0) \[R package\]. Zenodo. <https://doi.org/10.5281/zenodo.19734757>
+> Oliveira, M. (2026). *rcicrdiagnostics: Data quality diagnostics for reverse correlation experiments in social psychology using the rcicr package* (Version 0.2.0) \[R package\]. Zenodo. <https://doi.org/10.5281/zenodo.19734757>
 
 Or from within R: `citation("rcicrdiagnostics")`.
 
