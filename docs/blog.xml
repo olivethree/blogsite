@@ -10,7 +10,198 @@
 <atom:link href="https://manueloliveira.nl/blog.xml" rel="self" type="application/rss+xml"/>
 <description>Explore research tools and apps developed by Manuel Oliveira. Includes coding projects, academic resources, tools and tutorials for anyone conducting Psychology research or interested in reverse-correlation methods, face image manipulation, or data analysis with R and specific R packages for experimental psychology research. Learn more today!</description>
 <generator>quarto-1.0.37</generator>
-<lastBuildDate>Thu, 23 Apr 2026 22:00:00 GMT</lastBuildDate>
+<lastBuildDate>Fri, 24 Apr 2026 22:00:00 GMT</lastBuildDate>
+<item>
+  <title>Choosing a CI scaling option in rcicr</title>
+  <dc:creator>M. Oliveira</dc:creator>
+  <link>https://manueloliveira.nl/posts/p_4/index.html</link>
+  <description><![CDATA[ 
+
+
+
+<p>If you’ve ever generated a classification image (CI) with <a href="https://github.com/rdotsch/rcicr"><code>rcicr</code></a> (Dotsch, 2023), you’ve had to pick a <code>scaling</code> argument. There are five options and the documentation mostly tells you what each one does, not which one to use for what. After running into this question more times than I’d like to admit, I wrote down the answer for myself. Here it is.</p>
+<p>This post is a standalone version of the scaling chapter in the <a href="https://olivethree.github.io/rcicrdiagnostics/articles/tutorial.html"><code>rcicrdiagnostics</code> user’s guide</a>. Worth reading even if you don’t use the package.</p>
+<section id="what-scaling-is-and-why-it-exists" class="level2">
+<h2 class="anchored" data-anchor-id="what-scaling-is-and-why-it-exists">What scaling is, and why it exists</h2>
+<p>When <code>rcicr::batchGenerateCI2IFC()</code> (or <code>generateCI2IFC()</code>) computes a CI, the underlying math produces a 2D pixel array whose values are typically centred near zero and span a small range, often somewhere between -0.01 and +0.01, depending on signal strength and number of trials. <strong>These numbers are the real signal</strong>: they encode how much each pixel contributes to the participant’s mental image.</p>
+<p>The problem is that they cannot be displayed as-is. Monitors render pixel intensities between 0 (black) and 1 (white); negative values have no display meaning, and the absolute values would be too small to see anyway.</p>
+<p>Scaling solves this display problem by remapping the CI into a range a monitor can render. Every CI that <code>rcicr</code> returns therefore has two parallel fields:</p>
+<ul>
+<li><strong><code>ci$ci</code></strong>: the <em>raw</em> CI, exactly as produced by the weighted sum of noise patterns. <strong>This is your data.</strong></li>
+<li><strong><code>ci$scaled</code></strong>: the <em>rescaled</em> CI, after one of the transformations below. This is what gets saved as a PNG or combined with the base image.</li>
+</ul>
+<p>The raw field is <strong>unchanged</strong> regardless of which scaling option you pass. Only the scaled field changes. Keep that in mind, it’s the load-bearing fact for everything below.</p>
+</section>
+<section id="the-five-options" class="level2">
+<h2 class="anchored" data-anchor-id="the-five-options">The five options</h2>
+<table class="table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Option</th>
+<th>What it does</th>
+<th>When to consider it</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>none</code></td>
+<td>Leaves the CI unchanged in <code>$scaled</code>.</td>
+<td>Numerical inspection; any computation you want in raw CI units.</td>
+</tr>
+<tr class="even">
+<td><code>constant</code></td>
+<td><img src="https://latex.codecogs.com/png.latex?(CI%20+%20c)%20/%20(2c)"> with <img src="https://latex.codecogs.com/png.latex?c"> fixed (default <img src="https://latex.codecogs.com/png.latex?c%20=%200.1">). The same <img src="https://latex.codecogs.com/png.latex?c"> gives identical mapping across CIs.</td>
+<td>Visual comparability across CIs when you want to preserve relative intensity and have within-study control over the display scale.</td>
+</tr>
+<tr class="odd">
+<td><code>independent</code></td>
+<td>Same formula, but <img src="https://latex.codecogs.com/png.latex?c%20=%20%5Cmax%5C%7CCI%5C%7C"> computed <em>separately</em> for each CI. Each CI is stretched to <img src="https://latex.codecogs.com/png.latex?%5B0,%201%5D"> using its own range.</td>
+<td>Maximum visual contrast for a single CI viewed alone. Not for comparisons across CIs.</td>
+</tr>
+<tr class="even">
+<td><code>matched</code></td>
+<td>Linearly remaps the CI to match the base image’s pixel range.</td>
+<td>Overlaying the CI on the base image; rating-task stimuli that should blend with the base face.</td>
+</tr>
+<tr class="odd">
+<td><code>autoscale</code></td>
+<td>Batch version of <code>independent</code>: one shared constant computed from the widest-range CI in the batch.</td>
+<td>Sets of CIs that will be viewed side by side, e.g., group-level CIs per condition.</td>
+</tr>
+</tbody>
+</table>
+<p>A small detail that catches people out: the default scaling is <strong>different across functions</strong>. <code>batchGenerateCI2IFC()</code> defaults to <code>"autoscale"</code>; <code>generateCI2IFC()</code> defaults to <code>"independent"</code>. Two pipelines that both claim to use “rcicr defaults” can therefore produce visually different images from the same underlying raw CIs. Document which one you used.</p>
+</section>
+<section id="which-scaling-for-which-analysis" class="level2">
+<h2 class="anchored" data-anchor-id="which-scaling-for-which-analysis">Which scaling for which analysis</h2>
+<p>The short version: <strong>numerical analyses operate on <code>ci$ci</code>; visualisation choices operate on <code>ci$scaled</code></strong>. The <code>scaling</code> argument only affects the second.</p>
+<p>The longer version, by use case:</p>
+<table class="table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Your goal</th>
+<th>Correct choice</th>
+<th>Reasoning</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Computing infoVal</strong></td>
+<td>Any scaling</td>
+<td><code>rcicr::computeInfoVal2IFC()</code> reads <code>ci$ci</code> internally. The <code>scaling</code> argument has no effect on the returned z-score.</td>
+</tr>
+<tr class="even">
+<td><strong>Pixel-wise correlations between CIs</strong> (similarity)</td>
+<td>Use <code>ci$ci</code></td>
+<td>Pearson correlation is preserved only under <em>uniform</em> linear rescalings. <code>independent</code> and <code>matched</code> apply CI-specific rescalings, which distort correlations.</td>
+</tr>
+<tr class="odd">
+<td><strong>Euclidean distance between CIs</strong> (e.g., the objective discriminability ratio in Brinkman et al., 2019)</td>
+<td>Use <code>ci$ci</code></td>
+<td>Same reasoning. CI-dependent rescalings change distances non-uniformly.</td>
+</tr>
+<tr class="even">
+<td><strong>Producing CIs for a trait-rating task</strong></td>
+<td><code>autoscale</code> (one batch viewed together) or <code>constant</code> with a fixed <img src="https://latex.codecogs.com/png.latex?c"> (across-study consistency)</td>
+<td>Raters should perceive genuine signal differences across CIs. <code>independent</code> defeats this because every CI is stretched to the same display range; a weak-signal CI then looks as intense as a strong-signal CI.</td>
+</tr>
+<tr class="odd">
+<td><strong>Saving PNG figures for a paper</strong></td>
+<td><code>matched</code> for base-image overlays; <code>autoscale</code> for grids of CIs</td>
+<td>Pick one and document it. Mixing options across figures in the same paper makes them visually incomparable even when the underlying data are identical.</td>
+</tr>
+<tr class="even">
+<td><strong>Pixel / cluster statistical tests</strong> (Chauvin et al., 2005)</td>
+<td><code>rcicr::plotZmap()</code> (handles the raw CI internally)</td>
+<td>Do not hand-construct a z-map from <code>ci$scaled</code>.</td>
+</tr>
+<tr class="odd">
+<td><strong>Reporting CI magnitude or effect size</strong></td>
+<td><code>ci$ci</code></td>
+<td>Scaled CIs have arbitrary units determined by the option chosen.</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="common-pitfalls" class="level2">
+<h2 class="anchored" data-anchor-id="common-pitfalls">Common pitfalls</h2>
+<p>These are the four mistakes I keep running into in the wild (and have made myself).</p>
+<ol type="1">
+<li><p><strong>Correlating scaled CIs.</strong> Calling <code>cor()</code> on two <code>independent</code>-scaled CIs correlates images that have been stretched to the same <img src="https://latex.codecogs.com/png.latex?%5B0,%201%5D"> range by <em>different</em> constants. The result is no longer a clean pixel-wise agreement. Compute correlations on the raw CI.</p></li>
+<li><p><strong>Using <code>independent</code> for rating-task stimuli.</strong> A participant who responded weakly produces a low-signal CI. Under <code>independent</code>, that CI gets stretched to the same display range as a strong-signal CI. Raters perceive both as equally intense, and rating-based analyses systematically underestimate signal differences across participants.</p></li>
+<li><p><strong>Mixing scaling options across studies.</strong> Two papers that both claim to use “rcicr defaults” are not necessarily comparable: <code>batchGenerateCI2IFC()</code> defaults to <code>autoscale</code>, <code>generateCI2IFC()</code> defaults to <code>independent</code>. Always document the scaling option used in your methods section.</p></li>
+<li><p><strong>Believing that scaling affects infoVal.</strong> It does not. <code>computeInfoVal2IFC()</code> always reads the raw CI. If two analyses give different infoVal values, the cause is elsewhere (in the response data, in the reference-distribution cache, or in the trial count), not in scaling.</p></li>
+</ol>
+</section>
+<section id="recommended-defaults" class="level2">
+<h2 class="anchored" data-anchor-id="recommended-defaults">Recommended defaults</h2>
+<p>When in doubt:</p>
+<ul>
+<li><strong>Figures in a paper</strong>: <code>autoscale</code> for grids of CIs; <code>matched</code> for base-image overlays. Document the choice in methods.</li>
+<li><strong>Rating-task stimuli</strong>: <code>autoscale</code> within a single batch; otherwise <code>constant</code> with a fixed <code>c</code> documented in methods.</li>
+<li><strong>Any numerical analysis</strong> (infoVal, correlations, distances, effect sizes, pixel tests): compute from <code>ci$ci</code>, regardless of the scaling argument passed.</li>
+</ul>
+</section>
+<section id="a-typical-workflow" class="level2">
+<h2 class="anchored" data-anchor-id="a-typical-workflow">A typical workflow</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><span class="co" style="color: #5E5E5E;"># 1. Generate CIs with autoscale for a visually-comparable set of images</span></span>
+<span id="cb1-2"><span class="co" style="color: #5E5E5E;">#    (useful for rating-task stimuli or figure panels).</span></span>
+<span id="cb1-3">cis <span class="ot" style="color: #003B4F;">&lt;-</span> rcicr<span class="sc" style="color: #5E5E5E;">::</span><span class="fu" style="color: #4758AB;">batchGenerateCI2IFC</span>(</span>
+<span id="cb1-4">  <span class="at" style="color: #657422;">data        =</span> responses,</span>
+<span id="cb1-5">  <span class="at" style="color: #657422;">by          =</span> <span class="st" style="color: #20794D;">"participant_id"</span>,</span>
+<span id="cb1-6">  <span class="at" style="color: #657422;">stimuli     =</span> <span class="st" style="color: #20794D;">"stimulus"</span>,</span>
+<span id="cb1-7">  <span class="at" style="color: #657422;">responses   =</span> <span class="st" style="color: #20794D;">"response"</span>,</span>
+<span id="cb1-8">  <span class="at" style="color: #657422;">baseimage   =</span> <span class="st" style="color: #20794D;">"base"</span>,</span>
+<span id="cb1-9">  <span class="at" style="color: #657422;">rdata       =</span> <span class="st" style="color: #20794D;">"stimuli.RData"</span>,</span>
+<span id="cb1-10">  <span class="at" style="color: #657422;">save_as_png =</span> <span class="cn" style="color: #8f5902;">TRUE</span>,</span>
+<span id="cb1-11">  <span class="at" style="color: #657422;">scaling     =</span> <span class="st" style="color: #20794D;">"autoscale"</span></span>
+<span id="cb1-12">)</span>
+<span id="cb1-13"></span>
+<span id="cb1-14"><span class="co" style="color: #5E5E5E;"># 2. Compute infoVal per participant. Operates on ci$ci internally.</span></span>
+<span id="cb1-15">iv <span class="ot" style="color: #003B4F;">&lt;-</span> <span class="fu" style="color: #4758AB;">sapply</span>(cis, <span class="cf" style="color: #003B4F;">function</span>(ci) {</span>
+<span id="cb1-16">  rcicr<span class="sc" style="color: #5E5E5E;">::</span><span class="fu" style="color: #4758AB;">computeInfoVal2IFC</span>(ci, <span class="at" style="color: #657422;">rdata =</span> <span class="st" style="color: #20794D;">"stimuli.RData"</span>)</span>
+<span id="cb1-17">})</span>
+<span id="cb1-18"></span>
+<span id="cb1-19"><span class="co" style="color: #5E5E5E;"># 3. Pixel-wise similarity between two CIs. Compute on the raw CI.</span></span>
+<span id="cb1-20">r <span class="ot" style="color: #003B4F;">&lt;-</span> <span class="fu" style="color: #4758AB;">cor</span>(<span class="fu" style="color: #4758AB;">c</span>(cis[[<span class="dv" style="color: #AD0000;">1</span>]]<span class="sc" style="color: #5E5E5E;">$</span>ci), <span class="fu" style="color: #4758AB;">c</span>(cis[[<span class="dv" style="color: #AD0000;">2</span>]]<span class="sc" style="color: #5E5E5E;">$</span>ci))</span></code></pre></div>
+</div>
+<p>The PNGs from step 1 are visually comparable across participants because <code>autoscale</code> applies one shared constant across the batch. The statistical results in steps 2 and 3 are computed on the raw CI and are independent of the scaling argument.</p>
+</section>
+<section id="tldr" class="level2">
+<h2 class="anchored" data-anchor-id="tldr">TL;DR</h2>
+<p>Pick a scaling option for your figures and stimuli, document it, and never use the scaled CI for statistics. The raw CI is the data; the scaled CI is the picture.</p>
+<p>Thanks for reading!</p>
+</section>
+<section id="references" class="level2">
+<h2 class="anchored" data-anchor-id="references">References</h2>
+<ul>
+<li><p>Brinkman, L., Goffin, S., van de Schoot, R., van Haren, N. E. M., Dotsch, R., &amp; Aarts, H. (2019). Quantifying the informational value of classification images. <em>Behavior Research Methods</em>, <em>51</em>(5), 2059–2073. <a href="https://doi.org/10.3758/s13428-019-01232-2" class="uri">https://doi.org/10.3758/s13428-019-01232-2</a></p></li>
+<li><p>Chauvin, A., Worsley, K. J., Schyns, P. G., Arguin, M., &amp; Gosselin, F. (2005). Accurate statistical tests for smooth classification images. <em>Journal of Vision</em>, <em>5</em>(9), 659–667. <a href="https://doi.org/10.1167/5.9.1" class="uri">https://doi.org/10.1167/5.9.1</a></p></li>
+<li><p>Dotsch, R. (2023). <em>rcicr: Reverse correlation image classification toolbox</em> (Version 1.0.1) [R package]. <a href="https://github.com/rdotsch/rcicr" class="uri">https://github.com/rdotsch/rcicr</a></p></li>
+</ul>
+
+
+</section>
+
+ ]]></description>
+  <category>R</category>
+  <category>Reverse Correlation</category>
+  <category>Tutorial</category>
+  <category>Psychology</category>
+  <guid>https://manueloliveira.nl/posts/p_4/index.html</guid>
+  <pubDate>Fri, 24 Apr 2026 22:00:00 GMT</pubDate>
+</item>
 <item>
   <title>Introducing rcicrdiagnostics: an R package that runs data quality checks on your reverse correlation data</title>
   <dc:creator>M. Oliveira</dc:creator>
@@ -28,14 +219,14 @@
 <p>If you’ve ever run a reverse correlation (RC) experiment, you’ve probably lived this moment before: you feed your data into the classification image (CI) generation pipeline, look at the output, and something just feels <em>off</em> (but apparently nothing technically broke). You see no errors or warnings, just a CI that <em>looks</em> plausible (don’t we all more easily see what <em>we want</em> to see! ;) ) and yet something just doesn’t quite add up, or output values that look higher or lower than you would expect in theory.</p>
 <p>More often than not, the issue is not with your theory, but with your data pipeline. As a Super Mario fan, I was hoping for the moment I could write this in a blog post about research data plumbing: <em>Let’sa gooo!</em> (#cringeisokay)</p>
 <p>RC pipelines are unusually fragile to small data mistakes. Some examples: a response column coded as <code>{0, 1}</code> instead of <code>{-1, 1}</code>, stimulus IDs that are off by one, a noise matrix whose dimensions don’t match what your response data assumes, an <code>.RData</code> parameter file from a different stimulus batch than the one your participants actually saw. None of these throw an error. All of them produce a CI that looks convincing but may carry some unwanted mathematical distortions behind the scenes. Worse, because CIs are visually interpretable, a broken pipeline can still look “like a face” and trick us into believing the result.</p>
-<p>After running into these kinds of issues more times than I’d like to admit — both in my own projects and when helping others — I decided to put together a toolkit that checks for them systematically. It’s called <strong><code>rcicrdiagnostics</code></strong> and I’m releasing v0.1.0 today.</p>
+<p>After running into these kinds of issues more times than I’d like to admit (both in my own projects and when helping others), I decided to put together a toolkit that checks for them systematically. It’s called <strong><code>rcicrdiagnostics</code></strong> and I’m releasing v0.1.0 today.</p>
 <section id="what-it-does" class="level2">
 <h2 class="anchored" data-anchor-id="what-it-does">What it does</h2>
 <p><code>rcicrdiagnostics</code> is an R package that runs a battery of data-quality diagnostics on your response data <em>before</em> you compute any CIs or information values. Think of it as a pre-flight checklist: you load your response CSV and the auxiliary file that describes your stimuli, call <code>run_diagnostics()</code>, and get back a clear <strong>pass / warn / fail</strong> report per check.</p>
 <p>It supports both of the pipelines that currently dominate the field:</p>
 <ul>
-<li><strong>Two-image forced choice (2IFC)</strong> — the classical reverse correlation paradigm implemented in the <a href="https://github.com/rdotsch/rcicr"><code>rcicr</code></a> package (Dotsch, 2016, 2023).</li>
-<li><strong>Brief-RC</strong> — the more recent variant introduced by <a href="https://doi.org/10.1002/ejsp.3100">Schmitz, Rougier, and Yzerbyt (2024)</a> that shows 12 or 20 noisy faces per trial instead of two.</li>
+<li><strong>Two-image forced choice (2IFC)</strong>, the classical reverse correlation paradigm implemented in the <a href="https://github.com/rdotsch/rcicr"><code>rcicr</code></a> package (Dotsch, 2016, 2023).</li>
+<li><strong>Brief-RC</strong>, the more recent variant introduced by <a href="https://doi.org/10.1002/ejsp.3100">Schmitz, Rougier, and Yzerbyt (2024)</a> that shows 12 or 20 noisy faces per trial instead of two.</li>
 </ul>
 <p>A single <code>method</code> argument decides which pipeline to validate; the rest of the API is shared.</p>
 </section>
@@ -52,6 +243,16 @@
 <li><strong>Response inversion.</strong> Does a participant’s CI look like its own mirror image? A small but real fraction of participants get confused about which face they’re supposed to be picking, and their “inverted” CIs cancel out everyone else’s.</li>
 </ul>
 <p>If everything passes, you can move on to generating CIs and computing infoVal with confidence. If something fails, the report tells you exactly which participants or rows to investigate before you continue.</p>
+</section>
+<section id="infoval-diagnostics-baked-in" class="level2">
+<h2 class="anchored" data-anchor-id="infoval-diagnostics-baked-in">InfoVal diagnostics, baked in</h2>
+<p>A persistent question in RC practice is whether a low or negative individual-level <strong>infoVal</strong> score (Brinkman et al., 2019) means the data are broken or the metric is just noisy. <code>rcicrdiagnostics</code> ships three functions that try to make that question answerable instead of guessable:</p>
+<ul>
+<li><strong><code>infoval()</code></strong> computes per-producer infoVal with a reference distribution keyed on each producer’s actual trial count. This closes a calibration gap in the canonical <code>rcicr::computeInfoVal2IFC()</code>, which keys the reference on pool size and biases Brief-RC infoVals downward.</li>
+<li><strong><code>face_mask()</code></strong> generates the oval face-region masks used by <a href="https://doi.org/10.1002/ejsp.3100">Schmitz et al.&nbsp;(2024)</a> (and sub-regions: eyes, nose, mouth, upper / lower face). Pass it to the infoVal computation to restrict the Frobenius norm to the face area instead of integrating over hair and background.</li>
+<li><strong><code>diagnose_infoval()</code></strong> is a guided diagnostic that runs in six steps: simulate the reference at every trial count in the data, sanity-check it with a random responder, compute per-producer z unmasked, compute it masked, compute the group-mean CI’s z, and tally the per-producer distribution. The report explains what to look at first and what is honest to put in a methods section. Both 2IFC and Brief-RC are supported natively.</li>
+</ul>
+<p>The user’s guide has a chapter on what infoVal scores actually look like in published 2IFC and Brief-RC studies (the answer depends on paradigm and target, more than people often assume).</p>
 </section>
 <section id="quick-look" class="level2">
 <h2 class="anchored" data-anchor-id="quick-look">Quick look</h2>
@@ -85,14 +286,10 @@
 </section>
 <section id="a-note-on-ci-scaling-decisions" class="level2">
 <h2 class="anchored" data-anchor-id="a-note-on-ci-scaling-decisions">A note on CI scaling decisions</h2>
-<p>The package ships with a <a href="https://olivethree.github.io/rcicrdiagnostics/articles/tutorial.html">user’s guide</a> which, besides covering every function with runnable examples, includes a chapter I hope will save some headaches: <strong><em>Choosing a CI scaling option</em></strong>.</p>
-<p>It answers three questions that come up in pretty much every RC project:</p>
-<ol type="1">
-<li>What does the <code>scaling</code> argument in <code>rcicr</code> actually do?</li>
-<li>Which scaling option should I use for which downstream analysis — infoVal, pixel-wise correlations, rating-task stimuli, figures?</li>
-<li>When does scaling affect my results, and when does it not?</li>
-</ol>
-<p>There is a lot of confusion in the literature about this, and it shows up in how people interpret their CIs, how they present them to judges, and how they compare CIs across conditions or studies. The chapter lays out the distinction between the <strong>raw CI</strong> (the data you do statistics on) and the <strong>scaled CI</strong> (the display-ready image you show to eyes), and provides a decision table for picking the right scaling per analytical goal.</p>
+<p>One of the first things you have to decide after diagnostics pass is what <code>scaling</code> option to use when generating CIs. The choice is rarely documented in published work and it is a steady source of confusion (it shows up in how people interpret their CIs, how they present them to judges, and how they compare CIs across conditions or studies).</p>
+<p>Because the topic deserves more space than a short note here, I split it into a separate post:</p>
+<p>📄 <strong><a href="../../posts/p_4/index.html">Choosing a CI scaling option in rcicr</a></strong> – what the five <code>scaling</code> options actually do, when each is appropriate, and the common mistakes to watch out for.</p>
+<p>The user’s guide also includes the same chapter for offline reference: <strong><em>Choosing a CI scaling option</em></strong> in the <a href="https://olivethree.github.io/rcicrdiagnostics/articles/tutorial.html">tutorial</a>.</p>
 </section>
 <section id="status-and-whats-next" class="level2">
 <h2 class="anchored" data-anchor-id="status-and-whats-next">Status and what’s next</h2>
@@ -103,7 +300,7 @@
 <h2 class="anchored" data-anchor-id="links">Links</h2>
 <ul>
 <li><strong>Package on GitHub</strong>: <a href="https://github.com/olivethree/rcicrdiagnostics" class="uri">https://github.com/olivethree/rcicrdiagnostics</a></li>
-<li><strong>User’s guide</strong> (with the scaling chapter): <a href="https://olivethree.github.io/rcicrdiagnostics/articles/tutorial.html" class="uri">https://olivethree.github.io/rcicrdiagnostics/articles/tutorial.html</a></li>
+<li><strong>User’s guide</strong>: <a href="https://olivethree.github.io/rcicrdiagnostics/articles/tutorial.html" class="uri">https://olivethree.github.io/rcicrdiagnostics/articles/tutorial.html</a></li>
 <li><strong>Zenodo record</strong>: <a href="https://doi.org/10.5281/zenodo.19734757" class="uri">https://doi.org/10.5281/zenodo.19734757</a></li>
 </ul>
 </section>

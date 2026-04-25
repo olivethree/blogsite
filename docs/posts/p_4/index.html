@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.37">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="M. Oliveira">
+<meta name="dcterms.date" content="2026-04-25">
+
+<title>Manuel Oliveira - Choosing a CI scaling option in rcicr</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../assets/robots.png" rel="icon" type="image/png">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-dark.min.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+<script type="text/javascript">
+
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-176122484-2', 'auto');
+
+ga('send', {
+  hitType: 'pageview',
+  'anonymizeIp': true,
+});
+</script>
+
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<link rel="stylesheet" href="../../styles.css">
+<meta property="og:title" content="Manuel Oliveira - Choosing a CI scaling option in rcicr">
+<meta property="og:description" content="If you’ve ever generated a classification image (CI) with rcicr (Dotsch, 2023), you’ve had to pick a scaling argument.">
+<meta property="og:site-name" content="Manuel Oliveira">
+<meta name="twitter:title" content="Manuel Oliveira - Choosing a CI scaling option in rcicr">
+<meta name="twitter:description" content="If you’ve ever generated a classification image (CI) with rcicr (Dotsch, 2023), you’ve had to pick a scaling argument.">
+<meta name="twitter:card" content="summary">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">Manuel Oliveira</span>
+  </a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.html">Home</a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../blog.html">Blog</a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../media.html">Media</a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../publications.html">Publications</a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../apps.html">Tools</a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html">About</a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/olivethree"><i class="bi bi-github" role="img">
+</i> 
+ </a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://www.linkedin.com/in/manueljbo/"><i class="bi bi-linkedin" role="img">
+</i> 
+ </a>
+  </li>  
+</ul>
+              <div class="quarto-toggle-container">
+                  <a href="" class="quarto-color-scheme-toggle nav-link" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+              </div>
+              <div id="quarto-search" class="" title="Search"></div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#what-scaling-is-and-why-it-exists" id="toc-what-scaling-is-and-why-it-exists" class="nav-link active" data-scroll-target="#what-scaling-is-and-why-it-exists">What scaling is, and why it exists</a></li>
+  <li><a href="#the-five-options" id="toc-the-five-options" class="nav-link" data-scroll-target="#the-five-options">The five options</a></li>
+  <li><a href="#which-scaling-for-which-analysis" id="toc-which-scaling-for-which-analysis" class="nav-link" data-scroll-target="#which-scaling-for-which-analysis">Which scaling for which analysis</a></li>
+  <li><a href="#common-pitfalls" id="toc-common-pitfalls" class="nav-link" data-scroll-target="#common-pitfalls">Common pitfalls</a></li>
+  <li><a href="#recommended-defaults" id="toc-recommended-defaults" class="nav-link" data-scroll-target="#recommended-defaults">Recommended defaults</a></li>
+  <li><a href="#a-typical-workflow" id="toc-a-typical-workflow" class="nav-link" data-scroll-target="#a-typical-workflow">A typical workflow</a></li>
+  <li><a href="#tldr" id="toc-tldr" class="nav-link" data-scroll-target="#tldr">TL;DR</a></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Choosing a CI scaling option in rcicr</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">R</div>
+    <div class="quarto-category">Reverse Correlation</div>
+    <div class="quarto-category">Tutorial</div>
+    <div class="quarto-category">Psychology</div>
+  </div>
+  </div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>M. Oliveira </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">April 25, 2026</p>
+    </div>
+  </div>
+    
+  </div>
+  
+
+</header>
+
+<p>If you’ve ever generated a classification image (CI) with <a href="https://github.com/rdotsch/rcicr"><code>rcicr</code></a> (Dotsch, 2023), you’ve had to pick a <code>scaling</code> argument. There are five options and the documentation mostly tells you what each one does, not which one to use for what. After running into this question more times than I’d like to admit, I wrote down the answer for myself. Here it is.</p>
+<p>This post is a standalone version of the scaling chapter in the <a href="https://olivethree.github.io/rcicrdiagnostics/articles/tutorial.html"><code>rcicrdiagnostics</code> user’s guide</a>. Worth reading even if you don’t use the package.</p>
+<section id="what-scaling-is-and-why-it-exists" class="level2">
+<h2 class="anchored" data-anchor-id="what-scaling-is-and-why-it-exists">What scaling is, and why it exists</h2>
+<p>When <code>rcicr::batchGenerateCI2IFC()</code> (or <code>generateCI2IFC()</code>) computes a CI, the underlying math produces a 2D pixel array whose values are typically centred near zero and span a small range, often somewhere between -0.01 and +0.01, depending on signal strength and number of trials. <strong>These numbers are the real signal</strong>: they encode how much each pixel contributes to the participant’s mental image.</p>
+<p>The problem is that they cannot be displayed as-is. Monitors render pixel intensities between 0 (black) and 1 (white); negative values have no display meaning, and the absolute values would be too small to see anyway.</p>
+<p>Scaling solves this display problem by remapping the CI into a range a monitor can render. Every CI that <code>rcicr</code> returns therefore has two parallel fields:</p>
+<ul>
+<li><strong><code>ci$ci</code></strong>: the <em>raw</em> CI, exactly as produced by the weighted sum of noise patterns. <strong>This is your data.</strong></li>
+<li><strong><code>ci$scaled</code></strong>: the <em>rescaled</em> CI, after one of the transformations below. This is what gets saved as a PNG or combined with the base image.</li>
+</ul>
+<p>The raw field is <strong>unchanged</strong> regardless of which scaling option you pass. Only the scaled field changes. Keep that in mind, it’s the load-bearing fact for everything below.</p>
+</section>
+<section id="the-five-options" class="level2">
+<h2 class="anchored" data-anchor-id="the-five-options">The five options</h2>
+<table class="table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Option</th>
+<th>What it does</th>
+<th>When to consider it</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>none</code></td>
+<td>Leaves the CI unchanged in <code>$scaled</code>.</td>
+<td>Numerical inspection; any computation you want in raw CI units.</td>
+</tr>
+<tr class="even">
+<td><code>constant</code></td>
+<td><span class="math inline">\((CI + c) / (2c)\)</span> with <span class="math inline">\(c\)</span> fixed (default <span class="math inline">\(c = 0.1\)</span>). The same <span class="math inline">\(c\)</span> gives identical mapping across CIs.</td>
+<td>Visual comparability across CIs when you want to preserve relative intensity and have within-study control over the display scale.</td>
+</tr>
+<tr class="odd">
+<td><code>independent</code></td>
+<td>Same formula, but <span class="math inline">\(c = \max\|CI\|\)</span> computed <em>separately</em> for each CI. Each CI is stretched to <span class="math inline">\([0, 1]\)</span> using its own range.</td>
+<td>Maximum visual contrast for a single CI viewed alone. Not for comparisons across CIs.</td>
+</tr>
+<tr class="even">
+<td><code>matched</code></td>
+<td>Linearly remaps the CI to match the base image’s pixel range.</td>
+<td>Overlaying the CI on the base image; rating-task stimuli that should blend with the base face.</td>
+</tr>
+<tr class="odd">
+<td><code>autoscale</code></td>
+<td>Batch version of <code>independent</code>: one shared constant computed from the widest-range CI in the batch.</td>
+<td>Sets of CIs that will be viewed side by side, e.g., group-level CIs per condition.</td>
+</tr>
+</tbody>
+</table>
+<p>A small detail that catches people out: the default scaling is <strong>different across functions</strong>. <code>batchGenerateCI2IFC()</code> defaults to <code>"autoscale"</code>; <code>generateCI2IFC()</code> defaults to <code>"independent"</code>. Two pipelines that both claim to use “rcicr defaults” can therefore produce visually different images from the same underlying raw CIs. Document which one you used.</p>
+</section>
+<section id="which-scaling-for-which-analysis" class="level2">
+<h2 class="anchored" data-anchor-id="which-scaling-for-which-analysis">Which scaling for which analysis</h2>
+<p>The short version: <strong>numerical analyses operate on <code>ci$ci</code>; visualisation choices operate on <code>ci$scaled</code></strong>. The <code>scaling</code> argument only affects the second.</p>
+<p>The longer version, by use case:</p>
+<table class="table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Your goal</th>
+<th>Correct choice</th>
+<th>Reasoning</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Computing infoVal</strong></td>
+<td>Any scaling</td>
+<td><code>rcicr::computeInfoVal2IFC()</code> reads <code>ci$ci</code> internally. The <code>scaling</code> argument has no effect on the returned z-score.</td>
+</tr>
+<tr class="even">
+<td><strong>Pixel-wise correlations between CIs</strong> (similarity)</td>
+<td>Use <code>ci$ci</code></td>
+<td>Pearson correlation is preserved only under <em>uniform</em> linear rescalings. <code>independent</code> and <code>matched</code> apply CI-specific rescalings, which distort correlations.</td>
+</tr>
+<tr class="odd">
+<td><strong>Euclidean distance between CIs</strong> (e.g., the objective discriminability ratio in Brinkman et al., 2019)</td>
+<td>Use <code>ci$ci</code></td>
+<td>Same reasoning. CI-dependent rescalings change distances non-uniformly.</td>
+</tr>
+<tr class="even">
+<td><strong>Producing CIs for a trait-rating task</strong></td>
+<td><code>autoscale</code> (one batch viewed together) or <code>constant</code> with a fixed <span class="math inline">\(c\)</span> (across-study consistency)</td>
+<td>Raters should perceive genuine signal differences across CIs. <code>independent</code> defeats this because every CI is stretched to the same display range; a weak-signal CI then looks as intense as a strong-signal CI.</td>
+</tr>
+<tr class="odd">
+<td><strong>Saving PNG figures for a paper</strong></td>
+<td><code>matched</code> for base-image overlays; <code>autoscale</code> for grids of CIs</td>
+<td>Pick one and document it. Mixing options across figures in the same paper makes them visually incomparable even when the underlying data are identical.</td>
+</tr>
+<tr class="even">
+<td><strong>Pixel / cluster statistical tests</strong> (Chauvin et al., 2005)</td>
+<td><code>rcicr::plotZmap()</code> (handles the raw CI internally)</td>
+<td>Do not hand-construct a z-map from <code>ci$scaled</code>.</td>
+</tr>
+<tr class="odd">
+<td><strong>Reporting CI magnitude or effect size</strong></td>
+<td><code>ci$ci</code></td>
+<td>Scaled CIs have arbitrary units determined by the option chosen.</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="common-pitfalls" class="level2">
+<h2 class="anchored" data-anchor-id="common-pitfalls">Common pitfalls</h2>
+<p>These are the four mistakes I keep running into in the wild (and have made myself).</p>
+<ol type="1">
+<li><p><strong>Correlating scaled CIs.</strong> Calling <code>cor()</code> on two <code>independent</code>-scaled CIs correlates images that have been stretched to the same <span class="math inline">\([0, 1]\)</span> range by <em>different</em> constants. The result is no longer a clean pixel-wise agreement. Compute correlations on the raw CI.</p></li>
+<li><p><strong>Using <code>independent</code> for rating-task stimuli.</strong> A participant who responded weakly produces a low-signal CI. Under <code>independent</code>, that CI gets stretched to the same display range as a strong-signal CI. Raters perceive both as equally intense, and rating-based analyses systematically underestimate signal differences across participants.</p></li>
+<li><p><strong>Mixing scaling options across studies.</strong> Two papers that both claim to use “rcicr defaults” are not necessarily comparable: <code>batchGenerateCI2IFC()</code> defaults to <code>autoscale</code>, <code>generateCI2IFC()</code> defaults to <code>independent</code>. Always document the scaling option used in your methods section.</p></li>
+<li><p><strong>Believing that scaling affects infoVal.</strong> It does not. <code>computeInfoVal2IFC()</code> always reads the raw CI. If two analyses give different infoVal values, the cause is elsewhere (in the response data, in the reference-distribution cache, or in the trial count), not in scaling.</p></li>
+</ol>
+</section>
+<section id="recommended-defaults" class="level2">
+<h2 class="anchored" data-anchor-id="recommended-defaults">Recommended defaults</h2>
+<p>When in doubt:</p>
+<ul>
+<li><strong>Figures in a paper</strong>: <code>autoscale</code> for grids of CIs; <code>matched</code> for base-image overlays. Document the choice in methods.</li>
+<li><strong>Rating-task stimuli</strong>: <code>autoscale</code> within a single batch; otherwise <code>constant</code> with a fixed <code>c</code> documented in methods.</li>
+<li><strong>Any numerical analysis</strong> (infoVal, correlations, distances, effect sizes, pixel tests): compute from <code>ci$ci</code>, regardless of the scaling argument passed.</li>
+</ul>
+</section>
+<section id="a-typical-workflow" class="level2">
+<h2 class="anchored" data-anchor-id="a-typical-workflow">A typical workflow</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Generate CIs with autoscale for a visually-comparable set of images</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co">#    (useful for rating-task stimuli or figure panels).</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>cis <span class="ot">&lt;-</span> rcicr<span class="sc">::</span><span class="fu">batchGenerateCI2IFC</span>(</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">data        =</span> responses,</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">by          =</span> <span class="st">"participant_id"</span>,</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">stimuli     =</span> <span class="st">"stimulus"</span>,</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">responses   =</span> <span class="st">"response"</span>,</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">baseimage   =</span> <span class="st">"base"</span>,</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">rdata       =</span> <span class="st">"stimuli.RData"</span>,</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">save_as_png =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">scaling     =</span> <span class="st">"autoscale"</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Compute infoVal per participant. Operates on ci$ci internally.</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>iv <span class="ot">&lt;-</span> <span class="fu">sapply</span>(cis, <span class="cf">function</span>(ci) {</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>  rcicr<span class="sc">::</span><span class="fu">computeInfoVal2IFC</span>(ci, <span class="at">rdata =</span> <span class="st">"stimuli.RData"</span>)</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. Pixel-wise similarity between two CIs. Compute on the raw CI.</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>r <span class="ot">&lt;-</span> <span class="fu">cor</span>(<span class="fu">c</span>(cis[[<span class="dv">1</span>]]<span class="sc">$</span>ci), <span class="fu">c</span>(cis[[<span class="dv">2</span>]]<span class="sc">$</span>ci))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The PNGs from step 1 are visually comparable across participants because <code>autoscale</code> applies one shared constant across the batch. The statistical results in steps 2 and 3 are computed on the raw CI and are independent of the scaling argument.</p>
+</section>
+<section id="tldr" class="level2">
+<h2 class="anchored" data-anchor-id="tldr">TL;DR</h2>
+<p>Pick a scaling option for your figures and stimuli, document it, and never use the scaled CI for statistics. The raw CI is the data; the scaled CI is the picture.</p>
+<p>Thanks for reading!</p>
+</section>
+<section id="references" class="level2">
+<h2 class="anchored" data-anchor-id="references">References</h2>
+<ul>
+<li><p>Brinkman, L., Goffin, S., van de Schoot, R., van Haren, N. E. M., Dotsch, R., &amp; Aarts, H. (2019). Quantifying the informational value of classification images. <em>Behavior Research Methods</em>, <em>51</em>(5), 2059–2073. <a href="https://doi.org/10.3758/s13428-019-01232-2" class="uri">https://doi.org/10.3758/s13428-019-01232-2</a></p></li>
+<li><p>Chauvin, A., Worsley, K. J., Schyns, P. G., Arguin, M., &amp; Gosselin, F. (2005). Accurate statistical tests for smooth classification images. <em>Journal of Vision</em>, <em>5</em>(9), 659–667. <a href="https://doi.org/10.1167/5.9.1" class="uri">https://doi.org/10.1167/5.9.1</a></p></li>
+<li><p>Dotsch, R. (2023). <em>rcicr: Reverse correlation image classification toolbox</em> (Version 1.0.1) [R package]. <a href="https://github.com/rdotsch/rcicr" class="uri">https://github.com/rdotsch/rcicr</a></p></li>
+</ul>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const disableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'prefetch';
+    }
+  }
+  const enableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'stylesheet';
+    }
+  }
+  const manageTransitions = (selector, allowTransitions) => {
+    const els = window.document.querySelectorAll(selector);
+    for (let i=0; i < els.length; i++) {
+      const el = els[i];
+      if (allowTransitions) {
+        el.classList.remove('notransition');
+      } else {
+        el.classList.add('notransition');
+      }
+    }
+  }
+  const toggleColorMode = (alternate) => {
+    // Switch the stylesheets
+    const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+    manageTransitions('#quarto-margin-sidebar .nav-link', false);
+    if (alternate) {
+      enableStylesheet(alternateStylesheets);
+      for (const sheetNode of alternateStylesheets) {
+        if (sheetNode.id === "quarto-bootstrap") {
+          toggleBodyColorMode(sheetNode);
+        }
+      }
+    } else {
+      disableStylesheet(alternateStylesheets);
+      toggleBodyColorPrimary();
+    }
+    manageTransitions('#quarto-margin-sidebar .nav-link', true);
+    // Switch the toggles
+    const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+    for (let i=0; i < toggles.length; i++) {
+      const toggle = toggles[i];
+      if (toggle) {
+        if (alternate) {
+          toggle.classList.add("alternate");     
+        } else {
+          toggle.classList.remove("alternate");
+        }
+      }
+    }
+  }
+  const isFileUrl = () => { 
+    return window.location.protocol === 'file:';
+  }
+  const hasAlternateSentinel = () => {  
+    let styleSentinel = getColorSchemeSentinel();
+    if (styleSentinel !== null) {
+      return styleSentinel === "alternate";
+    } else {
+      return false;
+    }
+  }
+  const setStyleSentinel = (alternate) => {
+    const value = alternate ? "alternate" : "default";
+    if (!isFileUrl()) {
+      window.localStorage.setItem("quarto-color-scheme", value);
+    } else {
+      localAlternateSentinel = value;
+    }
+  }
+  const getColorSchemeSentinel = () => {
+    if (!isFileUrl()) {
+      const storageValue = window.localStorage.getItem("quarto-color-scheme");
+      return storageValue != null ? storageValue : localAlternateSentinel;
+    } else {
+      return localAlternateSentinel;
+    }
+  }
+  let localAlternateSentinel = 'default';
+  // Dark / light mode switch
+  window.quartoToggleColorScheme = () => {
+    // Read the current dark / light value 
+    let toAlternate = !hasAlternateSentinel();
+    toggleColorMode(toAlternate);
+    setStyleSentinel(toAlternate);
+  };
+  // Ensure there is a toggle, if there isn't float one in the top right
+  if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+    const a = window.document.createElement('a');
+    a.classList.add('top-right');
+    a.classList.add('quarto-color-scheme-toggle');
+    a.href = "";
+    a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+    const i = window.document.createElement("i");
+    i.classList.add('bi');
+    a.appendChild(i);
+    window.document.body.appendChild(a);
+  }
+  // Switch to dark mode if need be
+  if (hasAlternateSentinel()) {
+    toggleColorMode(true);
+  } 
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">Copyright 2026, Manuel Oliveira</div>   
+  </div>
+</footer>
+
+
+
+</body></html>

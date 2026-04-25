@@ -2,11 +2,13 @@
 title: "Introducing rcicrdiagnostics: an R package that runs data quality checks on your reverse correlation data"
 author: "M. Oliveira"
 date: "4/24/2026"
+date-modified: "4/25/2026"
 categories:
   - R
   - Reverse Correlation
-  - Psychology
-  - Package
+  - Social Psychology
+  - Toolkit
+  - Data quality
 ---
 
 ![Image generated with Gemini 3 Flash Image (Nano banana 2).](post_rcicrdiag_cover.png){fig-align="center"}
@@ -17,7 +19,7 @@ More often than not, the issue is not with your theory, but with your data pipel
 
 RC pipelines are unusually fragile to small data mistakes. Some examples: a response column coded as `{0, 1}` instead of `{-1, 1}`, stimulus IDs that are off by one, a noise matrix whose dimensions don't match what your response data assumes, an `.RData` parameter file from a different stimulus batch than the one your participants actually saw. None of these throw an error. All of them produce a CI that looks convincing but may carry some unwanted mathematical distortions behind the scenes. Worse, because CIs are visually interpretable, a broken pipeline can still look "like a face" and trick us into believing the result.
 
-After running into these kinds of issues more times than I'd like to admit — both in my own projects and when helping others — I decided to put together a toolkit that checks for them systematically. It's called **`rcicrdiagnostics`** and I'm releasing v0.1.0 today.
+After running into these kinds of issues more times than I'd like to admit (both in my own projects and when helping others), I decided to put together a toolkit that checks for them systematically. It's called **`rcicrdiagnostics`** and I'm releasing v0.1.0 today.
 
 ## What it does
 
@@ -25,8 +27,8 @@ After running into these kinds of issues more times than I'd like to admit — b
 
 It supports both of the pipelines that currently dominate the field:
 
--   **Two-image forced choice (2IFC)** — the classical reverse correlation paradigm implemented in the [`rcicr`](https://github.com/rdotsch/rcicr) package (Dotsch, 2016, 2023).
--   **Brief-RC** — the more recent variant introduced by [Schmitz, Rougier, and Yzerbyt (2024)](https://doi.org/10.1002/ejsp.3100) that shows 12 or 20 noisy faces per trial instead of two.
+-   **Two-image forced choice (2IFC)**, the classical reverse correlation paradigm implemented in the [`rcicr`](https://github.com/rdotsch/rcicr) package (Dotsch, 2016, 2023).
+-   **Brief-RC**, the more recent variant introduced by [Schmitz, Rougier, and Yzerbyt (2024)](https://doi.org/10.1002/ejsp.3100) that shows 12 or 20 noisy faces per trial instead of two.
 
 A single `method` argument decides which pipeline to validate; the rest of the API is shared.
 
@@ -43,6 +45,16 @@ Here's a flavour of what comes out of `run_diagnostics()`. Every finding lands i
 -   **Response inversion.** Does a participant's CI look like its own mirror image? A small but real fraction of participants get confused about which face they're supposed to be picking, and their "inverted" CIs cancel out everyone else's.
 
 If everything passes, you can move on to generating CIs and computing infoVal with confidence. If something fails, the report tells you exactly which participants or rows to investigate before you continue.
+
+## InfoVal diagnostics, baked in
+
+A persistent question in RC practice is whether a low or negative individual-level **infoVal** score (Brinkman et al., 2019) means the data are broken or the metric is just noisy. `rcicrdiagnostics` ships three functions that try to make that question answerable instead of guessable:
+
+-   **`infoval()`** computes per-producer infoVal with a reference distribution keyed on each producer's actual trial count. This closes a calibration gap in the original `rcicr::computeInfoVal2IFC()`, which keys the reference on pool size and biases Brief-RC infoVals downward.
+-   **`face_mask()`** generates the oval face-region masks used by [Schmitz et al. (2024)](https://doi.org/10.1002/ejsp.3100) (and sub-regions: eyes, nose, mouth, upper / lower face). Pass it to the infoVal computation to restrict the Frobenius norm to the face area instead of integrating over hair and background.
+-   **`diagnose_infoval()`** is a guided diagnostic that runs in six steps: simulate the reference at every trial count in the data, sanity-check it with a random responder, compute per-producer z unmasked, compute it masked, compute the group-mean CI's z, and tally the per-producer distribution. The report explains what to look at first and what is honest to put in a methods section. Both 2IFC and Brief-RC are supported natively.
+
+The user's guide has a chapter on what infoVal scores actually look like in published 2IFC and Brief-RC studies (the answer depends on paradigm and target, more than people often assume).
 
 ## Quick look
 
@@ -80,15 +92,13 @@ That's it.
 
 ## A note on CI scaling decisions
 
-The package ships with a [user's guide](https://olivethree.github.io/rcicrdiagnostics/articles/tutorial.html) which, besides covering every function with runnable examples, includes a chapter I hope will save some headaches: ***Choosing a CI scaling option***.
+One of the first things you have to decide after diagnostics pass is what `scaling` option to use when generating CIs. The choice is rarely documented in published work and it is a steady source of confusion (it shows up in how people interpret their CIs, how they present them to judges, and how they compare CIs across conditions or studies).
 
-It answers three questions that come up in pretty much every RC project:
+Because the topic deserves more space than a short note here, I split it into a separate post:
 
-1.  What does the `scaling` argument in `rcicr` actually do?
-2.  Which scaling option should I use for which downstream analysis — infoVal, pixel-wise correlations, rating-task stimuli, figures?
-3.  When does scaling affect my results, and when does it not?
+📄 [**Choosing a CI scaling option in rcicr**](../p_4/index.qmd) -- what the five `scaling` options actually do, when each is appropriate, and the common mistakes to watch out for.
 
-There is a lot of confusion in the literature about this, and it shows up in how people interpret their CIs, how they present them to judges, and how they compare CIs across conditions or studies. The chapter lays out the distinction between the **raw CI** (the data you do statistics on) and the **scaled CI** (the display-ready image you show to eyes), and provides a decision table for picking the right scaling per analytical goal.
+The user's guide also includes the same chapter for offline reference: ***Choosing a CI scaling option*** in the [tutorial](https://olivethree.github.io/rcicrdiagnostics/articles/tutorial.html).
 
 ## Status and what's next
 
@@ -99,7 +109,7 @@ Feedback, bug reports, and feature requests are very welcome. Please open an iss
 ## Links
 
 -   **Package on GitHub**: <https://github.com/olivethree/rcicrdiagnostics>
--   **User's guide** (with the scaling chapter): <https://olivethree.github.io/rcicrdiagnostics/articles/tutorial.html>
+-   **User's guide**: <https://olivethree.github.io/rcicrdiagnostics/articles/tutorial.html>
 -   **Zenodo record**: <https://doi.org/10.5281/zenodo.19734757>
 
 ## How to cite
