@@ -219,15 +219,14 @@ ga('send', {
 <section id="rcicrdiagnostics" class="level2">
 <h2 class="anchored" data-anchor-id="rcicrdiagnostics">rcicrdiagnostics</h2>
 <p><strong>Data-quality diagnostics for reverse correlation experiments in social psychology.</strong></p>
-<p><a href="https://github.com/olivethree/rcicrdiagnostics"><strong>Package available on GitHub</strong></a> | <a href="https://olivethree.github.io/rcicrdiagnostics/articles/tutorial.html"><strong>User’s Guide</strong></a> | <a href="./posts/p_3/index.html"><strong>Blog post</strong></a> | <a href="https://doi.org/10.5281/zenodo.19734757"><strong>DOI</strong></a></p>
-<p>Reverse correlation pipelines fail quietly. A response column coded <code>{0, 1}</code> instead of <code>{-1, 1}</code>, stimulus IDs that are off by one, a noise matrix whose dimensions don’t match the response data, a parameter file from the wrong stimulus batch — none of these throw errors, but all of them produce a classification image (CI) that looks convincing and is mathematically wrong.</p>
+<p><a href="https://github.com/olivethree/rcicrdiagnostics"><strong>Get package from GitHub</strong></a> | <a href="https://olivethree.github.io/rcicrdiagnostics/articles/tutorial.html"><strong>User’s Guide</strong></a> | <a href="./posts/p_3/index.html"><strong>Blog post</strong></a> | <a href="https://doi.org/10.5281/zenodo.19734757"><strong>DOI</strong></a></p>
+<p>Reverse correlation data processing pipelines may sometimes fail quietly. A response column coded <code>{0, 1}</code> instead of <code>{-1, 1}</code>, stimulus IDs that are off by one, a noise matrix whose dimensions don’t match the response data, a parameter file from the wrong stimulus batch — none of these throw errors, but all of them produce a classification image (CI) that looks convincing and is mathematically wrong.</p>
 <p><code>rcicrdiagnostics</code> is an R package I put together to catch those silent failures <strong>before</strong> you compute any CI or information value. You give it a response CSV plus your auxiliary stimulus file, call <code>run_diagnostics()</code>, and get back a clean pass / warn / fail report per check.</p>
 <ul>
 <li><p><strong>Covers both pipelines</strong> through a single <code>method</code> argument: the classical two-image forced choice (2IFC) via the <code>rcicr</code> package (Dotsch, 2016, 2023), and Brief-RC (<a href="https://doi.org/10.1002/ejsp.3100">Schmitz, Rougier, &amp; Yzerbyt, 2024</a>).</p></li>
-<li><p><strong>Runnable demo ships with the package.</strong> An AI-generated base face (thispersondoesnotexist.com) and bogus-data generators for 2IFC, Brief-RC 12, and Brief-RC 20 let you try the full flow in about a minute without collecting any real study data.</p></li>
+<li><p><strong>Runnable demo ships with the package.</strong> A synthetic base face (thispersondoesnotexist.com) and bogus-data generators for 2IFC, Brief-RC 12, and Brief-RC 20 let you try the full flow in about a minute without collecting any real study data.</p></li>
 <li><p><strong>User’s guide with a dedicated chapter on CI scaling decisions</strong> — which option to use for infoVal, pixel-wise correlations, rating-task stimuli, and figures. Aims to clear up confusion that shows up in the literature and personal projects.</p></li>
 </ul>
-<p>Citable via Zenodo (<a href="https://doi.org/10.5281/zenodo.19734757">10.5281/zenodo.19734757</a>). Feedback and bug reports welcome on the <a href="https://github.com/olivethree/rcicrdiagnostics/issues">issue tracker</a>.</p>
 <hr>
 </section>
 <section id="carefully-prompt-your-ai" class="level2">

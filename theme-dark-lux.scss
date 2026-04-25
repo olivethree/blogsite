@@ -1,8 +1,87 @@
 /*-- scss:defaults --*/
-// Base document colors
-$body-bg: #181818;
-$body-color: white;
-$link-color: #75AADB;
 
-// Code blocks
+// ---- Base document colors ----------------------------------------------
+$body-bg:        #181818;
+$body-color:     #f1f1f1;
+$link-color:     #ff9b89;     // warm tint that reads on dark + matches navbar
+$link-hover-color: #ffd0c5;
+
+// ---- Heading colors (Lux default leaves these dark, which disappear) ---
+$headings-color: #ffffff;
+
+// ---- Muted / secondary text (often invisible on dark Lux out-of-box) ---
+$text-muted:     #b8b8b8;
+$secondary:      #b8b8b8;
+
+// ---- Code blocks -------------------------------------------------------
 $code-block-bg-alpha: -.8;
+$code-color:     #ff9b89;     // inline code, matches link tone
+
+// ---- Table colors ------------------------------------------------------
+$table-color:        #f1f1f1;
+$table-border-color: #333333;
+
+// ---- Border / card backgrounds -----------------------------------------
+$border-color:   #333333;
+$card-bg:        #1f1f1f;
+
+/*-- scss:rules --*/
+
+// Force headings to inherit the corrected $headings-color across all
+// heading-tag combinations, including ones inside cards / listings that
+// some Lux variants paint with their own color.
+h1, h2, h3, h4, h5, h6,
+.h1, .h2, .h3, .h4, .h5, .h6 {
+  color: #ffffff;
+}
+
+// Listing card titles + meta: keep readable on dark.
+.quarto-listing-table,
+.quarto-listing-table td,
+.quarto-listing-table .listing-title,
+.quarto-listing-table .listing-title a,
+.quarto-listing-default .listing-title,
+.quarto-listing-default .listing-title a {
+  color: #f1f1f1;
+}
+
+.quarto-listing-table .listing-date,
+.quarto-listing-table .listing-author,
+.quarto-listing-table .listing-reading-time,
+.quarto-listing-default .listing-date,
+.quarto-listing-default .listing-author,
+.quarto-listing-default .listing-reading-time {
+  color: #b8b8b8;
+}
+
+// TOC links — Lux's default is near-black, invisible on dark.
+.sidebar nav[role="doc-toc"] ul > li > a,
+#TOC a,
+nav[role="doc-toc"] a {
+  color: #d0d0d0;
+}
+.sidebar nav[role="doc-toc"] ul > li > a.active,
+#TOC a.active,
+nav[role="doc-toc"] a.active {
+  color: #ff9b89;
+}
+
+// Footer
+.page-footer,
+.nav-footer {
+  color: #b8b8b8;
+}
+
+// Blockquotes — Lux paints them dark-on-dark by default.
+blockquote {
+  color: #d0d0d0;
+  border-left-color: #444444;
+}
+
+// Make sure body links not inside the navbar still tint warmly.
+a {
+  color: #ff9b89;
+}
+a:hover {
+  color: #ffd0c5;
+}
