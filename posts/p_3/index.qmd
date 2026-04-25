@@ -9,7 +9,7 @@ categories:
   - Package
 ---
 
-![Image generated with Gemini 3 Flash Image (Nano banana 2).](post_rcicrdiag_cover.png){fig-align="center"}
+![Image generated with Gemini 3 Flash Image (nano banana 2).](post_rcicrdiag_cover.png){fig-align="center"}
 
 If you've ever run a reverse correlation (RC) experiment, you've probably lived this moment before: you feed your data into the classification image (CI) generation pipeline, look at the output, and something just feels *off* (but apparently nothing technically broke). You see no errors or warnings, just a CI that *looks* plausible (don't we all more easily see what *we want* to see! ;) ) and yet something just doesn't quite add up, or output values that look higher or lower than you would expect in theory.
 
@@ -48,7 +48,7 @@ If everything passes, you can move on to generating CIs and computing infoVal wi
 
 A persistent question in RC practice is whether a low or negative individual-level **infoVal** score (Brinkman et al., 2019) means the data are broken or the metric is just noisy. `rcicrdiagnostics` ships three functions that try to make that question answerable instead of guessable:
 
--   **`infoval()`** computes per-producer infoVal with a reference distribution keyed on each producer's actual trial count. This closes a calibration gap in the canonical `rcicr::computeInfoVal2IFC()`, which keys the reference on pool size and biases Brief-RC infoVals downward.
+-   **`infoval()`** computes per-producer infoVal with a reference distribution keyed on each producer's actual trial count. This closes a calibration gap in the original `rcicr::computeInfoVal2IFC()`, which keys the reference on pool size and biases Brief-RC infoVals downward.
 -   **`face_mask()`** generates the oval face-region masks used by [Schmitz et al. (2024)](https://doi.org/10.1002/ejsp.3100) (and sub-regions: eyes, nose, mouth, upper / lower face). Pass it to the infoVal computation to restrict the Frobenius norm to the face area instead of integrating over hair and background.
 -   **`diagnose_infoval()`** is a guided diagnostic that runs in six steps: simulate the reference at every trial count in the data, sanity-check it with a random responder, compute per-producer z unmasked, compute it masked, compute the group-mean CI's z, and tally the per-producer distribution. The report explains what to look at first and what is honest to put in a methods section. Both 2IFC and Brief-RC are supported natively.
 

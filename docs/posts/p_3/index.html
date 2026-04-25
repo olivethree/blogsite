@@ -266,7 +266,7 @@ ga('send', {
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="post_rcicrdiag_cover.png" class="img-fluid figure-img"></p>
-<p></p><figcaption class="figure-caption">Image generated with Gemini 3 Flash Image (Nano banana 2).</figcaption><p></p>
+<p></p><figcaption class="figure-caption">Image generated with Gemini 3 Flash Image (nano banana 2).</figcaption><p></p>
 </figure>
 </div>
 <p>If you’ve ever run a reverse correlation (RC) experiment, you’ve probably lived this moment before: you feed your data into the classification image (CI) generation pipeline, look at the output, and something just feels <em>off</em> (but apparently nothing technically broke). You see no errors or warnings, just a CI that <em>looks</em> plausible (don’t we all more easily see what <em>we want</em> to see! ;) ) and yet something just doesn’t quite add up, or output values that look higher or lower than you would expect in theory.</p>
@@ -301,7 +301,7 @@ ga('send', {
 <h2 class="anchored" data-anchor-id="infoval-diagnostics-baked-in">InfoVal diagnostics, baked in</h2>
 <p>A persistent question in RC practice is whether a low or negative individual-level <strong>infoVal</strong> score (Brinkman et al., 2019) means the data are broken or the metric is just noisy. <code>rcicrdiagnostics</code> ships three functions that try to make that question answerable instead of guessable:</p>
 <ul>
-<li><strong><code>infoval()</code></strong> computes per-producer infoVal with a reference distribution keyed on each producer’s actual trial count. This closes a calibration gap in the canonical <code>rcicr::computeInfoVal2IFC()</code>, which keys the reference on pool size and biases Brief-RC infoVals downward.</li>
+<li><strong><code>infoval()</code></strong> computes per-producer infoVal with a reference distribution keyed on each producer’s actual trial count. This closes a calibration gap in the original <code>rcicr::computeInfoVal2IFC()</code>, which keys the reference on pool size and biases Brief-RC infoVals downward.</li>
 <li><strong><code>face_mask()</code></strong> generates the oval face-region masks used by <a href="https://doi.org/10.1002/ejsp.3100">Schmitz et al.&nbsp;(2024)</a> (and sub-regions: eyes, nose, mouth, upper / lower face). Pass it to the infoVal computation to restrict the Frobenius norm to the face area instead of integrating over hair and background.</li>
 <li><strong><code>diagnose_infoval()</code></strong> is a guided diagnostic that runs in six steps: simulate the reference at every trial count in the data, sanity-check it with a random responder, compute per-producer z unmasked, compute it masked, compute the group-mean CI’s z, and tally the per-producer distribution. The report explains what to look at first and what is honest to put in a methods section. Both 2IFC and Brief-RC are supported natively.</li>
 </ul>

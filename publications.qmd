@@ -5,7 +5,7 @@ editor: visual
 
 ### 2026
 
-[**Oliveira, M. (2026)**. rcicrdiagnostics: Data quality diagnostics for reverse correlation experiments in social psychology using the rcicr package (Version 0.1.0) \[R package\]. Zenodo. https://doi.org/10.5281/zenodo.19734757](https://doi.org/10.5281/zenodo.19734757)
+[**Oliveira, M. (2026)**. rcicrdiagnostics: Data quality diagnostics for reverse correlation experiments in social psychology using the rcicr package (Version 0.2.0) \[R package\]. Zenodo. https://doi.org/10.5281/zenodo.19734757](https://doi.org/10.5281/zenodo.19734757)
 
 ### 2025
 

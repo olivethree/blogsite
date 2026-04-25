@@ -13,7 +13,7 @@ If you've ever generated a classification image (CI) with [`rcicr`](https://gith
 
 This post is a standalone version of the scaling chapter in the [`rcicrdiagnostics` user's guide](https://olivethree.github.io/rcicrdiagnostics/articles/tutorial.html). Worth reading even if you don't use that package.
 
-![Confused RC-obsessed researchers looking at a huge laptop from an odd angle (thanks to Gemini nano banana 2, my personal human wannabe RA of late)](ciscaling_post_cover.png)
+![Image generated with Gemini 3 Flash Image nano banana 2.](ciscaling_post_cover.png)
 
 ## What scaling is, and why it exists
 
