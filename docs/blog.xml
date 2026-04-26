@@ -23,8 +23,8 @@
 <p>This post is a standalone version of the scaling chapter in the <a href="https://olivethree.github.io/rcicrdiagnostics/articles/tutorial.html"><code>rcicrdiagnostics</code> user’s guide</a>. Worth reading even if you don’t use that package.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="https://manueloliveira.nl/posts/p_4/ciscaling_post_cover.png" class="img-fluid figure-img"></p>
-<p></p><figcaption class="figure-caption">Image generated with Gemini 3 Flash Image nano banana 2.</figcaption><p></p>
+<p><img src="https://manueloliveira.nl/posts/p_4/ci_scaling_post.png" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">Image co-generated with Gemini 3 Flash Image (NB2)</figcaption><p></p>
 </figure>
 </div>
 <section id="what-scaling-is-and-why-it-exists" class="level2">
@@ -208,7 +208,7 @@
   <category>Psychology</category>
   <guid>https://manueloliveira.nl/posts/p_4/index.html</guid>
   <pubDate>Fri, 24 Apr 2026 22:00:00 GMT</pubDate>
-  <media:content url="https://manueloliveira.nl/posts/p_4/ciscaling_post_cover.png" medium="image" type="image/png" height="144" width="144"/>
+  <media:content url="https://manueloliveira.nl/posts/p_4/ci_scaling_post.png" medium="image" type="image/png" height="72" width="144"/>
 </item>
 <item>
   <title>Introducing rcicrdiagnostics: an R package that runs data quality checks on your reverse correlation data</title>
@@ -220,12 +220,12 @@
 
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="https://manueloliveira.nl/posts/p_3/post_rcicrdiag_cover.png" class="img-fluid figure-img"></p>
-<p></p><figcaption class="figure-caption">Image generated with Gemini 3 Flash Image (nano banana 2).</figcaption><p></p>
+<p><img src="https://manueloliveira.nl/posts/p_3/rcicrdiag_post_img.png" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">Image co-generated with Gemini 3 Flash Image (NB2)</figcaption><p></p>
 </figure>
 </div>
 <p>If you’ve ever run a reverse correlation (RC) experiment, you’ve probably lived this moment before: you feed your data into the classification image (CI) generation pipeline, look at the output, and something just feels <em>off</em> (but apparently nothing technically broke). You see no errors or warnings, just a CI that <em>looks</em> plausible (don’t we all more easily see what <em>we want</em> to see! ;) ) and yet something just doesn’t quite add up, or output values that look higher or lower than you would expect in theory.</p>
-<p>More often than not, the issue is not with your theory, but with your data pipeline. As a Super Mario fan, I was hoping for the moment I could write this in a blog post about research data plumbing: <em>Let’sa gooo!</em> (#cringeisokay)</p>
+<p>More often than not, the issue is not with your theory, but with your data pipeline. So…time for some data pipeline plumbing! Put on your Super Luigi hat and <em>let’sa gooo!</em> (sorry Mario, Luigi is way cooler!)</p>
 <p>RC pipelines are unusually fragile to small data mistakes. Some examples: a response column coded as <code>{0, 1}</code> instead of <code>{-1, 1}</code>, stimulus IDs that are off by one, a noise matrix whose dimensions don’t match what your response data assumes, an <code>.RData</code> parameter file from a different stimulus batch than the one your participants actually saw. None of these throw an error. All of them produce a CI that looks convincing but may carry some unwanted mathematical distortions behind the scenes. Worse, because CIs are visually interpretable, a broken pipeline can still look “like a face” and trick us into believing the result.</p>
 <p>After running into these kinds of issues more times than I’d like to admit (both in my own projects and when helping others), I decided to put together a toolkit that checks for them systematically. It’s called <strong><code>rcicrdiagnostics</code></strong> and I’m releasing it now at v0.2.0.</p>
 <section id="what-it-does" class="level2">
@@ -339,7 +339,7 @@
   <category>Package</category>
   <guid>https://manueloliveira.nl/posts/p_3/index.html</guid>
   <pubDate>Fri, 24 Apr 2026 22:00:00 GMT</pubDate>
-  <media:content url="https://manueloliveira.nl/posts/p_3/post_rcicrdiag_cover.png" medium="image" type="image/png" height="80" width="144"/>
+  <media:content url="https://manueloliveira.nl/posts/p_3/rcicrdiag_post_img.png" medium="image" type="image/png" height="72" width="144"/>
 </item>
 <item>
   <title>Using Reverse Correlation Methods in Psychology Research: R tutorial and Recommended Practices</title>

@@ -9,11 +9,11 @@ categories:
   - Package
 ---
 
-![Image generated with Gemini 3 Flash Image (nano banana 2).](post_rcicrdiag_cover.png){fig-align="center"}
+![Image co-generated with Gemini 3 Flash Image (NB2)](rcicrdiag_post_img.png){fig-align="center"}
 
 If you've ever run a reverse correlation (RC) experiment, you've probably lived this moment before: you feed your data into the classification image (CI) generation pipeline, look at the output, and something just feels *off* (but apparently nothing technically broke). You see no errors or warnings, just a CI that *looks* plausible (don't we all more easily see what *we want* to see! ;) ) and yet something just doesn't quite add up, or output values that look higher or lower than you would expect in theory.
 
-More often than not, the issue is not with your theory, but with your data pipeline. As a Super Mario fan, I was hoping for the moment I could write this in a blog post about research data plumbing: *Let'sa gooo!* (#cringeisokay)
+More often than not, the issue is not with your theory, but with your data pipeline. So...time for some data pipeline plumbing! Put on your Super Luigi hat and *let'sa gooo!* (sorry Mario, Luigi is way cooler!)
 
 RC pipelines are unusually fragile to small data mistakes. Some examples: a response column coded as `{0, 1}` instead of `{-1, 1}`, stimulus IDs that are off by one, a noise matrix whose dimensions don't match what your response data assumes, an `.RData` parameter file from a different stimulus batch than the one your participants actually saw. None of these throw an error. All of them produce a CI that looks convincing but may carry some unwanted mathematical distortions behind the scenes. Worse, because CIs are visually interpretable, a broken pipeline can still look "like a face" and trick us into believing the result.
 
