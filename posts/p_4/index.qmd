@@ -31,7 +31,7 @@ The raw field is **unchanged** regardless of which scaling option you pass. Only
 ## The five options
 
 | Option | What it does | When to consider it |
-|------------------------|------------------------|------------------------|
+|----|----|----|
 | `none` | Leaves the CI unchanged in `$scaled`. | Numerical inspection; any computation you want in raw CI units. |
 | `constant` | $(CI + c) / (2c)$ with $c$ fixed (default $c = 0.1$). The same $c$ gives identical mapping across CIs. | Visual comparability across CIs when you want to preserve relative intensity and have within-study control over the display scale. |
 | `independent` | Same formula, but $c = \max\|CI\|$ computed *separately* for each CI. Each CI is stretched to $[0, 1]$ using its own range. | Maximum visual contrast for a single CI viewed alone. Not for comparisons across CIs. |
@@ -47,7 +47,7 @@ The short version: **numerical analyses operate on `ci$ci`; visualisation choice
 The longer version, by use case:
 
 | Your goal | Correct choice | Reasoning |
-|------------------------|------------------------|------------------------|
+|----|----|----|
 | **Computing infoVal** | Any scaling | `rcicr::computeInfoVal2IFC()` reads `ci$ci` internally. The `scaling` argument has no effect on the returned z-score. |
 | **Pixel-wise correlations between CIs** (similarity) | Use `ci$ci` | Pearson correlation is preserved only under *uniform* linear rescalings. `independent` and `matched` apply CI-specific rescalings, which distort correlations. |
 | **Euclidean distance between CIs** (e.g., the objective discriminability ratio in Brinkman et al., 2019) | Use `ci$ci` | Same reasoning. CI-dependent rescalings change distances non-uniformly. |
