@@ -26,8 +26,8 @@
 </div>
 <p>If you’ve ever run a reverse correlation (RC) experiment, you’ve probably lived this moment before: you feed your data into the classification image (CI) generation pipeline, look at the output, and something just feels <em>off</em> (but apparently nothing technically broke). You see no errors or warnings, just a CI that <em>looks</em> plausible (don’t we all more easily see what <em>we want</em> to see! ;) ) and yet something just doesn’t quite add up, or output values that look higher or lower than you would expect in theory.</p>
 <p>More often than not, the issue is not with your theory, but with your data pipeline. So…time for some data pipeline plumbing! Put on your Super Luigi hat and <em>let’sa gooo!</em> (sorry Mario, Luigi is way cooler!)</p>
-<p><strong>BUT</strong> even when your input data is perfectly clean, you still cannot tell, just by looking at a CI, whether it is <strong>reliable</strong> (would the same participant’s data produce a similar CI on another day?) or <strong>discriminable</strong> (does this CI actually look different from the CI of a comparison condition, beyond what you’d expect from noise alone?). Some papers in the Social Psychology RC literature analyze how CI pixels of different representation target condition correlate to assess similarity, and some venture into pixel cluster analyses, but tools to facilitate such analyses remained buried in lab drawers (perfectly understanble! There is often just no time worth spending in walking the exra mile of converting study scripts into a software development odyssey).</p>
-<p>After repeatadely running into all these questions in the past years (both in my own projects and when helping others), I decided to put it all in one toolkit. After some iterations and interim package projects I decided to compile everything into a bigger package baptized as <strong><code>rcisignal</code></strong>, which I am now sufficiently happy to release publicly (v0.1.0).</p>
+<p><strong>BUT</strong> even when your input data is perfectly clean, you still cannot tell, just by looking at a CI, whether it is <strong>reliable</strong> (would the same participant’s data produce a similar CI on another day?) or <strong>discriminable</strong> (does this CI actually look different from the CI of a comparison condition, beyond what you’d expect from noise alone?). Some papers in the Social Psychology RC literature analyze how CI pixels of different representation target condition correlate to assess similarity, and some venture into pixel cluster analyses, but tools to facilitate such analyses remained buried in lab drawers (perfectly understandable! There is often just no time worth spending in walking the extra mile of converting study scripts into a software development odyssey).</p>
+<p>After repeatedly running into all these questions in the past years (both in my own projects and when helping others), I decided to put it all in one toolkit. After some iterations and interim package projects I decided to compile everything into a bigger package baptized as <strong><a href="https://github.com/olivethree/rcisignal"><code>rcisignal</code></a></strong>, which I am now sufficiently happy to release publicly (v0.1.0).</p>
 <section id="what-it-does" class="level2">
 <h2 class="anchored" data-anchor-id="what-it-does">What it does</h2>
 <p><code>rcisignal</code> is an R package that bundles three things you should be doing on every RC dataset before you commit to an interpretation, but which are usually scattered across personal scripts (when they get done at all):</p>
@@ -53,7 +53,7 @@
 <li><strong>Response bias.</strong> Are some participants just clicking the same side over and over? These produce near-constant “CIs” that carry no signal.</li>
 <li><strong>Reaction times.</strong> Any participants with an unusually high rate of extremely fast responses? Likely rushed or inattentive trials that contaminate the CI.</li>
 <li><strong>Duplicates.</strong> Is the same trial somehow recorded twice? Rare but happens with concatenated session files.</li>
-<li><strong>Version compatibility.</strong> Is your <code>.RData</code> parameter file from the same <code>rcicr</code> version you’re now trying to analyse with?</li>
+<li><strong>Version compatibility.</strong> Is your <code>.Rdata</code> parameter file from the same <code>rcicr</code> version you’re now trying to analyse with?</li>
 <li><strong>Response inversion.</strong> Does a participant’s CI look like its own mirror image? A small but real fraction of participants get confused about which face they’re supposed to be picking, and their “inverted” CIs cancel out everyone else’s.</li>
 </ul>
 <p>If everything passes, you can move on to generating CIs and computing reliability with confidence. If something fails, the report tells you exactly which participants or rows to investigate before you continue. For Brief-RC users, <code>validate_noise_matrix()</code> is a separate one-shot check that confirms your noise matrix dimensions are consistent with what your responses assume.</p>
@@ -67,7 +67,7 @@
 </ul>
 <p><code>rcisignal</code> ships a coordinated <code>rel_*</code> family for these:</p>
 <ul>
-<li><strong><code>run_reliability()</code></strong> is the high-level “is this condition internally coherent?” entry point. Internally it stitches together split-half permutation tests, ICC(3,<em>) (with a guard on which form to use given your trial budget), leave-one-out producer agreement, and a pixel-wise</em> t*-map vs the empirical null. The output prints as a one-page report with all four numbers and a verdict.</li>
+<li><strong><code>run_reliability()</code></strong> is the high-level “is this condition internally coherent?” entry point. Internally it stitches together split-half permutation tests, ICC(3,<em>) (with a guard on which form to use given your trial budget), leave-one-out producer agreement, and a pixel-wise </em>t*-map vs the empirical null. The output prints as a one-page report with all four numbers and a verdict.</li>
 <li><strong><code>run_discriminability()</code></strong> asks the corresponding “are these two conditions actually different?” question. It produces a <strong>cluster-agreement map</strong>: a neuroimaging-style FWER-controlled pixel map of where two CIs differ, with the cluster threshold and permutation count fully configurable. Use <code>run_discriminability_pairwise()</code> for an <em>n</em>x<em>n</em> grid of contrasts when you have more than two conditions.</li>
 <li><strong><code>pixel_t_test()</code></strong> and <strong><code>agreement_map_test()</code></strong> are the lower-level building blocks if you want to compose the analysis yourself, e.g.&nbsp;with custom face masks or non-default cluster-forming thresholds.</li>
 <li><strong><code>rel_dissimilarity()</code></strong> computes between-CI Euclidean / Frobenius dissimilarities with a percentile-bootstrap CI, which is a more honest “effect size” for between-condition differences than just eyeballing two CIs side-by-side.</li>
@@ -187,37 +187,43 @@
 </section>
 <section id="quick-look" class="level2">
 <h2 class="anchored" data-anchor-id="quick-look">Quick look</h2>
-<p>For your own data, the minimum you need is a response CSV with <code>participant_id</code>, <code>stimulus</code>, and <code>response</code> columns (optionally <code>rt</code>), plus either an <code>rcicr</code> <code>.RData</code> for 2IFC or a noise matrix for Brief-RC:</p>
+<p>For your own data, the minimum you need is a response CSV with <code>participant_id</code>, <code>stimulus</code>, and <code>response</code> columns (optionally <code>rt</code>), plus either an <code>rcicr</code> <code>.Rdata</code> for 2IFC or a noise matrix for Brief-RC:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><span class="co" style="color: #5E5E5E;"># install.packages("remotes")</span></span>
 <span id="cb1-2">remotes<span class="sc" style="color: #5E5E5E;">::</span><span class="fu" style="color: #4758AB;">install_github</span>(<span class="st" style="color: #20794D;">"olivethree/rcisignal"</span>)</span>
 <span id="cb1-3"></span>
 <span id="cb1-4"><span class="fu" style="color: #4758AB;">library</span>(rcisignal)</span>
 <span id="cb1-5"></span>
-<span id="cb1-6"><span class="co" style="color: #5E5E5E;"># 1. Diagnose the raw data first</span></span>
-<span id="cb1-7">responses <span class="ot" style="color: #003B4F;">&lt;-</span> <span class="fu" style="color: #4758AB;">read.csv</span>(<span class="st" style="color: #20794D;">"path/to/responses.csv"</span>)</span>
-<span id="cb1-8">report    <span class="ot" style="color: #003B4F;">&lt;-</span> <span class="fu" style="color: #4758AB;">run_diagnostics</span>(</span>
-<span id="cb1-9">  responses,</span>
-<span id="cb1-10">  <span class="at" style="color: #657422;">method =</span> <span class="st" style="color: #20794D;">"2ifc"</span>,</span>
-<span id="cb1-11">  <span class="at" style="color: #657422;">rdata  =</span> <span class="st" style="color: #20794D;">"path/to/rcicr_stimuli.RData"</span>,</span>
-<span id="cb1-12">  <span class="at" style="color: #657422;">col_rt =</span> <span class="st" style="color: #20794D;">"rt"</span></span>
-<span id="cb1-13">)</span>
-<span id="cb1-14"><span class="fu" style="color: #4758AB;">print</span>(report)</span>
-<span id="cb1-15"></span>
-<span id="cb1-16"><span class="co" style="color: #5E5E5E;"># 2. Within-condition reliability</span></span>
-<span id="cb1-17">trustworthy   <span class="ot" style="color: #003B4F;">&lt;-</span> <span class="fu" style="color: #4758AB;">ci_from_responses_2ifc</span>(trust_responses,   <span class="st" style="color: #20794D;">"data/rcicr_stimuli.RData"</span>, <span class="st" style="color: #20794D;">"base"</span>)</span>
-<span id="cb1-18">untrustworthy <span class="ot" style="color: #003B4F;">&lt;-</span> <span class="fu" style="color: #4758AB;">ci_from_responses_2ifc</span>(untrust_responses, <span class="st" style="color: #20794D;">"data/rcicr_stimuli.RData"</span>, <span class="st" style="color: #20794D;">"base"</span>)</span>
-<span id="cb1-19"><span class="fu" style="color: #4758AB;">print</span>(<span class="fu" style="color: #4758AB;">run_reliability</span>(trustworthy<span class="sc" style="color: #5E5E5E;">$</span>signal_matrix,   <span class="at" style="color: #657422;">seed =</span> <span class="dv" style="color: #AD0000;">1</span>))</span>
-<span id="cb1-20"><span class="fu" style="color: #4758AB;">print</span>(<span class="fu" style="color: #4758AB;">run_reliability</span>(untrustworthy<span class="sc" style="color: #5E5E5E;">$</span>signal_matrix, <span class="at" style="color: #657422;">seed =</span> <span class="dv" style="color: #AD0000;">1</span>))</span>
+<span id="cb1-6"><span class="co" style="color: #5E5E5E;"># Don't have data yet? Two helpers generate a complete simulated dataset</span></span>
+<span id="cb1-7"><span class="co" style="color: #5E5E5E;"># (responses + noise pool) so you can try every step below right away:</span></span>
+<span id="cb1-8"><span class="co" style="color: #5E5E5E;">#   sim &lt;- simulate_2ifc_data()        # 50 x 2 producers, 500 trials each</span></span>
+<span id="cb1-9"><span class="co" style="color: #5E5E5E;">#   sim &lt;- simulate_briefrc_data()     # Brief-RC equivalent</span></span>
+<span id="cb1-10"><span class="co" style="color: #5E5E5E;"># then pass sim$data and sim$rdata_path everywhere "responses" / "rdata" appear.</span></span>
+<span id="cb1-11"></span>
+<span id="cb1-12"><span class="co" style="color: #5E5E5E;"># 1. Diagnose the raw data first</span></span>
+<span id="cb1-13">responses <span class="ot" style="color: #003B4F;">&lt;-</span> <span class="fu" style="color: #4758AB;">read.csv</span>(<span class="st" style="color: #20794D;">"path/to/responses.csv"</span>)</span>
+<span id="cb1-14">report    <span class="ot" style="color: #003B4F;">&lt;-</span> <span class="fu" style="color: #4758AB;">run_diagnostics</span>(</span>
+<span id="cb1-15">  responses,</span>
+<span id="cb1-16">  <span class="at" style="color: #657422;">method =</span> <span class="st" style="color: #20794D;">"2ifc"</span>,</span>
+<span id="cb1-17">  <span class="at" style="color: #657422;">rdata  =</span> <span class="st" style="color: #20794D;">"path/to/rcicr_stimuli.Rdata"</span>,</span>
+<span id="cb1-18">  <span class="at" style="color: #657422;">col_rt =</span> <span class="st" style="color: #20794D;">"rt"</span></span>
+<span id="cb1-19">)</span>
+<span id="cb1-20"><span class="fu" style="color: #4758AB;">print</span>(report)</span>
 <span id="cb1-21"></span>
-<span id="cb1-22"><span class="co" style="color: #5E5E5E;"># 3. Between-condition discriminability</span></span>
-<span id="cb1-23">result <span class="ot" style="color: #003B4F;">&lt;-</span> <span class="fu" style="color: #4758AB;">run_discriminability</span>(</span>
-<span id="cb1-24">  trustworthy<span class="sc" style="color: #5E5E5E;">$</span>signal_matrix,</span>
-<span id="cb1-25">  untrustworthy<span class="sc" style="color: #5E5E5E;">$</span>signal_matrix,</span>
-<span id="cb1-26">  <span class="at" style="color: #657422;">seed =</span> <span class="dv" style="color: #AD0000;">1</span></span>
-<span id="cb1-27">)</span>
-<span id="cb1-28"><span class="fu" style="color: #4758AB;">print</span>(result)</span>
-<span id="cb1-29"><span class="fu" style="color: #4758AB;">plot</span>(result)</span></code></pre></div>
+<span id="cb1-22"><span class="co" style="color: #5E5E5E;"># 2. Within-condition reliability</span></span>
+<span id="cb1-23">trustworthy   <span class="ot" style="color: #003B4F;">&lt;-</span> <span class="fu" style="color: #4758AB;">ci_from_responses_2ifc</span>(trust_responses,   <span class="st" style="color: #20794D;">"data/rcicr_stimuli.Rdata"</span>, <span class="st" style="color: #20794D;">"base"</span>)</span>
+<span id="cb1-24">untrustworthy <span class="ot" style="color: #003B4F;">&lt;-</span> <span class="fu" style="color: #4758AB;">ci_from_responses_2ifc</span>(untrust_responses, <span class="st" style="color: #20794D;">"data/rcicr_stimuli.Rdata"</span>, <span class="st" style="color: #20794D;">"base"</span>)</span>
+<span id="cb1-25"><span class="fu" style="color: #4758AB;">print</span>(<span class="fu" style="color: #4758AB;">run_reliability</span>(trustworthy<span class="sc" style="color: #5E5E5E;">$</span>signal_matrix,   <span class="at" style="color: #657422;">seed =</span> <span class="dv" style="color: #AD0000;">1</span>))</span>
+<span id="cb1-26"><span class="fu" style="color: #4758AB;">print</span>(<span class="fu" style="color: #4758AB;">run_reliability</span>(untrustworthy<span class="sc" style="color: #5E5E5E;">$</span>signal_matrix, <span class="at" style="color: #657422;">seed =</span> <span class="dv" style="color: #AD0000;">1</span>))</span>
+<span id="cb1-27"></span>
+<span id="cb1-28"><span class="co" style="color: #5E5E5E;"># 3. Between-condition discriminability</span></span>
+<span id="cb1-29">result <span class="ot" style="color: #003B4F;">&lt;-</span> <span class="fu" style="color: #4758AB;">run_discriminability</span>(</span>
+<span id="cb1-30">  trustworthy<span class="sc" style="color: #5E5E5E;">$</span>signal_matrix,</span>
+<span id="cb1-31">  untrustworthy<span class="sc" style="color: #5E5E5E;">$</span>signal_matrix,</span>
+<span id="cb1-32">  <span class="at" style="color: #657422;">seed =</span> <span class="dv" style="color: #AD0000;">1</span></span>
+<span id="cb1-33">)</span>
+<span id="cb1-34"><span class="fu" style="color: #4758AB;">print</span>(result)</span>
+<span id="cb1-35"><span class="fu" style="color: #4758AB;">plot</span>(result)</span></code></pre></div>
 </div>
 <p>That’s it! A full walkthrough, including how to interpret cluster maps, sample-size warnings, when to use ICC(3,1) vs ICC(3,k), and Brief-RC end-to-end, can be found in the package’s <a href="https://olivethree.github.io/rcisignal/articles/rcisignal.html">user’s guide</a>.</p>
 </section>

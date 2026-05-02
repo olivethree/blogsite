@@ -15,9 +15,9 @@ If you've ever run a reverse correlation (RC) experiment, you've probably lived 
 
 More often than not, the issue is not with your theory, but with your data pipeline. So...time for some data pipeline plumbing! Put on your Super Luigi hat and *let'sa gooo!* (sorry Mario, Luigi is way cooler!)
 
-**BUT** even when your input data is perfectly clean, you still cannot tell, just by looking at a CI, whether it is **reliable** (would the same participant's data produce a similar CI on another day?) or **discriminable** (does this CI actually look different from the CI of a comparison condition, beyond what you'd expect from noise alone?). Some papers in the Social Psychology RC literature analyze how CI pixels of different representation target condition correlate to assess similarity, and some venture into pixel cluster analyses, but tools to facilitate such analyses remained buried in lab drawers (perfectly understanble! There is often just no time worth spending in walking the exra mile of converting study scripts into a software development odyssey).
+**BUT** even when your input data is perfectly clean, you still cannot tell, just by looking at a CI, whether it is **reliable** (would the same participant's data produce a similar CI on another day?) or **discriminable** (does this CI actually look different from the CI of a comparison condition, beyond what you'd expect from noise alone?). Some papers in the Social Psychology RC literature analyze how CI pixels of different representation target condition correlate to assess similarity, and some venture into pixel cluster analyses, but tools to facilitate such analyses remained buried in lab drawers (perfectly understandable! There is often just no time worth spending in walking the extra mile of converting study scripts into a software development odyssey).
 
-After repeatadely running into all these questions in the past years (both in my own projects and when helping others), I decided to put it all in one toolkit. After some iterations and interim package projects I decided to compile everything into a bigger package baptized as **`rcisignal`**, which I am now sufficiently happy to release publicly (v0.1.0).
+After repeatedly running into all these questions in the past years (both in my own projects and when helping others), I decided to put it all in one toolkit. After some iterations and interim package projects I decided to compile everything into a bigger package baptized as **[`rcisignal`](https://github.com/olivethree/rcisignal)**, which I am now sufficiently happy to release publicly (v0.1.0).
 
 ## What it does
 
@@ -44,7 +44,7 @@ Here's a flavor of what comes out of `run_diagnostics()`. Every finding lands in
 -   **Response bias.** Are some participants just clicking the same side over and over? These produce near-constant "CIs" that carry no signal.
 -   **Reaction times.** Any participants with an unusually high rate of extremely fast responses? Likely rushed or inattentive trials that contaminate the CI.
 -   **Duplicates.** Is the same trial somehow recorded twice? Rare but happens with concatenated session files.
--   **Version compatibility.** Is your `.RData` parameter file from the same `rcicr` version you're now trying to analyse with?
+-   **Version compatibility.** Is your `.Rdata` parameter file from the same `rcicr` version you're now trying to analyse with?
 -   **Response inversion.** Does a participant's CI look like its own mirror image? A small but real fraction of participants get confused about which face they're supposed to be picking, and their "inverted" CIs cancel out everyone else's.
 
 If everything passes, you can move on to generating CIs and computing reliability with confidence. If something fails, the report tells you exactly which participants or rows to investigate before you continue. For Brief-RC users, `validate_noise_matrix()` is a separate one-shot check that confirms your noise matrix dimensions are consistent with what your responses assume.
@@ -59,7 +59,7 @@ Once your input data is clean and you have per-participant CIs, some questions o
 
 `rcisignal` ships a coordinated `rel_*` family for these:
 
--   **`run_reliability()`** is the high-level "is this condition internally coherent?" entry point. Internally it stitches together split-half permutation tests, ICC(3,*) (with a guard on which form to use given your trial budget), leave-one-out producer agreement, and a pixel-wise* t\*-map vs the empirical null. The output prints as a one-page report with all four numbers and a verdict.
+-   **`run_reliability()`** is the high-level "is this condition internally coherent?" entry point. Internally it stitches together split-half permutation tests, ICC(3,*) (with a guard on which form to use given your trial budget), leave-one-out producer agreement, and a pixel-wise *t*-map vs the empirical null. The output prints as a one-page report with all four numbers and a verdict.
 -   **`run_discriminability()`** asks the corresponding "are these two conditions actually different?" question. It produces a **cluster-agreement map**: a neuroimaging-style FWER-controlled pixel map of where two CIs differ, with the cluster threshold and permutation count fully configurable. Use `run_discriminability_pairwise()` for an *n*x*n* grid of contrasts when you have more than two conditions.
 -   **`pixel_t_test()`** and **`agreement_map_test()`** are the lower-level building blocks if you want to compose the analysis yourself, e.g. with custom face masks or non-default cluster-forming thresholds.
 -   **`rel_dissimilarity()`** computes between-CI Euclidean / Frobenius dissimilarities with a percentile-bootstrap CI, which is a more honest "effect size" for between-condition differences than just eyeballing two CIs side-by-side.
@@ -120,7 +120,7 @@ Looking at these results was quite a thrill. This was my first published paper o
 
 ## Quick look
 
-For your own data, the minimum you need is a response CSV with `participant_id`, `stimulus`, and `response` columns (optionally `rt`), plus either an `rcicr` `.RData` for 2IFC or a noise matrix for Brief-RC:
+For your own data, the minimum you need is a response CSV with `participant_id`, `stimulus`, and `response` columns (optionally `rt`), plus either an `rcicr` `.Rdata` for 2IFC or a noise matrix for Brief-RC:
 
 ```{r eval=FALSE}
 # install.packages("remotes")
@@ -128,19 +128,25 @@ remotes::install_github("olivethree/rcisignal")
 
 library(rcisignal)
 
+# Don't have data yet? Two helpers generate a complete simulated dataset
+# (responses + noise pool) so you can try every step below right away:
+#   sim <- simulate_2ifc_data()        # 50 x 2 producers, 500 trials each
+#   sim <- simulate_briefrc_data()     # Brief-RC equivalent
+# then pass sim$data and sim$rdata_path everywhere "responses" / "rdata" appear.
+
 # 1. Diagnose the raw data first
 responses <- read.csv("path/to/responses.csv")
 report    <- run_diagnostics(
   responses,
   method = "2ifc",
-  rdata  = "path/to/rcicr_stimuli.RData",
+  rdata  = "path/to/rcicr_stimuli.Rdata",
   col_rt = "rt"
 )
 print(report)
 
 # 2. Within-condition reliability
-trustworthy   <- ci_from_responses_2ifc(trust_responses,   "data/rcicr_stimuli.RData", "base")
-untrustworthy <- ci_from_responses_2ifc(untrust_responses, "data/rcicr_stimuli.RData", "base")
+trustworthy   <- ci_from_responses_2ifc(trust_responses,   "data/rcicr_stimuli.Rdata", "base")
+untrustworthy <- ci_from_responses_2ifc(untrust_responses, "data/rcicr_stimuli.Rdata", "base")
 print(run_reliability(trustworthy$signal_matrix,   seed = 1))
 print(run_reliability(untrustworthy$signal_matrix, seed = 1))
 
