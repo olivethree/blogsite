@@ -1,18 +1,18 @@
-## rcicrdiagnostics
+## rcisignal
 
-**Data-quality diagnostics for reverse correlation experiments in social psychology.**
+**Quality checks for reverse-correlation data and classification images.**
 
-[**Get package from GitHub**](https://github.com/olivethree/rcicrdiagnostics) \| [**User's Guide**](https://olivethree.github.io/rcicrdiagnostics/articles/tutorial.html) \| [**Blog post**](posts/p_3/index.qmd) \| [**DOI**](https://doi.org/10.5281/zenodo.19734757)
+[**Get package from GitHub**](https://github.com/olivethree/rcisignal) \| [**User's Guide**](https://olivethree.github.io/rcisignal/) \| [**Blog post**](posts/p_3/index.qmd) \| [**DOI**](https://doi.org/10.5281/zenodo.19961180)
 
-Reverse correlation data processing pipelines may sometimes fail quietly. A response column coded `{0, 1}` instead of `{-1, 1}`, stimulus IDs that are off by one, a noise matrix whose dimensions don't match the response data, a parameter file from the wrong stimulus batch — none of these throw errors, but all of them produce a classification image (CI) that looks convincing and is mathematically wrong.
+Reverse-correlation pipelines fail quietly. A response column coded `{0, 1}` instead of `{-1, 1}`, stimulus IDs that are off by one, a parameter file from the wrong stimulus batch (none of these throw errors, but all of them produce a classification image (CI) that looks convincing and is mathematically wrong). And even when the input is clean, you cannot tell from a CI alone whether it is *reliable* or whether two CIs are *discriminably* different, without running extra analyses that most pipelines skip.
 
-`rcicrdiagnostics` is an R package I put together to catch those silent failures **before** you compute any CI or information value. You give it a response CSV plus your auxiliary stimulus file, call `run_diagnostics()`, and get back a clean pass / warn / fail report per check.
+`rcisignal` is an R package that bundles the three checks under one toolkit: data-quality diagnostics on the response data, pixel-level reliability and dissimilarity analyses on the CIs, and infoVal diagnostics tuned for trial-count-matched references and Brief-RC.
 
--   **Covers both pipelines** through a single `method` argument: the classical two-image forced choice (2IFC) via the `rcicr` package (Dotsch, 2016, 2023), and Brief-RC ([Schmitz, Rougier, & Yzerbyt, 2024](https://doi.org/10.1002/ejsp.3100)).
+-   **Covers both pipelines** through one `method` argument: 2IFC via `rcicr` (Dotsch, 2016, 2023), and Brief-RC ([Schmitz, Rougier, & Yzerbyt, 2024](https://doi.org/10.1002/ejsp.3100)).
 
--   **Runnable demo ships with the package.** A synthetic base face (thispersondoesnotexist.com) and bogus-data generators for 2IFC, Brief-RC 12, and Brief-RC 20 let you try the full flow in about a minute without collecting any real study data.
+-   **Worked example included.** The user's guide ships a precomputed example on Oliveira et al. (2019, *Social Cognition*) with pairwise FWER-controlled cluster-agreement maps and a per-region infoVal grid on real published data.
 
--   **User's guide with a dedicated chapter on CI scaling decisions**: which option to use for infoVal, pixel-wise correlations, rating-task stimuli, and figures. Aims to clear up confusion that many researchers out there bump into from time to time.
+-   **Programmatic face-region masks**, a six-step infoVal diagnostic, FWER-controlled cluster-agreement maps, and a runnable synthetic demo so you can see the full flow without your own data.
 
 ------------------------------------------------------------------------
 

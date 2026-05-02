@@ -209,12 +209,12 @@ ga('send', {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#what-scaling-is-and-why-it-exists" id="toc-what-scaling-is-and-why-it-exists" class="nav-link active" data-scroll-target="#what-scaling-is-and-why-it-exists">What scaling is, and why it exists</a></li>
+  <li><a href="#what-scaling-is-and-why-do-we-need-it" id="toc-what-scaling-is-and-why-do-we-need-it" class="nav-link active" data-scroll-target="#what-scaling-is-and-why-do-we-need-it">What scaling is and why do we need it</a></li>
   <li><a href="#the-five-options" id="toc-the-five-options" class="nav-link" data-scroll-target="#the-five-options">The five options</a></li>
   <li><a href="#which-scaling-for-which-analysis" id="toc-which-scaling-for-which-analysis" class="nav-link" data-scroll-target="#which-scaling-for-which-analysis">Which scaling for which analysis</a></li>
   <li><a href="#common-pitfalls" id="toc-common-pitfalls" class="nav-link" data-scroll-target="#common-pitfalls">Common pitfalls</a></li>
   <li><a href="#recommended-defaults" id="toc-recommended-defaults" class="nav-link" data-scroll-target="#recommended-defaults">Recommended defaults</a></li>
-  <li><a href="#a-typical-workflow" id="toc-a-typical-workflow" class="nav-link" data-scroll-target="#a-typical-workflow">A typical workflow</a></li>
+  <li><a href="#a-typical-r-workflow" id="toc-a-typical-r-workflow" class="nav-link" data-scroll-target="#a-typical-r-workflow">A typical R workflow</a></li>
   <li><a href="#tldr" id="toc-tldr" class="nav-link" data-scroll-target="#tldr">TL;DR</a></li>
   <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
   </ul>
@@ -258,15 +258,15 @@ ga('send', {
 </header>
 
 <p>If you’ve ever generated a classification image (CI) with <a href="https://github.com/rdotsch/rcicr"><code>rcicr</code></a> (Dotsch, 2023), you’ve had to pick a <code>scaling</code> argument. There are five options and the documentation mostly tells you what each one does, not which one to use for what. After running into this question more times than I’d like to admit, I wrote down the answer for myself and thought I might as well share with the research community.</p>
-<p>This post is a standalone version of the scaling chapter in the <a href="https://olivethree.github.io/rcicrdiagnostics/articles/tutorial.html"><code>rcicrdiagnostics</code> user’s guide</a>. Worth reading even if you don’t use that package.</p>
+<p>This post is a standalone version of the <strong>CI scaling options</strong> chapter in the <a href="https://olivethree.github.io/rcisignal/articles/rcisignal.html"><code>rcisignal</code> user’s guide</a>. Worth reading even if you don’t use that package.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="ci_scaling_post.png" class="img-fluid figure-img"></p>
 <p></p><figcaption class="figure-caption">Image co-generated with Gemini 3 Flash Image (NB2)</figcaption><p></p>
 </figure>
 </div>
-<section id="what-scaling-is-and-why-it-exists" class="level2">
-<h2 class="anchored" data-anchor-id="what-scaling-is-and-why-it-exists">What scaling is, and why it exists</h2>
+<section id="what-scaling-is-and-why-do-we-need-it" class="level2">
+<h2 class="anchored" data-anchor-id="what-scaling-is-and-why-do-we-need-it">What scaling is and why do we need it</h2>
 <p>When <code>rcicr::batchGenerateCI2IFC()</code> (or <code>generateCI2IFC()</code>) computes a CI, the underlying math produces a 2D pixel array whose values are typically centred near zero and span a small range, often somewhere between -0.01 and +0.01, depending on signal strength and number of trials. <strong>These numbers are the real signal</strong>: they encode how much each pixel contributes to the participant’s mental image.</p>
 <p>The problem is that they cannot be displayed as-is. Monitors render pixel intensities between 0 (black) and 1 (white); negative values have no display meaning, and the absolute values would be too small to see anyway.</p>
 <p>Scaling solves this display problem by remapping the CI into a range a monitor can render. Every CI that <code>rcicr</code> returns therefore has two parallel fields:</p>
@@ -323,7 +323,7 @@ ga('send', {
 </section>
 <section id="which-scaling-for-which-analysis" class="level2">
 <h2 class="anchored" data-anchor-id="which-scaling-for-which-analysis">Which scaling for which analysis</h2>
-<p>The short version: <strong>numerical analyses operate on <code>ci$ci</code>; visualisation choices operate on <code>ci$scaled</code></strong>. The <code>scaling</code> argument only affects the second.</p>
+<p>The short version: <strong>numerical analyses operate on <code>ci$ci</code>; visualization choices operate on <code>ci$scaled</code></strong>. The <code>scaling</code> argument only affects the second.</p>
 <p>The longer version, by use case:</p>
 <table class="table">
 <colgroup>
@@ -396,8 +396,8 @@ ga('send', {
 <li><strong>Any numerical analysis</strong> (infoVal, correlations, distances, effect sizes, pixel tests): compute from <code>ci$ci</code>, regardless of the scaling argument passed.</li>
 </ul>
 </section>
-<section id="a-typical-workflow" class="level2">
-<h2 class="anchored" data-anchor-id="a-typical-workflow">A typical workflow</h2>
+<section id="a-typical-r-workflow" class="level2">
+<h2 class="anchored" data-anchor-id="a-typical-r-workflow">A typical R workflow</h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Generate CIs with autoscale for a visually-comparable set of images.</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co">#    Useful for rating-task stimuli or figure panels: the strongest-signal</span></span>

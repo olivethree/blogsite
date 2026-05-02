@@ -10,7 +10,254 @@
 <atom:link href="https://manueloliveira.nl/blog.xml" rel="self" type="application/rss+xml"/>
 <description>Explore research tools and apps developed by Manuel Oliveira. Includes coding projects, academic resources, tools and tutorials for anyone conducting Psychology research or interested in reverse-correlation methods, face image manipulation, or data analysis with R and specific R packages for experimental psychology research. Learn more today!</description>
 <generator>quarto-1.0.37</generator>
-<lastBuildDate>Fri, 24 Apr 2026 22:00:00 GMT</lastBuildDate>
+<lastBuildDate>Fri, 01 May 2026 22:00:00 GMT</lastBuildDate>
+<item>
+  <title>Introducing rcisignal: Quality, reliability, and discriminability checks for reverse correlation data</title>
+  <dc:creator>M. Oliveira</dc:creator>
+  <link>https://manueloliveira.nl/posts/p_3/index.html</link>
+  <description><![CDATA[ 
+
+
+
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://manueloliveira.nl/posts/p_3/logo.svg" class="img-fluid figure-img" width="220"></p>
+</figure>
+</div>
+<p>If you’ve ever run a reverse correlation (RC) experiment, you’ve probably lived this moment before: you feed your data into the classification image (CI) generation pipeline, look at the output, and something just feels <em>off</em> (but apparently nothing technically broke). You see no errors or warnings, just a CI that <em>looks</em> plausible (don’t we all more easily see what <em>we want</em> to see! ;) ) and yet something just doesn’t quite add up, or output values that look higher or lower than you would expect in theory.</p>
+<p>More often than not, the issue is not with your theory, but with your data pipeline. So…time for some data pipeline plumbing! Put on your Super Luigi hat and <em>let’sa gooo!</em> (sorry Mario, Luigi is way cooler!)</p>
+<p><strong>BUT</strong> even when your input data is perfectly clean, you still cannot tell, just by looking at a CI, whether it is <strong>reliable</strong> (would the same participant’s data produce a similar CI on another day?) or <strong>discriminable</strong> (does this CI actually look different from the CI of a comparison condition, beyond what you’d expect from noise alone?). Some papers in the Social Psychology RC literature analyze how CI pixels of different representation target condition correlate to assess similarity, and some venture into pixel cluster analyses, but tools to facilitate such analyses remained buried in lab drawers (perfectly understanble! There is often just no time worth spending in walking the exra mile of converting study scripts into a software development odyssey).</p>
+<p>After repeatadely running into all these questions in the past years (both in my own projects and when helping others), I decided to put it all in one toolkit. After some iterations and interim package projects I decided to compile everything into a bigger package baptized as <strong><code>rcisignal</code></strong>, which I am now sufficiently happy to release publicly (v0.1.0).</p>
+<section id="what-it-does" class="level2">
+<h2 class="anchored" data-anchor-id="what-it-does">What it does</h2>
+<p><code>rcisignal</code> is an R package that bundles three things you should be doing on every RC dataset before you commit to an interpretation, but which are usually scattered across personal scripts (when they get done at all):</p>
+<ul>
+<li><strong>Data-quality diagnostics</strong> on your trial-level response data, <em>before</em> you compute any CIs. Call <code>run_diagnostics()</code> and get back a clear <strong>pass / warn / fail / skip</strong> report per check.</li>
+<li><strong>Pixel-level reliability and dissimilarity analyses</strong> on the CIs themselves: does each condition agree internally? Are two conditions actually different, with proper FWER control over the pixel grid?</li>
+<li><strong>InfoVal diagnostics</strong> for individual-level signal magnitude, with a reference distribution that’s keyed on <em>each producer’s actual trial count</em> (this matters a lot for Brief-RC; more on that below).</li>
+</ul>
+<p>It supports both of the pipelines that currently dominate the field:</p>
+<ul>
+<li><strong>Two-image forced choice (2IFC)</strong>, the classical reverse correlation paradigm implemented in the <a href="https://github.com/rdotsch/rcicr"><code>rcicr</code></a> package (Dotsch, 2016, 2023).</li>
+<li><strong>Brief-RC</strong>, the more recent variant introduced by <a href="https://doi.org/10.1002/ejsp.3100">Schmitz, Rougier, and Yzerbyt (2024)</a> that shows 12 or 20 noisy faces per trial instead of two.</li>
+</ul>
+<p>A single <code>method</code> argument decides which pipeline you’re working in; the rest of the API is shared.</p>
+</section>
+<section id="data-quality-diagnostics-what-the-checks-actually-catch" class="level2">
+<h2 class="anchored" data-anchor-id="data-quality-diagnostics-what-the-checks-actually-catch">Data-quality diagnostics: what the checks actually catch</h2>
+<p>Here’s a flavor of what comes out of <code>run_diagnostics()</code>. Every finding lands in one of four buckets (<strong>pass</strong>, <strong>warn</strong>, <strong>fail</strong>, <strong>skip</strong>), and each check names the participants or trials involved so you can jump straight to fixing them.</p>
+<ul>
+<li><strong>Response coding.</strong> Are responses <code>{-1, +1}</code> as the pipeline expects, or accidentally <code>{0, 1}</code> from your data-collection tool? This is easy to miss and it silently halves your CI.</li>
+<li><strong>Trial counts.</strong> Does every participant have the number of trials you expected? Participants who terminated early or whose data got partially lost skew your group-level CIs.</li>
+<li><strong>Stimulus alignment.</strong> Do the stimulus IDs in your response data actually exist in your stimulus pool, and are they within range? Off-by-one errors here are surprisingly common and hard to spot visually.</li>
+<li><strong>Response bias.</strong> Are some participants just clicking the same side over and over? These produce near-constant “CIs” that carry no signal.</li>
+<li><strong>Reaction times.</strong> Any participants with an unusually high rate of extremely fast responses? Likely rushed or inattentive trials that contaminate the CI.</li>
+<li><strong>Duplicates.</strong> Is the same trial somehow recorded twice? Rare but happens with concatenated session files.</li>
+<li><strong>Version compatibility.</strong> Is your <code>.RData</code> parameter file from the same <code>rcicr</code> version you’re now trying to analyse with?</li>
+<li><strong>Response inversion.</strong> Does a participant’s CI look like its own mirror image? A small but real fraction of participants get confused about which face they’re supposed to be picking, and their “inverted” CIs cancel out everyone else’s.</li>
+</ul>
+<p>If everything passes, you can move on to generating CIs and computing reliability with confidence. If something fails, the report tells you exactly which participants or rows to investigate before you continue. For Brief-RC users, <code>validate_noise_matrix()</code> is a separate one-shot check that confirms your noise matrix dimensions are consistent with what your responses assume.</p>
+</section>
+<section id="reliability-and-dissimilarity-the-half-people-skip" class="level2">
+<h2 class="anchored" data-anchor-id="reliability-and-dissimilarity-the-half-people-skip">Reliability and dissimilarity: the half people skip</h2>
+<p>Once your input data is clean and you have per-participant CIs, some questions often worth asking are:</p>
+<ul>
+<li><p>Do participants <em>within</em> a condition agree with each other (reliability)?</p></li>
+<li><p>And are participants <em>across</em> two conditions actually responding to different things (discriminability)?</p></li>
+</ul>
+<p><code>rcisignal</code> ships a coordinated <code>rel_*</code> family for these:</p>
+<ul>
+<li><strong><code>run_reliability()</code></strong> is the high-level “is this condition internally coherent?” entry point. Internally it stitches together split-half permutation tests, ICC(3,<em>) (with a guard on which form to use given your trial budget), leave-one-out producer agreement, and a pixel-wise</em> t*-map vs the empirical null. The output prints as a one-page report with all four numbers and a verdict.</li>
+<li><strong><code>run_discriminability()</code></strong> asks the corresponding “are these two conditions actually different?” question. It produces a <strong>cluster-agreement map</strong>: a neuroimaging-style FWER-controlled pixel map of where two CIs differ, with the cluster threshold and permutation count fully configurable. Use <code>run_discriminability_pairwise()</code> for an <em>n</em>x<em>n</em> grid of contrasts when you have more than two conditions.</li>
+<li><strong><code>pixel_t_test()</code></strong> and <strong><code>agreement_map_test()</code></strong> are the lower-level building blocks if you want to compose the analysis yourself, e.g.&nbsp;with custom face masks or non-default cluster-forming thresholds.</li>
+<li><strong><code>rel_dissimilarity()</code></strong> computes between-CI Euclidean / Frobenius dissimilarities with a percentile-bootstrap CI, which is a more honest “effect size” for between-condition differences than just eyeballing two CIs side-by-side.</li>
+<li><strong>The <code>plot_*</code> family</strong> (<code>plot_agreement_map()</code>, <code>plot_dissimilarity_grid()</code>, <code>plot_ci_overlay()</code>, <code>plot_face_mask()</code>) gives you publication-ready figures without needing to wrangle <code>image()</code> calls by hand.</li>
+</ul>
+<p>These analyses can help you gather more evidence about <em>whether</em> and <em>where</em> the people actually producing the CIs actually agreed. This can be triangulated with the subjective trait ratings of the resulting CIs by other new participants who did not produce the CIs in an RC task. This is especially useful to overcome some known limitation of the phase 2 of trait ratings of group-level CIs (see Cone et al., 2021).</p>
+</section>
+<section id="infoval-and-its-distributions" class="level2">
+<h2 class="anchored" data-anchor-id="infoval-and-its-distributions">InfoVal and its distributions</h2>
+<p>A question that some colleagues venturing into RC methods bumped into and struggled with over the past few years was whether a low or negative individual-level <strong>infoVal</strong> score (introduced by Brinkman et al., 2019) means the data are broken or the metric is just noisy. <code>rcisignal</code> ships three functions that try to make that question answerable instead of guessable:</p>
+<ul>
+<li><strong><code>infoval()</code></strong> computes per-producer infoVal with a reference distribution keyed on <em>each producer’s actual trial count</em>. This closes a calibration gap in the original <code>rcicr::computeInfoVal2IFC()</code>, which keys the reference on pool size and biases Brief-RC infoVals downward.</li>
+<li><strong><code>make_face_mask()</code></strong> generates the oval face-region masks used by <a href="https://doi.org/10.1002/ejsp.3100">Schmitz et al.&nbsp;(2024)</a>, and the sub-regions: eyes, nose, mouth, upper / lower face. Pass it to the infoVal computation to restrict the Frobenius norm to the face area instead of integrating over hair and background.</li>
+<li><strong><code>diagnose_infoval()</code></strong> is a guided diagnostic that runs in six steps: simulate the reference at every trial count in the data, sanity-check it with a random responder, compute per-producer z unmasked, compute it masked, compute the group-mean CI’s z, and tally the per-producer distribution. The report explains what to look at first and what is honest to put in a methods section. Both 2IFC and Brief-RC are supported natively.</li>
+</ul>
+<p>The user’s guide has a chapter on what infoVal scores actually look like in published 2IFC and Brief-RC studies (the answer depends on paradigm and target, more than people often assume).</p>
+</section>
+<section id="worked-example-using-real-data-oliveira-et-al.-2019" class="level2">
+<h2 class="anchored" data-anchor-id="worked-example-using-real-data-oliveira-et-al.-2019">Worked example using real data: Oliveira et al.&nbsp;(2019)</h2>
+<p>To make the output concrete, here are two contrasts from the open data of <a href="https://doi.org/10.1002/ejsp.2569">Oliveira, Garcia-Marques, Dotsch &amp; Garcia-Marques (2019)</a>. In Study 1, 200 participants completed a 2IFC reverse-correlation task on a 256 x 256 grayscale male base face across 10 trait conditions (20 producers per trait, 300 trials each). The four traits highlighted here are <strong>Trustworthy</strong>, <strong>Friendly</strong>, <strong>Competent</strong>, and <strong>Dominant</strong>.</p>
+<p>The motivating prediction was that the <strong>Dominant vs Competent</strong> contrast would yield broader pixel-level differences than the <strong>Trustworthy vs Friendly</strong> contrast. Trustworthy and friendly both load on the warmth dimension and share much of their facial encoding; dominant and competent are usually thought of as agency-related but have been argued to dissociate, with dominance reading off coarser whole-face features and competence reading off subtler ability cues.</p>
+<section id="descriptive-cluster-agreement-maps" class="level3">
+<h3 class="anchored" data-anchor-id="descriptive-cluster-agreement-maps">Descriptive cluster-agreement maps</h3>
+<p>Difference of the two group-mean CIs across all face-oval pixels; no inferential filter applied. Red = first condition stronger; blue = second condition stronger.</p>
+<table class="table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<tbody>
+<tr class="odd">
+<td><strong>Trustworthy − Friendly</strong></td>
+<td><strong>Dominant − Competent</strong></td>
+</tr>
+<tr class="even">
+<td><img src="https://manueloliveira.nl/posts/p_3/figures/oliveira_2019/pairwise_descriptive_trust_vs_friendly.png" class="img-fluid" alt="Descriptive map: trust minus friendly"></td>
+<td><img src="https://manueloliveira.nl/posts/p_3/figures/oliveira_2019/pairwise_descriptive_dominant_vs_competent.png" class="img-fluid" alt="Descriptive map: dominant minus competent"></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="fwer-controlled-cluster-agreement-maps" class="level3">
+<h3 class="anchored" data-anchor-id="fwer-controlled-cluster-agreement-maps">FWER-controlled cluster-agreement maps</h3>
+<p>Same difference signals, but pixels outside any cluster significant at <em>p</em> &lt; .05 are transparent (cluster threshold |t| &gt; 2.0; 2000 stratified label permutations; max-mass null).</p>
+<table class="table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<tbody>
+<tr class="odd">
+<td><strong>Trustworthy − Friendly</strong></td>
+<td><strong>Dominant − Competent</strong></td>
+</tr>
+<tr class="even">
+<td><img src="https://manueloliveira.nl/posts/p_3/figures/oliveira_2019/pairwise_trust_vs_friendly.png" class="img-fluid" alt="FWER map: trust minus friendly"></td>
+<td><img src="https://manueloliveira.nl/posts/p_3/figures/oliveira_2019/pairwise_dominant_vs_competent.png" class="img-fluid" alt="FWER map: dominant minus competent"></td>
+</tr>
+</tbody>
+</table>
+<p>The two contrasts pick out qualitatively different spatial signatures, broadly consistent with the prediction. Trustworthy versus Friendly localizes around the eyes and mid-face (exactly the kind of socially-relevant feature region the warmth dimension is read off). Dominant versus Competent spreads more widely across the face, consistent with a contrast that draws on both whole-face agency cues and finer ability cues. Among the pixels that survive the FWER filter, the Dominant vs Competent map retains noticeably more spatial extent than the Trustworthy vs Friendly map.</p>
+</section>
+<section id="per-region-informational-value" class="level3">
+<h3 class="anchored" data-anchor-id="per-region-informational-value">Per-region informational value</h3>
+<p>Magnitude per producer also varies by face region. The grid below runs <code>infoval()</code> separately on each (trait, region) cell using the <a href="https://doi.org/10.1002/ejsp.3100">Schmitz et al.&nbsp;(2024)</a> face masks and the trial-count-matched reference distribution. Cells report <strong>median producer z-score</strong> and (in parentheses) <strong>how many of 20 producers cleared the conventional <code>z &gt;= 1.96</code> threshold</strong>.</p>
+<table class="table">
+<colgroup>
+<col style="width: 18%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Trait</th>
+<th>Full face</th>
+<th>Upper face</th>
+<th>Eyes</th>
+<th>Mouth</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Trustworthy</td>
+<td>+0.50 (3/20)</td>
+<td>+0.30 (2/20)</td>
+<td>+0.62 (0/20)</td>
+<td>+0.53 (3/20)</td>
+</tr>
+<tr class="even">
+<td>Friendly</td>
+<td>+0.97 (5/20)</td>
+<td>+0.23 (2/20)</td>
+<td>+0.09 (2/20)</td>
+<td>+0.75 (4/20)</td>
+</tr>
+<tr class="odd">
+<td>Competent</td>
+<td>+0.70 (3/20)</td>
+<td>+0.21 (3/20)</td>
+<td>+0.24 (2/20)</td>
+<td>+0.25 (5/20)</td>
+</tr>
+<tr class="even">
+<td>Dominant</td>
+<td>+0.89 (6/20)</td>
+<td>+0.37 (5/20)</td>
+<td>+0.76 (3/20)</td>
+<td>+0.38 (2/20)</td>
+</tr>
+</tbody>
+</table>
+<p>The per-region picture is more granular than the headline full-face number suggests. Dominance carries comparatively strong signal in the <strong>eyes</strong> and <strong>upper face</strong> but only modest signal around the <strong>mouth</strong>; friendliness flips the pattern, with the <strong>mouth</strong> carrying its strongest regional signal and the <strong>eyes</strong> the weakest. Trustworthy localizes broadly across the eyes and mouth without a clear regional peak. The full per-region grid, the bootstrap dissimilarity intervals that accompany it, and the methods-section reporting templates are in vignette §12 of the <a href="https://olivethree.github.io/rcisignal/articles/rcisignal.html">user’s guide</a>.</p>
+<p>Looking at these results was quite a thrill. This was my first published paper of my PhD project. It was published a long time ago, in a world where the infoVal metric was not yet established, there was no clear understanding of the limitations of Phase 2 trait ratings using group CIs, and I was but a young apprentice learning the new ways of doing research post-reproducibility crisis. <em>What if the results do not replicate with a more scrutinized data pipeline? What if the infoVals suggest none of my CIs in that paper had any signal? What if the reliability analyses show no agreement?</em> Lucky me…the results were not only replicated, BUT extended to a new level of insights about the data. What a ride! Anyway…this could be useful for any meta-analysis enthusiasts out there ;)</p>
+</section>
+</section>
+<section id="quick-look" class="level2">
+<h2 class="anchored" data-anchor-id="quick-look">Quick look</h2>
+<p>For your own data, the minimum you need is a response CSV with <code>participant_id</code>, <code>stimulus</code>, and <code>response</code> columns (optionally <code>rt</code>), plus either an <code>rcicr</code> <code>.RData</code> for 2IFC or a noise matrix for Brief-RC:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><span class="co" style="color: #5E5E5E;"># install.packages("remotes")</span></span>
+<span id="cb1-2">remotes<span class="sc" style="color: #5E5E5E;">::</span><span class="fu" style="color: #4758AB;">install_github</span>(<span class="st" style="color: #20794D;">"olivethree/rcisignal"</span>)</span>
+<span id="cb1-3"></span>
+<span id="cb1-4"><span class="fu" style="color: #4758AB;">library</span>(rcisignal)</span>
+<span id="cb1-5"></span>
+<span id="cb1-6"><span class="co" style="color: #5E5E5E;"># 1. Diagnose the raw data first</span></span>
+<span id="cb1-7">responses <span class="ot" style="color: #003B4F;">&lt;-</span> <span class="fu" style="color: #4758AB;">read.csv</span>(<span class="st" style="color: #20794D;">"path/to/responses.csv"</span>)</span>
+<span id="cb1-8">report    <span class="ot" style="color: #003B4F;">&lt;-</span> <span class="fu" style="color: #4758AB;">run_diagnostics</span>(</span>
+<span id="cb1-9">  responses,</span>
+<span id="cb1-10">  <span class="at" style="color: #657422;">method =</span> <span class="st" style="color: #20794D;">"2ifc"</span>,</span>
+<span id="cb1-11">  <span class="at" style="color: #657422;">rdata  =</span> <span class="st" style="color: #20794D;">"path/to/rcicr_stimuli.RData"</span>,</span>
+<span id="cb1-12">  <span class="at" style="color: #657422;">col_rt =</span> <span class="st" style="color: #20794D;">"rt"</span></span>
+<span id="cb1-13">)</span>
+<span id="cb1-14"><span class="fu" style="color: #4758AB;">print</span>(report)</span>
+<span id="cb1-15"></span>
+<span id="cb1-16"><span class="co" style="color: #5E5E5E;"># 2. Within-condition reliability</span></span>
+<span id="cb1-17">trustworthy   <span class="ot" style="color: #003B4F;">&lt;-</span> <span class="fu" style="color: #4758AB;">ci_from_responses_2ifc</span>(trust_responses,   <span class="st" style="color: #20794D;">"data/rcicr_stimuli.RData"</span>, <span class="st" style="color: #20794D;">"base"</span>)</span>
+<span id="cb1-18">untrustworthy <span class="ot" style="color: #003B4F;">&lt;-</span> <span class="fu" style="color: #4758AB;">ci_from_responses_2ifc</span>(untrust_responses, <span class="st" style="color: #20794D;">"data/rcicr_stimuli.RData"</span>, <span class="st" style="color: #20794D;">"base"</span>)</span>
+<span id="cb1-19"><span class="fu" style="color: #4758AB;">print</span>(<span class="fu" style="color: #4758AB;">run_reliability</span>(trustworthy<span class="sc" style="color: #5E5E5E;">$</span>signal_matrix,   <span class="at" style="color: #657422;">seed =</span> <span class="dv" style="color: #AD0000;">1</span>))</span>
+<span id="cb1-20"><span class="fu" style="color: #4758AB;">print</span>(<span class="fu" style="color: #4758AB;">run_reliability</span>(untrustworthy<span class="sc" style="color: #5E5E5E;">$</span>signal_matrix, <span class="at" style="color: #657422;">seed =</span> <span class="dv" style="color: #AD0000;">1</span>))</span>
+<span id="cb1-21"></span>
+<span id="cb1-22"><span class="co" style="color: #5E5E5E;"># 3. Between-condition discriminability</span></span>
+<span id="cb1-23">result <span class="ot" style="color: #003B4F;">&lt;-</span> <span class="fu" style="color: #4758AB;">run_discriminability</span>(</span>
+<span id="cb1-24">  trustworthy<span class="sc" style="color: #5E5E5E;">$</span>signal_matrix,</span>
+<span id="cb1-25">  untrustworthy<span class="sc" style="color: #5E5E5E;">$</span>signal_matrix,</span>
+<span id="cb1-26">  <span class="at" style="color: #657422;">seed =</span> <span class="dv" style="color: #AD0000;">1</span></span>
+<span id="cb1-27">)</span>
+<span id="cb1-28"><span class="fu" style="color: #4758AB;">print</span>(result)</span>
+<span id="cb1-29"><span class="fu" style="color: #4758AB;">plot</span>(result)</span></code></pre></div>
+</div>
+<p>That’s it! A full walkthrough, including how to interpret cluster maps, sample-size warnings, when to use ICC(3,1) vs ICC(3,k), and Brief-RC end-to-end, can be found in the package’s <a href="https://olivethree.github.io/rcisignal/articles/rcisignal.html">user’s guide</a>.</p>
+</section>
+<section id="status-and-whats-next" class="level2">
+<h2 class="anchored" data-anchor-id="status-and-whats-next">Status and what’s next</h2>
+<p>v0.1.0 is the first public release. The API is not yet frozen, I expect to keep refining functions based on feedback I might get in the coming months, so please indicate the current version if you use it in any of your work. Distribution is GitHub-only, and I have no CRAN plans, as working on RC methods stuff is mainly a “hobby” beyond my daily job research focus.</p>
+<p>Feedback, bug reports, and feature requests are very welcome (m.j.barbosa.de.oliveira@tue.nl).</p>
+</section>
+<section id="links" class="level2">
+<h2 class="anchored" data-anchor-id="links">Links</h2>
+<ul>
+<li><strong>Package on GitHub</strong>: <a href="https://github.com/olivethree/rcisignal" class="uri">https://github.com/olivethree/rcisignal</a></li>
+<li><strong>User’s guide</strong>: <a href="https://olivethree.github.io/rcisignal/" class="uri">https://olivethree.github.io/rcisignal/</a></li>
+<li><strong>Zenodo record</strong>: <a href="https://doi.org/10.5281/zenodo.19961180" class="uri">https://doi.org/10.5281/zenodo.19961180</a></li>
+</ul>
+<p>Thanks for reading!</p>
+</section>
+<section id="references" class="level2">
+<h2 class="anchored" data-anchor-id="references">References</h2>
+<ul>
+<li><p>Brinkman, L., Goffin, S., van de Schoot, R., van Haren, N. E. M., Dotsch, R., &amp; Aarts, H. (2019). Quantifying the informational value of classification images. <em>Behavior Research Methods</em>, <em>51</em>(5), 2059–2073. <a href="https://doi.org/10.3758/s13428-019-01232-2" class="uri">https://doi.org/10.3758/s13428-019-01232-2</a></p></li>
+<li><p>Cone, J., Brown-Iannuzzi, J. L., Lei, R., &amp; Dotsch, R. (2021). Type I Error Is Inflated in the Two-Phase Reverse Correlation Procedure. Social Psychological and Personality Science, 12(5), 760–768. <a href="https://doi.org/10.1177/1948550620938616" class="uri">https://doi.org/10.1177/1948550620938616</a></p></li>
+<li><p>Dotsch, R. (2016). <em>rcicr: Reverse-correlation image-classification toolbox</em> [R package, development versions]. <a href="https://github.com/rdotsch/rcicr" class="uri">https://github.com/rdotsch/rcicr</a></p></li>
+<li><p>Dotsch, R. (2023). <em>rcicr: Reverse correlation image classification toolbox</em> (Version 1.0.1) [R package]. <a href="https://github.com/rdotsch/rcicr" class="uri">https://github.com/rdotsch/rcicr</a></p></li>
+<li><p>Oliveira, M., Garcia-Marques, T., Dotsch, R., &amp; Garcia-Marques, L. (2019). Combining traits into a face: A reverse correlation approach. <em>Social Cognition</em>, <em>37</em>(5), 516-545. <a href="https://doi.org/10.1521/soco.2019.37.5.516" class="uri">https://doi.org/10.1521/soco.2019.37.5.516</a></p></li>
+<li><p>Schmitz, M., Rougier, M., &amp; Yzerbyt, V. (2024). Introducing the brief reverse correlation: An improved tool to assess visual representations. <em>European Journal of Social Psychology</em>. <a href="https://doi.org/10.1002/ejsp.3100" class="uri">https://doi.org/10.1002/ejsp.3100</a></p></li>
+</ul>
+
+
+</section>
+
+ ]]></description>
+  <category>R</category>
+  <category>Reverse Correlation</category>
+  <category>Psychology</category>
+  <category>Package</category>
+  <guid>https://manueloliveira.nl/posts/p_3/index.html</guid>
+  <pubDate>Fri, 01 May 2026 22:00:00 GMT</pubDate>
+  <media:content url="https://manueloliveira.nl/posts/p_3/logo.svg" medium="image" type="image/svg+xml"/>
+</item>
 <item>
   <title>Choosing a CI scaling option in rcicr</title>
   <dc:creator>M. Oliveira</dc:creator>
@@ -20,15 +267,15 @@
 
 
 <p>If you’ve ever generated a classification image (CI) with <a href="https://github.com/rdotsch/rcicr"><code>rcicr</code></a> (Dotsch, 2023), you’ve had to pick a <code>scaling</code> argument. There are five options and the documentation mostly tells you what each one does, not which one to use for what. After running into this question more times than I’d like to admit, I wrote down the answer for myself and thought I might as well share with the research community.</p>
-<p>This post is a standalone version of the scaling chapter in the <a href="https://olivethree.github.io/rcicrdiagnostics/articles/tutorial.html"><code>rcicrdiagnostics</code> user’s guide</a>. Worth reading even if you don’t use that package.</p>
+<p>This post is a standalone version of the <strong>CI scaling options</strong> chapter in the <a href="https://olivethree.github.io/rcisignal/articles/rcisignal.html"><code>rcisignal</code> user’s guide</a>. Worth reading even if you don’t use that package.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="https://manueloliveira.nl/posts/p_4/ci_scaling_post.png" class="img-fluid figure-img"></p>
 <p></p><figcaption class="figure-caption">Image co-generated with Gemini 3 Flash Image (NB2)</figcaption><p></p>
 </figure>
 </div>
-<section id="what-scaling-is-and-why-it-exists" class="level2">
-<h2 class="anchored" data-anchor-id="what-scaling-is-and-why-it-exists">What scaling is, and why it exists</h2>
+<section id="what-scaling-is-and-why-do-we-need-it" class="level2">
+<h2 class="anchored" data-anchor-id="what-scaling-is-and-why-do-we-need-it">What scaling is and why do we need it</h2>
 <p>When <code>rcicr::batchGenerateCI2IFC()</code> (or <code>generateCI2IFC()</code>) computes a CI, the underlying math produces a 2D pixel array whose values are typically centred near zero and span a small range, often somewhere between -0.01 and +0.01, depending on signal strength and number of trials. <strong>These numbers are the real signal</strong>: they encode how much each pixel contributes to the participant’s mental image.</p>
 <p>The problem is that they cannot be displayed as-is. Monitors render pixel intensities between 0 (black) and 1 (white); negative values have no display meaning, and the absolute values would be too small to see anyway.</p>
 <p>Scaling solves this display problem by remapping the CI into a range a monitor can render. Every CI that <code>rcicr</code> returns therefore has two parallel fields:</p>
@@ -85,7 +332,7 @@
 </section>
 <section id="which-scaling-for-which-analysis" class="level2">
 <h2 class="anchored" data-anchor-id="which-scaling-for-which-analysis">Which scaling for which analysis</h2>
-<p>The short version: <strong>numerical analyses operate on <code>ci$ci</code>; visualisation choices operate on <code>ci$scaled</code></strong>. The <code>scaling</code> argument only affects the second.</p>
+<p>The short version: <strong>numerical analyses operate on <code>ci$ci</code>; visualization choices operate on <code>ci$scaled</code></strong>. The <code>scaling</code> argument only affects the second.</p>
 <p>The longer version, by use case:</p>
 <table class="table">
 <colgroup>
@@ -158,8 +405,8 @@
 <li><strong>Any numerical analysis</strong> (infoVal, correlations, distances, effect sizes, pixel tests): compute from <code>ci$ci</code>, regardless of the scaling argument passed.</li>
 </ul>
 </section>
-<section id="a-typical-workflow" class="level2">
-<h2 class="anchored" data-anchor-id="a-typical-workflow">A typical workflow</h2>
+<section id="a-typical-r-workflow" class="level2">
+<h2 class="anchored" data-anchor-id="a-typical-r-workflow">A typical R workflow</h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><span class="co" style="color: #5E5E5E;"># 1. Generate CIs with autoscale for a visually-comparable set of images.</span></span>
 <span id="cb1-2"><span class="co" style="color: #5E5E5E;">#    Useful for rating-task stimuli or figure panels: the strongest-signal</span></span>
@@ -209,137 +456,6 @@
   <guid>https://manueloliveira.nl/posts/p_4/index.html</guid>
   <pubDate>Fri, 24 Apr 2026 22:00:00 GMT</pubDate>
   <media:content url="https://manueloliveira.nl/posts/p_4/ci_scaling_post.png" medium="image" type="image/png" height="72" width="144"/>
-</item>
-<item>
-  <title>Introducing rcicrdiagnostics: an R package that runs data quality checks on your reverse correlation data</title>
-  <dc:creator>M. Oliveira</dc:creator>
-  <link>https://manueloliveira.nl/posts/p_3/index.html</link>
-  <description><![CDATA[ 
-
-
-
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="https://manueloliveira.nl/posts/p_3/rcicrdiag_post_img.png" class="img-fluid figure-img"></p>
-<p></p><figcaption class="figure-caption">Image co-generated with Gemini 3 Flash Image (NB2)</figcaption><p></p>
-</figure>
-</div>
-<p>If you’ve ever run a reverse correlation (RC) experiment, you’ve probably lived this moment before: you feed your data into the classification image (CI) generation pipeline, look at the output, and something just feels <em>off</em> (but apparently nothing technically broke). You see no errors or warnings, just a CI that <em>looks</em> plausible (don’t we all more easily see what <em>we want</em> to see! ;) ) and yet something just doesn’t quite add up, or output values that look higher or lower than you would expect in theory.</p>
-<p>More often than not, the issue is not with your theory, but with your data pipeline. So…time for some data pipeline plumbing! Put on your Super Luigi hat and <em>let’sa gooo!</em> (sorry Mario, Luigi is way cooler!)</p>
-<p>RC pipelines are unusually fragile to small data mistakes. Some examples: a response column coded as <code>{0, 1}</code> instead of <code>{-1, 1}</code>, stimulus IDs that are off by one, a noise matrix whose dimensions don’t match what your response data assumes, an <code>.RData</code> parameter file from a different stimulus batch than the one your participants actually saw. None of these throw an error. All of them produce a CI that looks convincing but may carry some unwanted mathematical distortions behind the scenes. Worse, because CIs are visually interpretable, a broken pipeline can still look “like a face” and trick us into believing the result.</p>
-<p>After running into these kinds of issues more times than I’d like to admit (both in my own projects and when helping others), I decided to put together a toolkit that checks for them systematically. It’s called <strong><code>rcicrdiagnostics</code></strong> and I’m releasing it now at v0.2.0.</p>
-<section id="what-it-does" class="level2">
-<h2 class="anchored" data-anchor-id="what-it-does">What it does</h2>
-<p><code>rcicrdiagnostics</code> is an R package that runs a battery of data-quality diagnostics on your response data <em>before</em> you compute any CIs or information values. Think of it as a pre-flight checklist: you load your response CSV and the auxiliary file that describes your stimuli, call <code>run_diagnostics()</code>, and get back a clear <strong>pass / warn / fail</strong> report per check.</p>
-<p>It supports both of the pipelines that currently dominate the field:</p>
-<ul>
-<li><strong>Two-image forced choice (2IFC)</strong>, the classical reverse correlation paradigm implemented in the <a href="https://github.com/rdotsch/rcicr"><code>rcicr</code></a> package (Dotsch, 2016, 2023).</li>
-<li><strong>Brief-RC</strong>, the more recent variant introduced by <a href="https://doi.org/10.1002/ejsp.3100">Schmitz, Rougier, and Yzerbyt (2024)</a> that shows 12 or 20 noisy faces per trial instead of two.</li>
-</ul>
-<p>A single <code>method</code> argument decides which pipeline to validate; the rest of the API is shared.</p>
-</section>
-<section id="what-the-checks-actually-catch" class="level2">
-<h2 class="anchored" data-anchor-id="what-the-checks-actually-catch">What the checks actually catch</h2>
-<p>Here’s a flavour of what comes out of <code>run_diagnostics()</code>. Every finding lands in one of four buckets (<strong>pass</strong>, <strong>warn</strong>, <strong>fail</strong>, <strong>skip</strong>), and each check names the participants or trials involved so you can jump straight to fixing them.</p>
-<ul>
-<li><strong>Response coding.</strong> Are responses <code>{-1, +1}</code> as the pipeline expects, or accidentally <code>{0, 1}</code> from your data-collection tool? This is easy to miss and it silently halves your CI.</li>
-<li><strong>Trial counts.</strong> Does every participant have the number of trials you expected? Participants who terminated early or whose data got partially lost skew your group-level CIs.</li>
-<li><strong>Stimulus alignment.</strong> Do the stimulus IDs in your response data actually exist in your stimulus pool, and are they within range? Off-by-one errors here are surprisingly common and hard to spot visually.</li>
-<li><strong>Response bias.</strong> Are some participants just clicking the same side over and over? These produce near-constant “CIs” that carry no signal.</li>
-<li><strong>Reaction times.</strong> Any participants with an unusually high rate of extremely fast responses? Likely rushed or inattentive trials that contaminate the CI.</li>
-<li><strong>Version compatibility.</strong> Is your <code>.RData</code> parameter file from the same <code>rcicr</code> version you’re now trying to analyse with?</li>
-<li><strong>Response inversion.</strong> Does a participant’s CI look like its own mirror image? A small but real fraction of participants get confused about which face they’re supposed to be picking, and their “inverted” CIs cancel out everyone else’s.</li>
-</ul>
-<p>If everything passes, you can move on to generating CIs and computing infoVal with confidence. If something fails, the report tells you exactly which participants or rows to investigate before you continue.</p>
-</section>
-<section id="infoval-diagnostics-baked-in" class="level2">
-<h2 class="anchored" data-anchor-id="infoval-diagnostics-baked-in">InfoVal diagnostics, baked in</h2>
-<p>A persistent question in RC practice is whether a low or negative individual-level <strong>infoVal</strong> score (Brinkman et al., 2019) means the data are broken or the metric is just noisy. <code>rcicrdiagnostics</code> ships three functions that try to make that question answerable instead of guessable:</p>
-<ul>
-<li><strong><code>infoval()</code></strong> computes per-producer infoVal with a reference distribution keyed on each producer’s actual trial count. This closes a calibration gap in the original <code>rcicr::computeInfoVal2IFC()</code>, which keys the reference on pool size and biases Brief-RC infoVals downward.</li>
-<li><strong><code>face_mask()</code></strong> generates the oval face-region masks used by <a href="https://doi.org/10.1002/ejsp.3100">Schmitz et al.&nbsp;(2024)</a> (and sub-regions: eyes, nose, mouth, upper / lower face). Pass it to the infoVal computation to restrict the Frobenius norm to the face area instead of integrating over hair and background.</li>
-<li><strong><code>diagnose_infoval()</code></strong> is a guided diagnostic that runs in six steps: simulate the reference at every trial count in the data, sanity-check it with a random responder, compute per-producer z unmasked, compute it masked, compute the group-mean CI’s z, and tally the per-producer distribution. The report explains what to look at first and what is honest to put in a methods section. Both 2IFC and Brief-RC are supported natively.</li>
-</ul>
-<p>The user’s guide has a chapter on what infoVal scores actually look like in published 2IFC and Brief-RC studies (the answer depends on paradigm and target, more than people often assume).</p>
-</section>
-<section id="quick-look" class="level2">
-<h2 class="anchored" data-anchor-id="quick-look">Quick look</h2>
-<p>The package ships with a runnable demo that you can try without any real study data. It generates synthetic 2IFC and Brief-RC datasets using an AI-generated base face (<a href="https://thispersondoesnotexist.com/">thispersondoesnotexist.com</a>), runs the full diagnostic battery on each, and prints the reports:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><span class="co" style="color: #5E5E5E;"># install.packages("remotes")</span></span>
-<span id="cb1-2">remotes<span class="sc" style="color: #5E5E5E;">::</span><span class="fu" style="color: #4758AB;">install_github</span>(<span class="st" style="color: #20794D;">"olivethree/rcicrdiagnostics"</span>)</span>
-<span id="cb1-3"></span>
-<span id="cb1-4"><span class="fu" style="color: #4758AB;">library</span>(rcicrdiagnostics)</span>
-<span id="cb1-5"></span>
-<span id="cb1-6"><span class="co" style="color: #5E5E5E;"># Source the runnable examples in order (about a minute total).</span></span>
-<span id="cb1-7"><span class="fu" style="color: #4758AB;">source</span>(<span class="fu" style="color: #4758AB;">system.file</span>(<span class="st" style="color: #20794D;">"examples"</span>, <span class="st" style="color: #20794D;">"01_generate_stimuli.R"</span>,          <span class="at" style="color: #657422;">package =</span> <span class="st" style="color: #20794D;">"rcicrdiagnostics"</span>))</span>
-<span id="cb1-8"><span class="fu" style="color: #4758AB;">source</span>(<span class="fu" style="color: #4758AB;">system.file</span>(<span class="st" style="color: #20794D;">"examples"</span>, <span class="st" style="color: #20794D;">"02a_bogus_responses_2ifc.R"</span>,     <span class="at" style="color: #657422;">package =</span> <span class="st" style="color: #20794D;">"rcicrdiagnostics"</span>))</span>
-<span id="cb1-9"><span class="fu" style="color: #4758AB;">source</span>(<span class="fu" style="color: #4758AB;">system.file</span>(<span class="st" style="color: #20794D;">"examples"</span>, <span class="st" style="color: #20794D;">"02b_bogus_responses_briefrc12.R"</span>, <span class="at" style="color: #657422;">package =</span> <span class="st" style="color: #20794D;">"rcicrdiagnostics"</span>))</span>
-<span id="cb1-10"><span class="fu" style="color: #4758AB;">source</span>(<span class="fu" style="color: #4758AB;">system.file</span>(<span class="st" style="color: #20794D;">"examples"</span>, <span class="st" style="color: #20794D;">"02c_bogus_responses_briefrc20.R"</span>, <span class="at" style="color: #657422;">package =</span> <span class="st" style="color: #20794D;">"rcicrdiagnostics"</span>))</span>
-<span id="cb1-11"><span class="fu" style="color: #4758AB;">source</span>(<span class="fu" style="color: #4758AB;">system.file</span>(<span class="st" style="color: #20794D;">"examples"</span>, <span class="st" style="color: #20794D;">"03_run_diagnostics_demo.R"</span>,       <span class="at" style="color: #657422;">package =</span> <span class="st" style="color: #20794D;">"rcicrdiagnostics"</span>))</span></code></pre></div>
-</div>
-<p>For your own data, the minimum you need is a response CSV with <code>participant_id</code>, <code>stimulus</code>, and <code>response</code> columns (optionally <code>rt</code>), plus either an <code>rcicr</code> <code>.RData</code> for 2IFC or a noise matrix for Brief-RC:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1">responses <span class="ot" style="color: #003B4F;">&lt;-</span> <span class="fu" style="color: #4758AB;">read.csv</span>(<span class="st" style="color: #20794D;">"path/to/your/responses.csv"</span>)</span>
-<span id="cb2-2"></span>
-<span id="cb2-3">report <span class="ot" style="color: #003B4F;">&lt;-</span> <span class="fu" style="color: #4758AB;">run_diagnostics</span>(</span>
-<span id="cb2-4">  responses,</span>
-<span id="cb2-5">  <span class="at" style="color: #657422;">method =</span> <span class="st" style="color: #20794D;">"2ifc"</span>,</span>
-<span id="cb2-6">  <span class="at" style="color: #657422;">rdata  =</span> <span class="st" style="color: #20794D;">"path/to/your/rcicr_stimuli.RData"</span>,</span>
-<span id="cb2-7">  <span class="at" style="color: #657422;">col_rt =</span> <span class="st" style="color: #20794D;">"rt"</span></span>
-<span id="cb2-8">)</span>
-<span id="cb2-9"><span class="fu" style="color: #4758AB;">print</span>(report)</span></code></pre></div>
-</div>
-<p>That’s it.</p>
-</section>
-<section id="a-note-on-ci-scaling-decisions" class="level2">
-<h2 class="anchored" data-anchor-id="a-note-on-ci-scaling-decisions">A note on CI scaling decisions</h2>
-<p>One of the first things you have to decide after diagnostics pass is what <code>scaling</code> option to use when generating CIs. The choice is rarely documented in published work and it is a steady source of confusion (it shows up in how people interpret their CIs, how they present them to judges, and how they compare CIs across conditions or studies).</p>
-<p>Because the topic deserves more space than a short note here, I split it into a separate post:</p>
-<p>📄 <a href="../../posts/p_4/index.html"><strong>Choosing a CI scaling option in rcicr</strong></a> – what the five <code>scaling</code> options actually do, when each is appropriate, and the common mistakes to watch out for.</p>
-<p>The user’s guide also includes the same chapter for offline reference: <strong><em>Choosing a CI scaling option</em></strong> in the <a href="https://olivethree.github.io/rcicrdiagnostics/articles/tutorial.html">tutorial</a>.</p>
-</section>
-<section id="status-and-whats-next" class="level2">
-<h2 class="anchored" data-anchor-id="status-and-whats-next">Status and what’s next</h2>
-<p>v0.2.0 is the first public release. The API is not yet frozen, I expect to refine function signatures and defaults before any future release, so please indicate the current version if you use it in any of your papers. Distribution is GitHub-only for now; there is no CRAN plan at this stage as working on RC methods stuff is mainly a “hobby” beyond my daily job research focus.</p>
-<p>Feedback, bug reports, and feature requests are very welcome. Please open an issue on GitHub or reach out directly (m.j.barbosa.de.oliveira@tue.nl).</p>
-</section>
-<section id="links" class="level2">
-<h2 class="anchored" data-anchor-id="links">Links</h2>
-<ul>
-<li><strong>Package on GitHub</strong>: <a href="https://github.com/olivethree/rcicrdiagnostics" class="uri">https://github.com/olivethree/rcicrdiagnostics</a></li>
-<li><strong>User’s guide</strong>: <a href="https://olivethree.github.io/rcicrdiagnostics/articles/tutorial.html" class="uri">https://olivethree.github.io/rcicrdiagnostics/articles/tutorial.html</a></li>
-<li><strong>Zenodo record</strong>: <a href="https://doi.org/10.5281/zenodo.19734757" class="uri">https://doi.org/10.5281/zenodo.19734757</a></li>
-</ul>
-</section>
-<section id="how-to-cite" class="level2">
-<h2 class="anchored" data-anchor-id="how-to-cite">How to cite</h2>
-<blockquote class="blockquote">
-<p>Oliveira, M. (2026). <em>rcicrdiagnostics: Data quality diagnostics for reverse correlation experiments in social psychology using the rcicr package</em> (Version 0.2.0) [R package]. Zenodo. <a href="https://doi.org/10.5281/zenodo.19734757" class="uri">https://doi.org/10.5281/zenodo.19734757</a></p>
-</blockquote>
-<p>Or from within R: <code>citation("rcicrdiagnostics")</code>.</p>
-<p>Thanks for reading!</p>
-</section>
-<section id="references" class="level2">
-<h2 class="anchored" data-anchor-id="references">References</h2>
-<ul>
-<li><p>Brinkman, L., Goffin, S., van de Schoot, R., van Haren, N. E. M., Dotsch, R., &amp; Aarts, H. (2019). Quantifying the informational value of classification images. <em>Behavior Research Methods</em>, <em>51</em>(5), 2059–2073. <a href="https://doi.org/10.3758/s13428-019-01232-2" class="uri">https://doi.org/10.3758/s13428-019-01232-2</a></p></li>
-<li><p>Dotsch, R. (2016). <em>rcicr: Reverse-correlation image-classification toolbox</em> [R package, development versions]. <a href="https://github.com/rdotsch/rcicr" class="uri">https://github.com/rdotsch/rcicr</a></p></li>
-<li><p>Dotsch, R. (2023). <em>rcicr: Reverse correlation image classification toolbox</em> (Version 1.0.1) [R package]. <a href="https://github.com/rdotsch/rcicr" class="uri">https://github.com/rdotsch/rcicr</a></p></li>
-<li><p>Schmitz, M., Rougier, M., &amp; Yzerbyt, V. (2024). Introducing the brief reverse correlation: An improved tool to assess visual representations. <em>European Journal of Social Psychology</em>. <a href="https://doi.org/10.1002/ejsp.3100" class="uri">https://doi.org/10.1002/ejsp.3100</a></p></li>
-</ul>
-
-
-</section>
-
- ]]></description>
-  <category>R</category>
-  <category>Reverse Correlation</category>
-  <category>Psychology</category>
-  <category>Package</category>
-  <guid>https://manueloliveira.nl/posts/p_3/index.html</guid>
-  <pubDate>Fri, 24 Apr 2026 22:00:00 GMT</pubDate>
-  <media:content url="https://manueloliveira.nl/posts/p_3/rcicrdiag_post_img.png" medium="image" type="image/png" height="72" width="144"/>
 </item>
 <item>
   <title>Using Reverse Correlation Methods in Psychology Research: R tutorial and Recommended Practices</title>
