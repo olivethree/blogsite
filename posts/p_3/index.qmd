@@ -9,7 +9,7 @@ categories:
   - Package
 ---
 
-![](logo.svg){fig-align="center" width="220"}
+![](logo.png){fig-align="center"}
 
 If you've ever run a reverse correlation (RC) experiment, you've probably lived this moment before: you feed your data into the classification image (CI) generation pipeline, look at the output, and something just feels *off* (but apparently nothing technically broke). You see no errors or warnings, just a CI that *looks* plausible (don't we all more easily see what *we want* to see! ;) ) and yet something just doesn't quite add up, or output values that look higher or lower than you would expect in theory.
 
@@ -17,7 +17,7 @@ More often than not, the issue is not with your theory, but with your data pipel
 
 **BUT** even when your input data is perfectly clean, you still cannot tell, just by looking at a CI, whether it is **reliable** (would the same participant's data produce a similar CI on another day?) or **discriminable** (does this CI actually look different from the CI of a comparison condition, beyond what you'd expect from noise alone?). Some papers in the Social Psychology RC literature analyze how CI pixels of different representation target condition correlate to assess similarity, and some venture into pixel cluster analyses, but tools to facilitate such analyses remained buried in lab drawers (perfectly understandable! There is often just no time worth spending in walking the extra mile of converting study scripts into a software development odyssey).
 
-After repeatedly running into all these questions in the past years (both in my own projects and when helping others), I decided to put it all in one toolkit. After some iterations and interim package projects I decided to compile everything into a bigger package baptized as **[`rcisignal`](https://github.com/olivethree/rcisignal)**, which I am now sufficiently happy to release publicly (v0.1.0).
+After repeatedly running into all these questions in the past years (both in my own projects and when helping others), I decided to put it all in one toolkit. After some iterations and interim package projects I decided to compile everything into a bigger package baptized as [**`rcisignal`**](https://github.com/olivethree/rcisignal), which I am now sufficiently happy to release publicly (v0.1.0).
 
 ## What it does
 
@@ -57,9 +57,9 @@ Once your input data is clean and you have per-participant CIs, some questions o
 
 -   And are participants *across* two conditions actually responding to different things (discriminability)?
 
-`rcisignal` ships a coordinated `rel_*` family for these:
+`rcisignal` includes a family of functions for these:
 
--   **`run_reliability()`** is the high-level "is this condition internally coherent?" entry point. Internally it stitches together split-half permutation tests, ICC(3,*) (with a guard on which form to use given your trial budget), leave-one-out producer agreement, and a pixel-wise *t*-map vs the empirical null. The output prints as a one-page report with all four numbers and a verdict.
+-   **`run_reliability()`** is the high-level "is this condition internally coherent?" entry point. Internally it stitches together split-half permutation tests, ICC(3,*) (with a guard on which form to use given your trial budget), leave-one-out producer agreement, and a pixel-wise* t\*-map vs the empirical null. The output prints as a one-page report with all four numbers and a verdict.
 -   **`run_discriminability()`** asks the corresponding "are these two conditions actually different?" question. It produces a **cluster-agreement map**: a neuroimaging-style FWER-controlled pixel map of where two CIs differ, with the cluster threshold and permutation count fully configurable. Use `run_discriminability_pairwise()` for an *n*x*n* grid of contrasts when you have more than two conditions.
 -   **`pixel_t_test()`** and **`agreement_map_test()`** are the lower-level building blocks if you want to compose the analysis yourself, e.g. with custom face masks or non-default cluster-forming thresholds.
 -   **`rel_dissimilarity()`** computes between-CI Euclidean / Frobenius dissimilarities with a percentile-bootstrap CI, which is a more honest "effect size" for between-condition differences than just eyeballing two CIs side-by-side.
@@ -77,7 +77,7 @@ A question that some colleagues venturing into RC methods bumped into and strugg
 
 The user's guide has a chapter on what infoVal scores actually look like in published 2IFC and Brief-RC studies (the answer depends on paradigm and target, more than people often assume).
 
-## Worked example using real data: Oliveira et al. (2019)
+## Testing it on real data: Oliveira et al. (2019)
 
 To make the output concrete, here are two contrasts from the open data of [Oliveira, Garcia-Marques, Dotsch & Garcia-Marques (2019)](https://doi.org/10.1002/ejsp.2569). In Study 1, 200 participants completed a 2IFC reverse-correlation task on a 256 x 256 grayscale male base face across 10 trait conditions (20 producers per trait, 300 trials each). The four traits highlighted here are **Trustworthy**, **Friendly**, **Competent**, and **Dominant**.
 
@@ -103,7 +103,7 @@ Same difference signals, but pixels outside any cluster significant at *p* \< .0
 
 The two contrasts pick out qualitatively different spatial signatures, broadly consistent with the prediction. Trustworthy versus Friendly localizes around the eyes and mid-face (exactly the kind of socially-relevant feature region the warmth dimension is read off). Dominant versus Competent spreads more widely across the face, consistent with a contrast that draws on both whole-face agency cues and finer ability cues. Among the pixels that survive the FWER filter, the Dominant vs Competent map retains noticeably more spatial extent than the Trustworthy vs Friendly map.
 
-### Per-region informational value
+### Per-region infoVal
 
 Magnitude per producer also varies by face region. The grid below runs `infoval()` separately on each (trait, region) cell using the [Schmitz et al. (2024)](https://doi.org/10.1002/ejsp.3100) face masks and the trial-count-matched reference distribution. Cells report **median producer z-score** and (in parentheses) **how many of 20 producers cleared the conventional `z >= 1.96` threshold**.
 
@@ -116,7 +116,9 @@ Magnitude per producer also varies by face region. The grid below runs `infoval(
 
 The per-region picture is more granular than the headline full-face number suggests. Dominance carries comparatively strong signal in the **eyes** and **upper face** but only modest signal around the **mouth**; friendliness flips the pattern, with the **mouth** carrying its strongest regional signal and the **eyes** the weakest. Trustworthy localizes broadly across the eyes and mouth without a clear regional peak. The full per-region grid, the bootstrap dissimilarity intervals that accompany it, and the methods-section reporting templates are in vignette §12 of the [user's guide](https://olivethree.github.io/rcisignal/articles/rcisignal.html).
 
-Looking at these results was quite a thrill. This was my first published paper of my PhD project. It was published a long time ago, in a world where the infoVal metric was not yet established, there was no clear understanding of the limitations of Phase 2 trait ratings using group CIs, and I was but a young apprentice learning the new ways of doing research post-reproducibility crisis. *What if the results do not replicate with a more scrutinized data pipeline? What if the infoVals suggest none of my CIs in that paper had any signal? What if the reliability analyses show no agreement?* Lucky me...the results were not only replicated, BUT extended to a new level of insights about the data. What a ride! Anyway...this could be useful for any meta-analysis enthusiasts out there ;)
+Looking at these results was quite a thrill. This was my first published paper of my PhD project. It was published a long time ago, in a world where the infoVal metric was not yet established, there was no clear understanding of the limitations of Phase 2 trait ratings using group CIs, and I was but a young apprentice learning the new ways of doing research post-reproducibility crisis. My mind was spinning with neurotic thoughts like: *What if the results do not replicate with a more scrutinized data pipeline? What if the infoVals suggest none of my CIs in that paper had any signal? What if the reliability analyses show no agreement?*
+
+Lucky me...the results were not only replicated, BUT extended to a new level of insights about the data. What a ride! Anyway...this could be useful for any meta-analysis enthusiasts out there ;)
 
 ## Quick look
 
@@ -168,13 +170,12 @@ v0.1.0 is the first public release. The API is not yet frozen, I expect to keep 
 
 Feedback, bug reports, and feature requests are very welcome (m.j.barbosa.de.oliveira\@tue.nl).
 
+Thanks for reading!
+
 ## Links
 
 -   **Package on GitHub**: <https://github.com/olivethree/rcisignal>
 -   **User's guide**: <https://olivethree.github.io/rcisignal/>
--   **Zenodo record**: <https://doi.org/10.5281/zenodo.19961180>
-
-Thanks for reading!
 
 ## References
 

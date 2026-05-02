@@ -212,11 +212,11 @@ ga('send', {
   <li><a href="#data-quality-diagnostics-what-the-checks-actually-catch" id="toc-data-quality-diagnostics-what-the-checks-actually-catch" class="nav-link" data-scroll-target="#data-quality-diagnostics-what-the-checks-actually-catch">Data-quality diagnostics: what the checks actually catch</a></li>
   <li><a href="#reliability-and-dissimilarity-the-half-people-skip" id="toc-reliability-and-dissimilarity-the-half-people-skip" class="nav-link" data-scroll-target="#reliability-and-dissimilarity-the-half-people-skip">Reliability and dissimilarity: the half people skip</a></li>
   <li><a href="#infoval-and-its-distributions" id="toc-infoval-and-its-distributions" class="nav-link" data-scroll-target="#infoval-and-its-distributions">InfoVal and its distributions</a></li>
-  <li><a href="#worked-example-using-real-data-oliveira-et-al.-2019" id="toc-worked-example-using-real-data-oliveira-et-al.-2019" class="nav-link" data-scroll-target="#worked-example-using-real-data-oliveira-et-al.-2019">Worked example using real data: Oliveira et al.&nbsp;(2019)</a>
+  <li><a href="#testing-it-on-real-data-oliveira-et-al.-2019" id="toc-testing-it-on-real-data-oliveira-et-al.-2019" class="nav-link" data-scroll-target="#testing-it-on-real-data-oliveira-et-al.-2019">Testing it on real data: Oliveira et al.&nbsp;(2019)</a>
   <ul class="collapse">
   <li><a href="#descriptive-cluster-agreement-maps" id="toc-descriptive-cluster-agreement-maps" class="nav-link" data-scroll-target="#descriptive-cluster-agreement-maps">Descriptive cluster-agreement maps</a></li>
   <li><a href="#fwer-controlled-cluster-agreement-maps" id="toc-fwer-controlled-cluster-agreement-maps" class="nav-link" data-scroll-target="#fwer-controlled-cluster-agreement-maps">FWER-controlled cluster-agreement maps</a></li>
-  <li><a href="#per-region-informational-value" id="toc-per-region-informational-value" class="nav-link" data-scroll-target="#per-region-informational-value">Per-region informational value</a></li>
+  <li><a href="#per-region-infoval" id="toc-per-region-infoval" class="nav-link" data-scroll-target="#per-region-infoval">Per-region infoVal</a></li>
   </ul></li>
   <li><a href="#quick-look" id="toc-quick-look" class="nav-link" data-scroll-target="#quick-look">Quick look</a></li>
   <li><a href="#status-and-whats-next" id="toc-status-and-whats-next" class="nav-link" data-scroll-target="#status-and-whats-next">Status and what’s next</a></li>
@@ -264,13 +264,13 @@ ga('send', {
 
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="logo.svg" class="img-fluid figure-img" width="220"></p>
+<p><img src="logo.png" class="img-fluid figure-img"></p>
 </figure>
 </div>
 <p>If you’ve ever run a reverse correlation (RC) experiment, you’ve probably lived this moment before: you feed your data into the classification image (CI) generation pipeline, look at the output, and something just feels <em>off</em> (but apparently nothing technically broke). You see no errors or warnings, just a CI that <em>looks</em> plausible (don’t we all more easily see what <em>we want</em> to see! ;) ) and yet something just doesn’t quite add up, or output values that look higher or lower than you would expect in theory.</p>
 <p>More often than not, the issue is not with your theory, but with your data pipeline. So…time for some data pipeline plumbing! Put on your Super Luigi hat and <em>let’sa gooo!</em> (sorry Mario, Luigi is way cooler!)</p>
 <p><strong>BUT</strong> even when your input data is perfectly clean, you still cannot tell, just by looking at a CI, whether it is <strong>reliable</strong> (would the same participant’s data produce a similar CI on another day?) or <strong>discriminable</strong> (does this CI actually look different from the CI of a comparison condition, beyond what you’d expect from noise alone?). Some papers in the Social Psychology RC literature analyze how CI pixels of different representation target condition correlate to assess similarity, and some venture into pixel cluster analyses, but tools to facilitate such analyses remained buried in lab drawers (perfectly understandable! There is often just no time worth spending in walking the extra mile of converting study scripts into a software development odyssey).</p>
-<p>After repeatedly running into all these questions in the past years (both in my own projects and when helping others), I decided to put it all in one toolkit. After some iterations and interim package projects I decided to compile everything into a bigger package baptized as <strong><a href="https://github.com/olivethree/rcisignal"><code>rcisignal</code></a></strong>, which I am now sufficiently happy to release publicly (v0.1.0).</p>
+<p>After repeatedly running into all these questions in the past years (both in my own projects and when helping others), I decided to put it all in one toolkit. After some iterations and interim package projects I decided to compile everything into a bigger package baptized as <a href="https://github.com/olivethree/rcisignal"><strong><code>rcisignal</code></strong></a>, which I am now sufficiently happy to release publicly (v0.1.0).</p>
 <section id="what-it-does" class="level2">
 <h2 class="anchored" data-anchor-id="what-it-does">What it does</h2>
 <p><code>rcisignal</code> is an R package that bundles three things you should be doing on every RC dataset before you commit to an interpretation, but which are usually scattered across personal scripts (when they get done at all):</p>
@@ -308,9 +308,9 @@ ga('send', {
 <li><p>Do participants <em>within</em> a condition agree with each other (reliability)?</p></li>
 <li><p>And are participants <em>across</em> two conditions actually responding to different things (discriminability)?</p></li>
 </ul>
-<p><code>rcisignal</code> ships a coordinated <code>rel_*</code> family for these:</p>
+<p><code>rcisignal</code> includes a family of functions for these:</p>
 <ul>
-<li><strong><code>run_reliability()</code></strong> is the high-level “is this condition internally coherent?” entry point. Internally it stitches together split-half permutation tests, ICC(3,<em>) (with a guard on which form to use given your trial budget), leave-one-out producer agreement, and a pixel-wise </em>t*-map vs the empirical null. The output prints as a one-page report with all four numbers and a verdict.</li>
+<li><strong><code>run_reliability()</code></strong> is the high-level “is this condition internally coherent?” entry point. Internally it stitches together split-half permutation tests, ICC(3,<em>) (with a guard on which form to use given your trial budget), leave-one-out producer agreement, and a pixel-wise</em> t*-map vs the empirical null. The output prints as a one-page report with all four numbers and a verdict.</li>
 <li><strong><code>run_discriminability()</code></strong> asks the corresponding “are these two conditions actually different?” question. It produces a <strong>cluster-agreement map</strong>: a neuroimaging-style FWER-controlled pixel map of where two CIs differ, with the cluster threshold and permutation count fully configurable. Use <code>run_discriminability_pairwise()</code> for an <em>n</em>x<em>n</em> grid of contrasts when you have more than two conditions.</li>
 <li><strong><code>pixel_t_test()</code></strong> and <strong><code>agreement_map_test()</code></strong> are the lower-level building blocks if you want to compose the analysis yourself, e.g.&nbsp;with custom face masks or non-default cluster-forming thresholds.</li>
 <li><strong><code>rel_dissimilarity()</code></strong> computes between-CI Euclidean / Frobenius dissimilarities with a percentile-bootstrap CI, which is a more honest “effect size” for between-condition differences than just eyeballing two CIs side-by-side.</li>
@@ -328,8 +328,8 @@ ga('send', {
 </ul>
 <p>The user’s guide has a chapter on what infoVal scores actually look like in published 2IFC and Brief-RC studies (the answer depends on paradigm and target, more than people often assume).</p>
 </section>
-<section id="worked-example-using-real-data-oliveira-et-al.-2019" class="level2">
-<h2 class="anchored" data-anchor-id="worked-example-using-real-data-oliveira-et-al.-2019">Worked example using real data: Oliveira et al.&nbsp;(2019)</h2>
+<section id="testing-it-on-real-data-oliveira-et-al.-2019" class="level2">
+<h2 class="anchored" data-anchor-id="testing-it-on-real-data-oliveira-et-al.-2019">Testing it on real data: Oliveira et al.&nbsp;(2019)</h2>
 <p>To make the output concrete, here are two contrasts from the open data of <a href="https://doi.org/10.1002/ejsp.2569">Oliveira, Garcia-Marques, Dotsch &amp; Garcia-Marques (2019)</a>. In Study 1, 200 participants completed a 2IFC reverse-correlation task on a 256 x 256 grayscale male base face across 10 trait conditions (20 producers per trait, 300 trials each). The four traits highlighted here are <strong>Trustworthy</strong>, <strong>Friendly</strong>, <strong>Competent</strong>, and <strong>Dominant</strong>.</p>
 <p>The motivating prediction was that the <strong>Dominant vs Competent</strong> contrast would yield broader pixel-level differences than the <strong>Trustworthy vs Friendly</strong> contrast. Trustworthy and friendly both load on the warmth dimension and share much of their facial encoding; dominant and competent are usually thought of as agency-related but have been argued to dissociate, with dominance reading off coarser whole-face features and competence reading off subtler ability cues.</p>
 <section id="descriptive-cluster-agreement-maps" class="level3">
@@ -373,8 +373,8 @@ ga('send', {
 </table>
 <p>The two contrasts pick out qualitatively different spatial signatures, broadly consistent with the prediction. Trustworthy versus Friendly localizes around the eyes and mid-face (exactly the kind of socially-relevant feature region the warmth dimension is read off). Dominant versus Competent spreads more widely across the face, consistent with a contrast that draws on both whole-face agency cues and finer ability cues. Among the pixels that survive the FWER filter, the Dominant vs Competent map retains noticeably more spatial extent than the Trustworthy vs Friendly map.</p>
 </section>
-<section id="per-region-informational-value" class="level3">
-<h3 class="anchored" data-anchor-id="per-region-informational-value">Per-region informational value</h3>
+<section id="per-region-infoval" class="level3">
+<h3 class="anchored" data-anchor-id="per-region-infoval">Per-region infoVal</h3>
 <p>Magnitude per producer also varies by face region. The grid below runs <code>infoval()</code> separately on each (trait, region) cell using the <a href="https://doi.org/10.1002/ejsp.3100">Schmitz et al.&nbsp;(2024)</a> face masks and the trial-count-matched reference distribution. Cells report <strong>median producer z-score</strong> and (in parentheses) <strong>how many of 20 producers cleared the conventional <code>z &gt;= 1.96</code> threshold</strong>.</p>
 <table class="table">
 <colgroup>
@@ -425,7 +425,8 @@ ga('send', {
 </tbody>
 </table>
 <p>The per-region picture is more granular than the headline full-face number suggests. Dominance carries comparatively strong signal in the <strong>eyes</strong> and <strong>upper face</strong> but only modest signal around the <strong>mouth</strong>; friendliness flips the pattern, with the <strong>mouth</strong> carrying its strongest regional signal and the <strong>eyes</strong> the weakest. Trustworthy localizes broadly across the eyes and mouth without a clear regional peak. The full per-region grid, the bootstrap dissimilarity intervals that accompany it, and the methods-section reporting templates are in vignette §12 of the <a href="https://olivethree.github.io/rcisignal/articles/rcisignal.html">user’s guide</a>.</p>
-<p>Looking at these results was quite a thrill. This was my first published paper of my PhD project. It was published a long time ago, in a world where the infoVal metric was not yet established, there was no clear understanding of the limitations of Phase 2 trait ratings using group CIs, and I was but a young apprentice learning the new ways of doing research post-reproducibility crisis. <em>What if the results do not replicate with a more scrutinized data pipeline? What if the infoVals suggest none of my CIs in that paper had any signal? What if the reliability analyses show no agreement?</em> Lucky me…the results were not only replicated, BUT extended to a new level of insights about the data. What a ride! Anyway…this could be useful for any meta-analysis enthusiasts out there ;)</p>
+<p>Looking at these results was quite a thrill. This was my first published paper of my PhD project. It was published a long time ago, in a world where the infoVal metric was not yet established, there was no clear understanding of the limitations of Phase 2 trait ratings using group CIs, and I was but a young apprentice learning the new ways of doing research post-reproducibility crisis. My mind was spinning with neurotic thoughts like: <em>What if the results do not replicate with a more scrutinized data pipeline? What if the infoVals suggest none of my CIs in that paper had any signal? What if the reliability analyses show no agreement?</em></p>
+<p>Lucky me…the results were not only replicated, BUT extended to a new level of insights about the data. What a ride! Anyway…this could be useful for any meta-analysis enthusiasts out there ;)</p>
 </section>
 </section>
 <section id="quick-look" class="level2">
@@ -474,15 +475,14 @@ ga('send', {
 <h2 class="anchored" data-anchor-id="status-and-whats-next">Status and what’s next</h2>
 <p>v0.1.0 is the first public release. The API is not yet frozen, I expect to keep refining functions based on feedback I might get in the coming months, so please indicate the current version if you use it in any of your work. Distribution is GitHub-only, and I have no CRAN plans, as working on RC methods stuff is mainly a “hobby” beyond my daily job research focus.</p>
 <p>Feedback, bug reports, and feature requests are very welcome (m.j.barbosa.de.oliveira@tue.nl).</p>
+<p>Thanks for reading!</p>
 </section>
 <section id="links" class="level2">
 <h2 class="anchored" data-anchor-id="links">Links</h2>
 <ul>
 <li><strong>Package on GitHub</strong>: <a href="https://github.com/olivethree/rcisignal" class="uri">https://github.com/olivethree/rcisignal</a></li>
 <li><strong>User’s guide</strong>: <a href="https://olivethree.github.io/rcisignal/" class="uri">https://olivethree.github.io/rcisignal/</a></li>
-<li><strong>Zenodo record</strong>: <a href="https://doi.org/10.5281/zenodo.19961180" class="uri">https://doi.org/10.5281/zenodo.19961180</a></li>
 </ul>
-<p>Thanks for reading!</p>
 </section>
 <section id="references" class="level2">
 <h2 class="anchored" data-anchor-id="references">References</h2>
