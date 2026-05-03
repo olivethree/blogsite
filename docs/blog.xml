@@ -58,8 +58,8 @@
 </ul>
 <p>If everything passes, you can move on to generating CIs and computing reliability with confidence. If something fails, the report tells you exactly which participants or rows to investigate before you continue. For Brief-RC users, <code>validate_noise_matrix()</code> is a separate one-shot check that confirms your noise matrix dimensions are consistent with what your responses assume.</p>
 </section>
-<section id="reliability-and-dissimilarity-the-half-people-skip" class="level2">
-<h2 class="anchored" data-anchor-id="reliability-and-dissimilarity-the-half-people-skip">Reliability and dissimilarity: the half people skip</h2>
+<section id="reliability-and-dissimilarity" class="level2">
+<h2 class="anchored" data-anchor-id="reliability-and-dissimilarity">Reliability and dissimilarity</h2>
 <p>Once your input data is clean and you have per-participant CIs, some questions often worth asking are:</p>
 <ul>
 <li><p>Do participants <em>within</em> a condition agree with each other (reliability)?</p></li>

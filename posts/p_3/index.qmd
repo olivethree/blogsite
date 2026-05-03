@@ -49,7 +49,7 @@ Here's a flavor of what comes out of `run_diagnostics()`. Every finding lands in
 
 If everything passes, you can move on to generating CIs and computing reliability with confidence. If something fails, the report tells you exactly which participants or rows to investigate before you continue. For Brief-RC users, `validate_noise_matrix()` is a separate one-shot check that confirms your noise matrix dimensions are consistent with what your responses assume.
 
-## Reliability and dissimilarity: the half people skip
+## Reliability and dissimilarity
 
 Once your input data is clean and you have per-participant CIs, some questions often worth asking are:
 
