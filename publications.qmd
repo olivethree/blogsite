@@ -54,7 +54,7 @@ toc-depth: 3
 
 ### Software tools
 
-[**Oliveira, M. (2026)**. rcisignal: Quality checks for reverse-correlation data and classification images (Version 0.1.0) \[R package\]. Zenodo. https://doi.org/10.5281/zenodo.19961180](https://doi.org/10.5281/zenodo.19961180)
+[Oliveira, M. (2026). rcisignal: Quality checks for reverse-correlation data and classification images (Version 0.1.1) \[R package\]. Zenodo. https://doi.org/10.5281/zenodo.19961180](https://doi.org/10.5281/zenodo.19961180)
 
 [**Oliveira, M. (2025)**. CARefully prompt your AI: A prompt library for AI-assisted academic writing with ethical guidance (v.1.1). Zenodo. https://doi.org/10.5281/zenodo.15475953](https://olivethree.github.io/carefullyprompt/)
 
