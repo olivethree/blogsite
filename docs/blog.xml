@@ -91,7 +91,7 @@
 <p>The motivating prediction was that the <strong>Dominant vs Competent</strong> contrast would yield broader pixel-level differences than the <strong>Trustworthy vs Friendly</strong> contrast. Trustworthy and friendly both load on the warmth dimension and share much of their facial encoding; dominant and competent are usually thought of as agency-related but have been argued to dissociate, with dominance reading off coarser whole-face features and competence reading off subtler ability cues.</p>
 <section id="descriptive-cluster-agreement-maps" class="level3">
 <h3 class="anchored" data-anchor-id="descriptive-cluster-agreement-maps">Descriptive cluster-agreement maps</h3>
-<p>Difference of the two group-mean CIs across all face-oval pixels; no inferential filter applied. Red = first condition stronger; blue = second condition stronger.</p>
+<p>Difference of the two group-mean CIs across all face-oval pixels; no inferential filter applied. Blue = first condition stronger; red = second condition stronger; opacity = magnitude of the difference.</p>
 <table class="table">
 <colgroup>
 <col style="width: 50%">
@@ -183,7 +183,7 @@
 </table>
 <p>The per-region picture is more granular than the headline full-face number suggests. Dominance carries comparatively strong signal in the <strong>eyes</strong> and <strong>upper face</strong> but only modest signal around the <strong>mouth</strong>; friendliness flips the pattern, with the <strong>mouth</strong> carrying its strongest regional signal and the <strong>eyes</strong> the weakest. Trustworthy localizes broadly across the eyes and mouth without a clear regional peak. The full per-region grid, the bootstrap dissimilarity intervals that accompany it, and the methods-section reporting templates are in vignette §12 of the <a href="https://olivethree.github.io/rcisignal/articles/rcisignal.html">user’s guide</a>.</p>
 <p>Looking at these results was quite a thrill. This was my first published paper of my PhD project. It was published a long time ago, in a world where the infoVal metric was not yet established, there was no clear understanding of the limitations of Phase 2 trait ratings using group CIs, and I was but a young apprentice learning the new ways of doing research post-reproducibility crisis. My mind was spinning with neurotic thoughts like: <em>What if the results do not replicate with a more scrutinized data pipeline? What if the infoVals suggest none of my CIs in that paper had any signal? What if the reliability analyses show no agreement?</em></p>
-<p>Lucky me…the results were not only replicated, BUT extended to a new level of insights about the data. What a ride! Anyway…this could be useful for any meta-analysis enthusiasts out there ;)</p>
+<p>Lucky me…the pattern of results was not only replicated, BUT extended to a new level of insights about the data. What a ride! Anyway…this could be useful for any meta-analysis enthusiasts out there ;)</p>
 </section>
 </section>
 <section id="quick-look" class="level2">
@@ -230,8 +230,8 @@
 </section>
 <section id="status-and-whats-next" class="level2">
 <h2 class="anchored" data-anchor-id="status-and-whats-next">Status and what’s next</h2>
-<p>The latest release is version 0.1.1. The API is not yet frozen, I expect to keep refining functions based on feedback I might get in the coming months, so please indicate the current version if you use it in any of your work. Distribution is GitHub-only, and I have no CRAN plans, as working on RC methods stuff is mainly a “hobby” beyond my daily job research focus.</p>
-<p>Feedback, bug reports, and feature requests are very welcome (m.j.barbosa.de.oliveira@tue.nl).</p>
+<p>The latest release is version 0.1.2. The API is not yet frozen, I expect to keep refining functions based on feedback I might get in the coming months, so please indicate the current version if you use it in any of your work. Distribution is GitHub-only, and I have no CRAN plans, as working on RC methods stuff is mainly a “hobby” beyond my daily job research focus.</p>
+<p>Feedback, bug reports, and feature requests are very welcome.</p>
 <p>Thanks for reading!</p>
 </section>
 <section id="links" class="level2">

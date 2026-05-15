@@ -10,7 +10,7 @@ about:
       href: https://github.com/olivethree
 ---
 
-My interests and work are best placed at the intersection of **Psychology** and **Artificial Intelligence**. Currently, I serve as a researcher and advisor at Eindhoven University of Technology (TU/e), focusing on topics of AI in Education.
+My interests and work are best placed at the intersection of **Psychology** and **Artificial Intelligence**. Currently, I serve as an AI in Education Specialist & Senior Researcher at Eindhoven University of Technology (TU/e), department of Education and Student Affairs, where I split my time between AI in education research, institutional AI strategy, and helping teaching staff navigate generative AI in their classrooms.
 
 My background is rooted in **Social Cognition**. For most of my academic journey, I have researched how humans form impressions about other humans. With the increasing presence of AI in society, my research interests started to drift towards questions related with human-AI interaction and the impact of AI in society. Some of the questions I have worked on include: how humans perceive and trust non-human/articial entities, how they perceive the capabilities of LLMs to match humanlike abilities to judge human behaviors, how students perceive and engage with AI in high-stakes assessment contexts (and importantly *what to do about it?*).
 
@@ -20,40 +20,31 @@ Between academic roles, I worked for some time as a **Data Modeller & Researcher
 
 ### **Converting research into practice: AI in Education**
 
-At TU/e, I play a supportive role in the university’s operational response to Generative AI. As a member of the [Task force AI in Education](https://tueindhoven.ai/education/teaching/index.html), I translate research output into practical, institutional strategy. My work involves designing and leading activities to help stakeholders (faculty, support staff, students) adapt to educational transformation, specifically in redefining assessment methods and upskilling staff for an AI-integrated reality.
+At TU/e, I play a supportive role in the university's strategy and operational response to Generative AI. As a member of the [Task force AI in ](https://tueindhoven.ai/education/teaching/index.html)[Education](https://tueindhoven.ai/) and working closely with education advisors and institutional leadership, I translate research output and technology trends into practical strategy. My work involves designing and leading activities to help stakeholders (faculty, support staff, students) adapt to educational transformation, specifically in redefining assessment methods and upskilling staff for an AI-integrated reality.
 
 ## Experience
 
--   **Task force AI in Education** | 2024 - Present
-    -   *Eindhoven University of Technology (IE&IS)*
-    -   In this role, I provide input on the latest relevant research and technological developments, with the aim to inform educational policy makers. Other activities include: writing content for public engagement (newsletter, website), designing and conducting workshops to inform and up-skill relevant stakeholders (faculty, support staff, students, entrepreneurs).
-
--   **Postdoctoral Researcher** | 2024 - Present
-    -   *Eindhoven University of Technology*
-    -   My research focuses on finding novel assessment approaches to capture evidence of learning in written assignments despite the use of Generative AI tools (e.g. [Oliveira et al., 2025](https://doi.org/10.1016/j.caeai.2025.100497)). Other projects I worked in explored the utility of GenAI technology to scaffold teacher feedback to students in CBL contexts ([preprint](https://doi.org/10.21203/rs.3.rs-7486768/v1)).
-
--   **Postdoctoral Researcher & Program Coordinator** | 2022 - 2023
+-   **AI in Education Specialist & Senior Researcher** \| May 2026 - Present
+    -   *Eindhoven University of Technology, Education and Student Affairs, Department of IE&IS*
+    -   Research on AI in education, institutional AI strategy, and bridging research and technology trends with everyday teaching practice. Contributing to the university's effort to find a coherent approach to AI in education. Member of the Task force AI in Education.
+-   **Postdoctoral Researcher** \| April 2024 - April 2026
+    -   *Eindhoven University of Technology, Human Technology Interaction, Department of IE&IS*
+    -   Developed an AI-robust assessment framework to capture evidence of learning in AI-mediated interactions (e.g. [Oliveira et al., 2025](https://doi.org/10.1016/j.caeai.2025.100497)). Other projects explored the utility of GenAI technology to scaffold teacher feedback to students in CBL contexts ([preprint](https://doi.org/10.21203/rs.3.rs-7486768/v1)).
+-   **Postdoctoral Researcher & Program Coordinator** \| 2022 - 2023
     -   *Utrecht University, Coordination Human-AI Alliance Program*
     -   Managed inter-institutional grant calls and conducted research on trust in human-AI interaction.
     -   *Lecturer & Supervisor:* Experimental Methods, AI Research Methods, and MSc Thesis Supervision.
-
--   **Data Modeller & Researcher (R&D)** | 2020 - 2022
+-   **Data Modeller & Researcher (R&D)** \| 2020 - 2022
     -   *Philips (Eindhoven), Digital Cognitive Diagnostics*
     -   Developed data-driven models for clinical decision support and digital assessment tools.
-
--   **Teaching Assistant & Researcher** | 2012 - 2019
+-   **Teaching Assistant & Researcher** \| 2012 - 2019
     -   *Multiple universities: ISPA - Instituto Universitário, University of Lisbon, ISCTE-IUL*
     -   Specialized in Experimental Design, Statistics, and Social Cognition.
 
 ## Education
 
-**PhD in Social Psychology** | 2015 - 2019
--   *ISPA - Instituto Universitário (Lisboa, Portugal) & Utrecht University (Utrecht, Netherlands)*
-    -   **Graduated with Honor and Distinction**
-    -   Dissertation: "The structuring role of valence in the relationship between and within models of face and trait impressions"
+**PhD in Social Psychology** \| 2015 - 2019 - *ISPA - Instituto Universitário (Lisboa, Portugal) & Utrecht University (Utrecht, Netherlands)* - **Graduated with Honor and Distinction** - Dissertation: "The structuring role of valence in the relationship between and within models of face and trait impressions"
 
-**MSc in Social and Organizational Psychology** | 2009 - 2011
--   *ISPA - Instituto Universitário | Lisbon, Portugal*
+**MSc in Social and Organizational Psychology** \| 2009 - 2011 - *ISPA - Instituto Universitário \| Lisbon, Portugal*
 
-**BSc in Psychology** | 2006 - 2009
--   *University of Aveiro | Aveiro, Portugal*
+**BSc in Psychology** \| 2006 - 2009 - *University of Aveiro \| Aveiro, Portugal*
