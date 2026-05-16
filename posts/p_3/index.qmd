@@ -89,7 +89,7 @@ The motivating prediction was that the **Dominant vs Competent** contrast would 
 Difference of the two group-mean CIs across all face-oval pixels; no inferential filter applied. Blue = first condition stronger; red = second condition stronger; opacity = magnitude of the difference.
 
 |  |  |
-|----|----|
+|------------------------------------|------------------------------------|
 | **Trustworthy − Friendly** | **Dominant − Competent** |
 | ![Descriptive map: trust minus friendly](figures/oliveira_2019/pairwise_descriptive_trust_vs_friendly.png){alt="Descriptive map: trust minus friendly"} | ![Descriptive map: dominant minus competent](figures/oliveira_2019/pairwise_descriptive_dominant_vs_competent.png){alt="Descriptive map: dominant minus competent"} |
 
@@ -98,7 +98,7 @@ Difference of the two group-mean CIs across all face-oval pixels; no inferential
 Same difference signals, but pixels outside any cluster significant at *p* \< .05 are transparent (cluster threshold \|t\| \> 2.0; 2000 stratified label permutations; max-mass null).
 
 |  |  |
-|----|----|
+|------------------------------------|------------------------------------|
 | **Trustworthy − Friendly** | **Dominant − Competent** |
 | ![FWER map: trust minus friendly](figures/oliveira_2019/pairwise_trust_vs_friendly.png){alt="FWER map: trust minus friendly"} | ![FWER map: dominant minus competent](figures/oliveira_2019/pairwise_dominant_vs_competent.png){alt="FWER map: dominant minus competent"} |
 
@@ -167,7 +167,7 @@ That's it! A full walkthrough, including how to interpret cluster maps, sample-s
 
 ## Status and what's next
 
-The latest release is version 0.1.2. The API is not yet frozen, I expect to keep refining functions based on feedback I might get in the coming months, so please indicate the current version if you use it in any of your work. Distribution is GitHub-only, and I have no CRAN plans, as working on RC methods stuff is mainly a "hobby" beyond my daily job research focus.
+The latest release version can be checked by clicking the Zenodo DOI badge at the title section. The API is not yet frozen, I expect to keep refining functions based on feedback I might get in the coming months, so please indicate the current version if you use it in any of your work. Distribution is GitHub-only, and I have no CRAN plans, as working on RC methods stuff is mainly a "hobby" beyond my daily job research focus.
 
 Feedback, bug reports, and feature requests are very welcome.
 
